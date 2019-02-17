@@ -17,4 +17,16 @@ router.get('/domains', (req, res) => {
     });
 });
 
+router.get('/domain/:domain', (req, res) => {
+    if (!req.session.user) {
+        return res.redirect(401, '/login');
+    }
+    var errorMessage = req.session.errorMessage;
+    req.session.errorMessage = undefined;
+    res.render('domain', {
+        errorMessage: errorMessage,
+        domain: {}
+    });
+});
+
 module.exports = router;

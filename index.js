@@ -8,6 +8,7 @@ const express = require('express');
 const session = require('express-session');
 const app = express();
 const version = require('./version');
+const helper = require('./modules/helper');
 
 const CONFIG = require('./config');
 var DOMAINS = {};
@@ -57,32 +58,35 @@ app.use('/', nginx_v1);
 
 if (!DOMAINS.hasOwnProperty(CONFIG.domain)) {
     DOMAINS[CONFIG.domain] = {
+        enabled: true,
         httpRedirect: true,
-        proxy: {
+        location: {
             path: '/',
-            pass: {
-                https: false,
-                address: '127.0.0.1',
-                port: 3000
-            },
-            redirect: false,
-            buffering: false,
-            ssl_verify: false,
-            set_header: {
-                'Host': '$host',
-                'X-Real-IP': '$remote_addr',
-                'X-Forwarded-For': '$proxy_add_x_forwarded_for',
-                'X-Forwarded-Ssl': 'on'
+            proxy: {
+                pass: {
+                    https: false,
+                    address: '127.0.0.1',
+                    port: 3000
+                },
+                next_upstream: 'error timeout invalid_header http_500 http_502 http_503 http_504',
+                redirect: false,
+                buffering: false,
+                ssl_verify: false,
+                set_header: {
+                    'Host': '$host',
+                    'X-Real-IP': '$remote_addr',
+                    'X-Forwarded-For': '$proxy_add_x_forwarded_for',
+                    'X-Forwarded-Ssl': 'on'
+                }
             }
         }
     };
     fs.writeFileSync('./domains.json', JSON.stringify(DOMAINS, null, 2));
+    helper.config.generate();
 }
 
 if (!fs.existsSync('./nginx/sites-available/letsproxy')) {
-    var cfg = "?";
-
-    fs.writeFileSync('./nginx/sites-available/letsproxy', cfg);
+    helper.config.generate();
 }
 
 const PORT = process.env.PORT || 3000;
