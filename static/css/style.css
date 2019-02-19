@@ -1,0 +1,17 @@
+img {
+    width: 100px;
+    height: 100px;
+    -webkit-clip-path: polygon(0 0, 0 100px, 100px 0px, 100px 0);
+}
+
+body {
+    font-size: 16px;
+}
+
+.material-icons {
+    /* font-size: 16px; */
+}
+
+tr {
+    cursor: pointer;
+}

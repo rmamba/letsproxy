@@ -5,8 +5,50 @@ html(lang="en")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         meta(http-equiv="X-UA-Compatible", content="ie=edge")
         title letsProxy
+        include includes/styles.pug
+        include includes/code.pug
     body
-        h1 Domains:
-        each domain in domains
-            .domain
-                p #{domain.name}
+        .container
+            .row
+                include includes/menu.pug
+            h1 Domains 
+                a(href="/add")
+                    i.material-icons(title="Add domain") add_circle_outline
+            table.u-full-width
+                thead
+                    tr
+                        //- th Status
+                        th External domain
+                        th &nbsp;
+                        th Internal address
+                        th &nbsp;
+                tbody
+                    each domain in domains
+                        - var ID = domain.name.replace(/\./g, '-')
+                        - var https = domain.settings.location.proxy.pass.https?'s':''
+                        - var redirectIcon = domain.settings.location.proxy.redirect?'lock':'lock_open'
+                        - var redirectText = domain.settings.location.proxy.redirect?'https only':'http redirect'
+                        tr(id=ID name="domain")
+                            //- td
+                            td #{domain.name}
+                            td
+                                //- i.material-icons arrow_right_alt
+                                i.material-icons(title=redirectText) #{redirectIcon}
+                            td http#{https}://#{domain.settings.location.proxy.pass.address}:#{domain.settings.location.proxy.pass.port}
+                            td
+                                a(href="/edit/"+domain.name)
+                                    i.material-icons(title="Edit domain") edit
+                                if domain.settings.enabled
+                                    a(href="/ajax/disable/"+domain.name)
+                                        i.material-icons(title="Disable domain") cancel
+                                else
+                                    a(href="/ajax/enable/"+domain.name)
+                                        i.material-icons(title="Enable domain") check_circle
+                                a(href="/ajax/check/"+domain.name)
+                                    i.material-icons(title="Check config" style="color: green;") check
+                                a(href="/ajax/delete/"+domain.name)
+                                    i.material-icons(title="Remove domain!!!" style="color: red;") delete
+                        tr(id="code-"+ID style="display: none;")
+                            td(colspan=4)
+                                pre
+                                    code #{domain.config}

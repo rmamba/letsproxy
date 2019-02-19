@@ -5,16 +5,17 @@ html(lang="en")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         meta(http-equiv="X-UA-Compatible", content="ie=edge")
         title Login
+        include includes/styles.pug
     body
-        h1 Login
-        form(action="/login" method="post")
-            div
-                p #{errorMessage}
-            div
-                label User:
-                input(type="text" name="user")
-            div
-                label Password:
-                input(type="password" name="password")
-            div
-                input(type="submit")
+        .section
+            .container
+                form.form-signin(action="/login" method="post")
+                    .row
+                        .columns.twelwe
+                            h2.form-signin-heading Please sign in
+                            p.error #{errorMessage}
+                        .columns.twelwe
+                            input.input-block-level(type='text', name="user", placeholder='User name...')
+                        .columns.twelwe
+                            input.input-block-level(type='password', name="password", placeholder='Password...')
+                        button.btn.btn-large.btn-primary(type='submit') Sign in

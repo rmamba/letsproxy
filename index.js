@@ -5,7 +5,7 @@ process.env.NODE_ENV = 'test';
 
 const fs = require('fs');
 const express = require('express');
-const session = require('express-session');
+const session = require('cookie-session');
 const app = express();
 const version = require('./version');
 const helper = require('./modules/helper');
@@ -21,15 +21,12 @@ app.use(express.urlencoded({
     extended: true
 }));
 app.use(session({
-    secret: 'keyboard cat', 
-    cookie: {
-        maxAge: 60000
-    },
-    resave: true,
-    saveUninitialized: true
+    name: 'letsproxy_session', 
+    secret: 'keyboard cat',
+    maxAge: 24 * 60 * 60 * 1000 * 1
 }))
 app.set('view engine', 'pug');
-app.use(express.static(__dirname + '/static'));
+app.use(express.static('static'));
 
 if (process.env.NodeDB_COMPRESSION === 'true') {
     const compression = require('compression');
@@ -48,7 +45,9 @@ if (process.env.NodeDB_COMPRESSION === 'true') {
 
 app.get('/', (req, res) => {
     req.session.errorMessage = undefined;
-    res.render('index');
+    res.render('index', {
+        user: req.session.user !== undefined?req.session.user.name:false
+    });
 });
 
 const user_v1 = require('./express/user');

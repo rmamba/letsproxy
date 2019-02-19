@@ -2,6 +2,8 @@
 "use strict";
 
 const fs = require('fs');
+const https = require('https');
+const wait = require('wait-for-stuff');
 
 module.exports.config = {
     domains: {}
@@ -14,10 +16,14 @@ module.exports.config.domains.array = function domainsToArray() {
     }
     var domainsArray = [];
     Object.keys(domainsDict).forEach(domain => {
-        domainsArray.push({
+        var data = {
             name: domain,
-            servers: domainsDict[domain].servers
-        });
+            settings: domainsDict[domain]
+        };
+        if (fs.existsSync(`./nginx/sites-available/${domain}`)) {
+            data.config = fs.readFileSync(`./nginx/sites-available/${domain}`).toString();
+        }
+        domainsArray.push(data);
     });
     return domainsArray;
 };
@@ -72,3 +78,33 @@ module.exports.config.generate = function generateConfig() {
         }
     });
 };
+
+module.exports.ipify = {};
+//https://api.ipify.org/?format=json
+module.exports.ipify.getIP = function getIP() {
+    var $IP = undefined;
+
+    var P = new Promise(function(resolve, reject){
+        https.get('https://api.ipify.org/?format=json', (resp) => {
+            let data = '';
+            // A chunk of data has been recieved.
+            resp.on('data', (chunk) => {
+                data += chunk;
+            });
+
+            // The whole response has been received. Print out the result.
+            resp.on('end', () => {
+                resolve(JSON.parse(data));
+            });
+        }).on("error", (err) => {
+            reject(error);
+        });
+    });
+
+    var $response = wait.for.promise(P);
+    if (!($response instanceof Error)) {
+        $IP = $response.ip;
+    }
+
+    return $IP;
+}

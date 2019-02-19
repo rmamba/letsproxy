@@ -11,19 +11,22 @@ router.get('/domains', (req, res) => {
     }
     var errorMessage = req.session.errorMessage;
     req.session.errorMessage = undefined;
+    var domains = helper.config.domains.array();
     res.render('domains', {
+        user: req.session.user !== undefined?req.session.user.name:false,
         errorMessage: errorMessage,
-        domains: helper.config.domains.array()
+        domains: domains
     });
 });
 
-router.get('/domain/:domain', (req, res) => {
+router.get('/edit/:domain', (req, res) => {
     if (!req.session.user) {
         return res.redirect(401, '/login');
     }
     var errorMessage = req.session.errorMessage;
     req.session.errorMessage = undefined;
-    res.render('domain', {
+    res.render('edit', {
+        user: req.session.user !== undefined?req.session.user.name:false,
         errorMessage: errorMessage,
         domain: {}
     });

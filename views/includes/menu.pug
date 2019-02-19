@@ -1,0 +1,10 @@
+ul.menu
+    li
+        a(href="/") Home
+    li
+        a(href="/domains") Domains
+    li
+        if user !== false
+            a(href="/logout") Logout
+        else
+            a(href="/login") Login
