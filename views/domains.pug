@@ -30,8 +30,8 @@ html(lang="en")
                         - var https = domain.settings.location.proxy.pass.https?'s':''
                         - var redirectIcon = domain.settings.location.proxy.redirect?'lock':'lock_open'
                         - var redirectText = domain.settings.location.proxy.redirect?'https only':'http redirect'
-                        - var proxyAddress = domain.settings.location.proxy.pass.address
-                        - var proxyPort = domain.settings.location.proxy.pass.port?':'+domain.settings.location.proxy.pass.port:''
+                        //- - var proxyAddress = domain.settings.location.proxy.pass.address
+                        //- - var proxyPort = domain.settings.location.proxy.pass.port?':'+domain.settings.location.proxy.pass.port:''
                         tr
                             td(style="width: 30px;")
                                 if domain.settings.enabled
@@ -47,10 +47,11 @@ html(lang="en")
                                 i.material-icons(title=redirectText) #{redirectIcon}
                             td
                                 ul.domain-list
-                                    li
-                                        a(href="http"+https+"://"+proxyAddress+proxyPort target="_blank") http#{https}://#{proxyAddress}#{proxyPort}
-                                    //- li
-                                    //-     a(href="http"+https+"://"+proxyAddress+proxyPort target="_blank") http#{https}://#{proxyAddress}#{proxyPort}
+                                    each server in domain.backend.servers
+                                        - var proxyAddress = server.address
+                                        - var proxyPort = server.port?':'+server.port:''
+                                        li
+                                            a(href="http"+https+"://"+proxyAddress+proxyPort target="_blank") http#{https}://#{proxyAddress}#{proxyPort}
                             td
                                 a(href="/edit/"+domain.name)
                                     i.material-icons(title="Edit domain") edit
