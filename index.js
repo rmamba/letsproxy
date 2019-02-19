@@ -11,9 +11,13 @@ const version = require('./version');
 const helper = require('./modules/helper');
 
 const CONFIG = require('./config');
-var DOMAINS = {};
-if (fs.existsSync('./domains.json')) {
-    DOMAINS = JSON.parse(fs.readFileSync('./domains.json').toString());
+var FRONTENDS = {};
+var BACKENDS = {};
+if (fs.existsSync('./frontends.json')) {
+    FRONTENDS = JSON.parse(fs.readFileSync('./frontends.json').toString());
+}
+if (fs.existsSync('./backends.json')) {
+    BACKENDS = JSON.parse(fs.readFileSync('./backends.json').toString());
 }
 
 app.use(express.json());
@@ -52,11 +56,24 @@ app.get('/', (req, res) => {
 
 const user_v1 = require('./express/user');
 const nginx_v1 = require('./express/nginx');
+const ajax_v1 = require('./express/ajax');
 app.use('/', user_v1);
 app.use('/', nginx_v1);
+app.use('/ajax', ajax_v1);
 
-if (!DOMAINS.hasOwnProperty(CONFIG.domain)) {
-    DOMAINS[CONFIG.domain] = {
+
+if (!BACKENDS.hasOwnProperty(helper.domain.to.backend(CONFIG.domain))) {
+    BACKENDS[helper.domain.to.backend(CONFIG.domain)] = {
+        servers: [{
+            'address': '127.0.0.1',
+            'port': '3000'
+        }]
+    };
+    fs.writeFileSync('./backends.json', JSON.stringify(BACKENDS, null, 2));
+    helper.config.generate();
+}
+if (!FRONTENDS.hasOwnProperty(CONFIG.domain)) {
+    FRONTENDS[CONFIG.domain] = {
         enabled: true,
         httpRedirect: true,
         location: {
@@ -64,8 +81,7 @@ if (!DOMAINS.hasOwnProperty(CONFIG.domain)) {
             proxy: {
                 pass: {
                     https: false,
-                    address: '127.0.0.1',
-                    port: 3000
+                    backend: helper.domain.to.backend(CONFIG.domain)
                 },
                 next_upstream: 'error timeout invalid_header http_500 http_502 http_503 http_504',
                 redirect: false,
@@ -80,7 +96,7 @@ if (!DOMAINS.hasOwnProperty(CONFIG.domain)) {
             }
         }
     };
-    fs.writeFileSync('./domains.json', JSON.stringify(DOMAINS, null, 2));
+    fs.writeFileSync('./frontends.json', JSON.stringify(FRONTENDS, null, 2));
     helper.config.generate();
 }
 

@@ -63,5 +63,7 @@ typings/
 package-lock.json
 .vscode
 config.js
-domains.json
 nginx
+frontends.json
+backends.json
+favicons.json

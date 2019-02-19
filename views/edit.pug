@@ -1,0 +1,23 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        meta(http-equiv="X-UA-Compatible", content="ie=edge")
+        title letsProxy
+        include includes/styles.pug
+        include includes/code.pug
+    body
+        .container
+            .row
+                include includes/menu.pug
+            h1 New domain 
+            form(action="/update" method="post")
+                label External domain:
+                input(type="text" name="externalDomain" value=externalDomain)
+                label Internal address(es):
+                input(type="checkbox" name="pass[0][port]" title="https")
+                input(type="text" name="pass[0][address]" value=internalAddress placeholder="127.0.0.1")
+                | : 
+                input(type="text" name="pass[0][port]" value=internalAddress placeholder="3000")
+                i.material-icons.pointer add_circle_outline

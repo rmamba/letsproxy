@@ -13,11 +13,13 @@ html(lang="en")
                 include includes/menu.pug
             h1 Domains 
                 a(href="/add")
-                    i.material-icons(title="Add domain") add_circle_outline
+                    i.material-icons.pointer.big-icon(title="Add domain" style="color: green;") add_circle_outline
+                i.material-icons.pointer.big-icon(title="Check NGINX config" style="color: blue;") sync_problem
+                i.material-icons.pointer.big-icon(title="Restart NGINX" style="color: orange;") sync
             table.u-full-width
                 thead
                     tr
-                        //- th Status
+                        th Status
                         th External domain
                         th &nbsp;
                         th Internal address
@@ -28,13 +30,27 @@ html(lang="en")
                         - var https = domain.settings.location.proxy.pass.https?'s':''
                         - var redirectIcon = domain.settings.location.proxy.redirect?'lock':'lock_open'
                         - var redirectText = domain.settings.location.proxy.redirect?'https only':'http redirect'
-                        tr(id=ID name="domain")
-                            //- td
-                            td #{domain.name}
+                        - var proxyAddress = domain.settings.location.proxy.pass.address
+                        - var proxyPort = domain.settings.location.proxy.pass.port?':'+domain.settings.location.proxy.pass.port:''
+                        tr
+                            td(style="width: 30px;")
+                                if domain.settings.enabled
+                                    i.material-icons.pointer(id=ID name="domain" title="Active" style="color: green;") check_circle
+                                else
+                                    i.material-icons.pointer(id=ID name="domain" title="Inactive" style="color: red;") cancel
+                            td
+                                ul.domain-list
+                                    li
+                                        a(href="https://"+domain.name target="_blank") #{domain.name}
                             td
                                 //- i.material-icons arrow_right_alt
                                 i.material-icons(title=redirectText) #{redirectIcon}
-                            td http#{https}://#{domain.settings.location.proxy.pass.address}:#{domain.settings.location.proxy.pass.port}
+                            td
+                                ul.domain-list
+                                    li
+                                        a(href="http"+https+"://"+proxyAddress+proxyPort target="_blank") http#{https}://#{proxyAddress}#{proxyPort}
+                                    //- li
+                                    //-     a(href="http"+https+"://"+proxyAddress+proxyPort target="_blank") http#{https}://#{proxyAddress}#{proxyPort}
                             td
                                 a(href="/edit/"+domain.name)
                                     i.material-icons(title="Edit domain") edit
@@ -44,11 +60,10 @@ html(lang="en")
                                 else
                                     a(href="/ajax/enable/"+domain.name)
                                         i.material-icons(title="Enable domain") check_circle
-                                a(href="/ajax/check/"+domain.name)
-                                    i.material-icons(title="Check config" style="color: green;") check
                                 a(href="/ajax/delete/"+domain.name)
                                     i.material-icons(title="Remove domain!!!" style="color: red;") delete
                         tr(id="code-"+ID style="display: none;")
+                            td &nbsp;
                             td(colspan=4)
                                 pre
                                     code #{domain.config}
