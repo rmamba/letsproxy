@@ -73,13 +73,31 @@ module.exports.config.generate = function generateConfig() {
     Object.keys(domainsDict).forEach(domain => {
         var D = domainsDict[domain];
         var config = '';
+        config += `server {\n`;
+        config += `\tlisten 80;\n`;
+        config += `\tserver_name ${domain.toLowerCase()};\n`;
+
+        // #ACME
+        config += `\n\tlocation ^~ /.well-known/acme-challenge/ {\n`;
+        config += `\t\tallow all;\n`;
+        config += `\t\tdefault_type "text/plain";\n`;
+        config += `\t\talias /var/run/acme/acme-challenge/;\n`;
+        config += `\t}\n`;
+        config += `\t\n\tlocation = /.well-known/acme-challenge/ {\n`;
+        config += `\t\treturn 404;\n`;
+        config += `\t}\n`;
+
         if (D.httpRedirect === true) {
             // var aliases = '';
             // if (D.aliases) {
             //     aliases +=
             // }
-            config += `server {\n\tlisten 80;\n\tserver_name ${domain.toLowerCase()};\n\treturn 301 https://$host$request_uri;\n}\n\n`;
+            config += `\n\tlocation / {\n`;
+            config += `\t\treturn 301 https://$host$request_uri;\n`;
+            config += `\t}\n`;
         }
+
+        config += `}\n`;
 
         if (D.location.proxy.pass.backend !== undefined) {
             config += `\nupstream ${D.location.proxy.pass.backend} {\n`;
@@ -101,6 +119,8 @@ module.exports.config.generate = function generateConfig() {
         config += `\tserver_name ${domain.toLowerCase()};\n`;
         config += `\taccess_log /var/log/nginx/${domain.toLowerCase()}.access.log;\n`
         config += `\terror_log /var/log/nginx/${domain.toLowerCase()}.error.log;\n`;
+
+
 
         config += `\t\n\tlocation ${D.location.path} {\n`;
         Object.keys(D.location.proxy).forEach(p => {

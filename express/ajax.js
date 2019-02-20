@@ -7,6 +7,7 @@ const router = express.Router();
 const helper = require('../modules/helper');
 const faviconFolder = './cache/favicon'
 const mime = {
+    ico: 'image/x-icon',
     gif: 'image/gif',
     jpg: 'image/jpeg',
     png: 'image/png',
