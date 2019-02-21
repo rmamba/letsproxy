@@ -67,10 +67,10 @@ html(lang="en")
                                     i.material-icons(title="Edit domain") edit
                                 if domain.settings.enabled
                                     a(href="/ajax/disable/"+domain.name)
-                                        i.material-icons(title="Disable domain") cancel
+                                        i.material-icons.rotate(title="Disable domain") toggle_off
                                 else
                                     a(href="/ajax/enable/"+domain.name)
-                                        i.material-icons(title="Enable domain") check_circle
+                                        i.material-icons.rotate(title="Enable domain") toggle_on
                                 a(href="/ajax/delete/"+domain.name)
                                     i.material-icons(title="Remove domain!!!" style="color: red;") delete
                         //- tr(id="code-"+ID style="display: none;")
