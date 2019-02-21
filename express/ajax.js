@@ -14,6 +14,15 @@ const mime = {
     svg: 'image/svg+xml'
 };
 
+router.get('/config/:domain', (req, res) => {
+    var data = '{\n\t"error": "No config found!!!"\n}';
+    if (fs.existsSync(`./nginx/sites-available/${req.params.domain}`)) {
+        data = fs.readFileSync(`./nginx/sites-available/${req.params.domain}`).toString();
+    }
+    // res.header();
+    res.end(data);
+});
+
 router.get('/favicon/:protocol/:url', (req, res) => {
     if (!req.session.user) {
         return res.redirect(401, '/login');

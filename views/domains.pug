@@ -11,11 +11,21 @@ html(lang="en")
         .container
             .row
                 include includes/menu.pug
-            h1 Domains 
-                a(href="/add")
-                    i.material-icons.pointer.big-icon(title="Add domain" style="color: green;") add_circle_outline
-                i.material-icons.pointer.big-icon(title="Check NGINX config" style="color: blue;") sync_problem
-                i.material-icons.pointer.big-icon(title="Restart NGINX" style="color: orange;") sync
+            table.u-full-width
+                tbody
+                    td
+                        h1 FrontEnd 
+                            a(href="/add/front")
+                                i.material-icons.pointer.big-icon(title="Add domain" style="color: green;") add_circle_outline
+                            i.material-icons.pointer.big-icon(title="Check NGINX config" style="color: blue;") sync_problem
+                            i.material-icons.pointer.big-icon(title="Restart NGINX" style="color: orange;") sync
+                    td &nbsp;
+                    td
+                        h1 BackEnd 
+                            a(href="/add/back")
+                                i.material-icons.pointer.big-icon(title="Add server" style="color: green;") add_circle_outline
+                            i.material-icons.pointer.big-icon(title="Check NGINX config" style="color: blue;") sync_problem
+                            i.material-icons.pointer.big-icon(title="Restart NGINX" style="color: orange;") sync
             table.u-full-width
                 thead
                     tr
@@ -35,9 +45,9 @@ html(lang="en")
                         tr
                             td(style="width: 30px;")
                                 if domain.settings.enabled
-                                    i.material-icons.pointer(id=ID name="domain" title="Active" style="color: green;") check_circle
+                                    i.material-icons.pointer(id=domain.name name="domain" title="Active" style="color: green;") check_circle
                                 else
-                                    i.material-icons.pointer(id=ID name="domain" title="Inactive" style="color: red;") cancel
+                                    i.material-icons.pointer(id=domain.name name="domain" title="Inactive" style="color: red;") cancel
                             td
                                 ul.domain-list
                                     li
@@ -63,8 +73,9 @@ html(lang="en")
                                         i.material-icons(title="Enable domain") check_circle
                                 a(href="/ajax/delete/"+domain.name)
                                     i.material-icons(title="Remove domain!!!" style="color: red;") delete
-                        tr(id="code-"+ID style="display: none;")
-                            td &nbsp;
-                            td(colspan=4)
-                                pre
-                                    code #{domain.config}
+                        //- tr(id="code-"+ID style="display: none;")
+                        //-     td &nbsp;
+                        //-     td(colspan=4)
+                        //-         pre
+                        //-             code #{domain.config}
+            include modal/config.pug

@@ -30,3 +30,21 @@ body {
 .big-icon {
     font-size: 32px;
 }
+
+.menu {
+    list-style: none;
+}
+
+.menu li {
+    display: inline;
+}
+
+.menu li a {
+    /* display: block; */
+    padding: 8px 16px;
+    margin: 8px;
+    background-color: #dddddd;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: bold;
+}

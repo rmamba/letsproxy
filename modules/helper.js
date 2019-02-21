@@ -4,6 +4,7 @@
 const fs = require('fs');
 const wait = require('wait-for-stuff');
 const request = require('request');
+const CONFIG = require('../config');
 
 module.exports.domain = {
     to: {}
@@ -53,9 +54,9 @@ module.exports.config.domains.array = function domainsToArray() {
             settings: domainData,
             backend: backendsDict[domainData.location.proxy.pass.backend]
         };
-        if (fs.existsSync(`./nginx/sites-available/${domain}`)) {
-            data.config = fs.readFileSync(`./nginx/sites-available/${domain}`).toString();
-        }
+        // if (fs.existsSync(`./nginx/sites-available/${domain}`)) {
+        //     data.config = fs.readFileSync(`./nginx/sites-available/${domain}`).toString();
+        // }
         domainsArray.push(data);
     });
     return domainsArray;
@@ -73,6 +74,15 @@ module.exports.config.generate = function generateConfig() {
     Object.keys(domainsDict).forEach(domain => {
         var D = domainsDict[domain];
         var config = '';
+        var acmeConfig = {
+            satisfy: {
+                names: []
+            }
+        };
+        acmeConfig.satisfy.names.push(domain);
+        // if (D.aliases) {
+        //    acmeConfig.satisfy.names.push(alias);
+        // }
         config += `server {\n`;
         config += `\tlisten 80;\n`;
         config += `\tserver_name ${domain.toLowerCase()};\n`;
@@ -81,7 +91,7 @@ module.exports.config.generate = function generateConfig() {
         config += `\n\tlocation ^~ /.well-known/acme-challenge/ {\n`;
         config += `\t\tallow all;\n`;
         config += `\t\tdefault_type "text/plain";\n`;
-        config += `\t\talias /var/run/acme/acme-challenge/;\n`;
+        config += `\t\talias ${CONFIG.acme.challenge}/;\n`;
         config += `\t}\n`;
         config += `\t\n\tlocation = /.well-known/acme-challenge/ {\n`;
         config += `\t\treturn 404;\n`;
@@ -119,8 +129,8 @@ module.exports.config.generate = function generateConfig() {
         config += `\tserver_name ${domain.toLowerCase()};\n`;
         config += `\taccess_log /var/log/nginx/${domain.toLowerCase()}.access.log;\n`
         config += `\terror_log /var/log/nginx/${domain.toLowerCase()}.error.log;\n`;
-
-
+        config += `#\tssl_certificate ${CONFIG.acme.certificates}/${domain.toLowerCase()}/fullchain;\n`;
+        config += `#\tssl_certificate_key ${CONFIG.acme.certificates}/${domain.toLowerCase()}/privkey;\n`;
 
         config += `\t\n\tlocation ${D.location.path} {\n`;
         Object.keys(D.location.proxy).forEach(p => {
