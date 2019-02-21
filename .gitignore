@@ -67,3 +67,10 @@ nginx
 frontends.json
 backends.json
 favicons.json
+cache/*
+
+# ToDO
+.github
+*.md
+*.sh
+.dockerignore

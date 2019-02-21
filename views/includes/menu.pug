@@ -1,10 +1,23 @@
 ul.menu
     li
-        a(href="/") Home
+        a.no-background(href="/")
+            img.icon(src="/images/favicon.png")
     li
-        a(href="/domains") Domains
+        a(href="/")
+            i.material-icons home
+            | Home
     li
-        a(href="/servers") Servers
+        a(href="/domains")
+            i.material-icons web
+            | Domains
+    li
+        a(href="/servers")
+            i.material-icons device_hub
+            | Servers
+    li
+        a(href="/users")
+            i.material-icons face
+            | Users
     li
         if user !== false
             a(href="/logout") Logout
