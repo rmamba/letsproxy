@@ -18,7 +18,7 @@ const Letsproxy = require('../modules/configs/letsproxy');
 //         return res.redirect('/domains');
 //     }
 //     res.render('domain', {
-//         user: req.session.user !== undefined?req.session.user.name:false,
+//         user: req.session.user !== undefined?req.session.user:false,
 //         errorMessage: errorMessage,
 //         domain: domains[req.params.domain],
 //         externalDomain: req.params.domain

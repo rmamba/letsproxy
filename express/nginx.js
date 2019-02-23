@@ -13,7 +13,7 @@ router.get('/domains', (req, res) => {
     req.session.errorMessage = undefined;
     var domains = helper.config.domains.array();
     res.render('domains', {
-        user: req.session.user !== undefined?req.session.user.name:false,
+        user: req.session.user !== undefined?req.session.user:false,
         errorMessage: errorMessage,
         domains: domains
     });
@@ -27,7 +27,7 @@ router.get('/servers', (req, res) => {
     req.session.errorMessage = undefined;
     var servers = helper.config.servers.array();
     res.render('servers', {
-        user: req.session.user !== undefined?req.session.user.name:false,
+        user: req.session.user !== undefined?req.session.user:false,
         errorMessage: errorMessage,
         servers: servers
     });

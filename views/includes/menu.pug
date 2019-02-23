@@ -14,12 +14,14 @@ ul.menu
         a(href="/servers")
             i.material-icons device_hub
             | Servers
-    li
-        a(href="/users")
-            i.material-icons face
-            | Users
-    li
-        if user !== false
-            a(href="/logout") Logout
-        else
+    if user !== false
+        if user.isAdmin
+            li  
+                a(href="/settings")
+                    i.material-icons settings
+                    | Settings
+        li
+            a(href="/logout") Logout #{user.name}
+    else
+        li
             a(href="/login") Login

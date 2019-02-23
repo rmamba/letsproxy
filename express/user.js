@@ -28,7 +28,7 @@ router.post('/login', (req, res) => {
     if (req.session.user === undefined) {
         req.session.user ={
             name: req.body.user,
-            isAdmin: PASSWD[req.body.user]['isAdmin']
+            isAdmin: PASSWD[req.body.user].isAdmin
         };
     }
     res.redirect('/');

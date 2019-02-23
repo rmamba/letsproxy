@@ -22,7 +22,7 @@ router.get('/domain/:domain', (req, res) => {
         aliases = letsproxy.domainsDict[req.params.domain].aliases.join(',');
     }
     res.render('domain', {
-        user: req.session.user !== undefined?req.session.user.name:false,
+        user: req.session.user !== undefined?req.session.user:false,
         errorMessage: errorMessage,
         externalDomain: req.params.domain,
         domainUpstream: letsproxy.domainsDict[req.params.domain].location.proxy.pass.backend,
@@ -43,7 +43,7 @@ router.get('/server/:server', (req, res) => {
         return res.redirect('/servers');
     }
     res.render('server', {
-        user: req.session.user !== undefined?req.session.user.name:false,
+        user: req.session.user !== undefined?req.session.user:false,
         errorMessage: errorMessage,
         upstreamName: req.params.server,
         upstreamServers: letsproxy.backendsDict[req.params.server].servers

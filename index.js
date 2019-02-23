@@ -52,7 +52,7 @@ if (process.env.NodeDB_COMPRESSION === 'true') {
 app.get('/', (req, res) => {
     req.session.errorMessage = undefined;
     res.render('index', {
-        user: req.session.user !== undefined?req.session.user.name:false
+        user: req.session.user !== undefined?req.session.user:false
     });
 });
 

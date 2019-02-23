@@ -66,6 +66,7 @@ config.js
 nginx
 *.json
 cache/*
+acme/*
 
 # ToDO
 .github

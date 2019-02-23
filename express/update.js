@@ -18,8 +18,8 @@ router.post('/domain', (req, res) => {
     letsproxy.write_domains();
     if (req.body.oldExternalDomain !== '' && req.body.oldExternalDomain !== req.body.externalDomain) {
         letsproxy.remove_domain(req.body.oldExternalDomain);
-        letsproxy.write_configs();
     }
+    letsproxy.write_configs();
 
     return res.redirect('/domains');
 });

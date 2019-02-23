@@ -13,7 +13,7 @@ router.get('/domain', (req, res) => {
     req.session.errorMessage = undefined;
     const letsproxy = new Letsproxy();
     res.render('domain', {
-        user: req.session.user !== undefined?req.session.user.name:false,
+        user: req.session.user !== undefined?req.session.user:false,
         errorMessage: errorMessage,
         domain: {},
         upstreamServers: Object.keys(letsproxy.backendsDict)
@@ -28,7 +28,7 @@ router.get('/server', (req, res) => {
     req.session.errorMessage = undefined;
     const letsproxy = new Letsproxy();
     res.render('server', {
-        user: req.session.user !== undefined?req.session.user.name:false,
+        user: req.session.user !== undefined?req.session.user:false,
         errorMessage: errorMessage,
         upstreamName: null,
         upstreamServers: [{address: null, port: null}]

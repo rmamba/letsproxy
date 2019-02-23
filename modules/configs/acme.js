@@ -7,7 +7,7 @@ const CONFIG = require('../../config');
 module.exports = class Acme {
     constructor() {
         this.domains = {};
-        if (fs.existsSync('../frontends.json')) {
+        if (fs.existsSync('./frontends.json')) {
             this.domains = JSON.parse(fs.readFileSync('./frontends.json').toString());
         }
     }
@@ -25,7 +25,7 @@ module.exports = class Acme {
             domains.forEach(d => {
                 config += `  - ${d}\n`;
             });
-            fs.writeFileSync(`../acme/desired/${domain}`, config);
+            fs.writeFileSync(`./acme/desired/${domain}`, config);
         }
     }
 
