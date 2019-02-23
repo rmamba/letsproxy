@@ -78,6 +78,42 @@ module.exports = class Letsproxy {
         });
     }
 
+    parse_domain(body) {
+        var domain = {
+            enabled: false,
+            httpRedirect: false,
+            location: {
+                path: "/",
+                proxy: {
+                    pass: {
+                        https: false,
+                        backend: body.domainUpstream
+                    },
+                    next_upstream: "error timeout invalid_header http_500 http_502 http_503 http_504",
+                    redirect: false,
+                    buffering: false,
+                    ssl_verify: false,
+                    set_header: {
+                        "Host": "$host",
+                        "X-Real-IP": "$remote_addr",
+                        "X-Forwarded-For": "$proxy_add_x_forwarded_for",
+                        "X-Forwarded-Ssl": "on"
+                    }
+                }
+            }
+        };
+
+        if (body.domainAliases !== "") {
+            domain.aliases = body.domainAliases.split(',');
+        }
+
+        return domain;
+    }
+
+    update_domain(name, data) {
+        this.domainsDict[name] = data;
+    }
+
     write_domains() {
         fs.writeFileSync('./frontends.json', JSON.stringify(this.domainsDict, null ,2));
         this.write_configs();

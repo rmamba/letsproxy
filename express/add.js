@@ -11,10 +11,13 @@ router.get('/domain', (req, res) => {
     }
     var errorMessage = req.session.errorMessage;
     req.session.errorMessage = undefined;
+    const letsproxy = new Letsproxy();
+    const servers = Object.keys(letsproxy.backendsDict);
     res.render('domain', {
         user: req.session.user !== undefined?req.session.user.name:false,
         errorMessage: errorMessage,
-        domain: {}
+        domain: {},
+        upstreamServers: servers
     });
 });
 

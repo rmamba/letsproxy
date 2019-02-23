@@ -14,11 +14,14 @@ html(lang="en")
             h1 New domain 
             form(action="/update/domain" method="post")
                 label External domain:
-                input(type="text" name="externalDomain" value=externalDomain)
-                label Internal address(es):
-                input(type="checkbox" name="pass[0][port]" title="https")
-                input(type="text" name="pass[0][address]" value=internalAddress placeholder="127.0.0.1")
-                | : 
-                input(type="text" name="pass[0][port]" value=internalAddress placeholder="3000")
-                i.material-icons.pointer add_circle_outline
+                input(type="hidden" name="oldExternalDomain" value=oldExternalDomain)
+                input(type="text" name="externalDomain" placeholder="example.com" value=externalDomain style="width: 100%;")
+                label Aliases:
+                input(type="text" name="domainAliases" placeholder="www.example.com,test.example.com" value=domainAliases style="width: 100%;")
+                label Upstream:
+                .upstreams
+                    select(name="domainUpstream" style="width: 100%;")
+                        each server in upstreamServers
+                            option(value=server) #{server}
+                input(type="submit" value="SAVE")
             include includes/footer.pug

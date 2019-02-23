@@ -21,7 +21,7 @@ module.exports = class Nginx {
         var config = '';
         var domains = domain.toLowerCase();
         if (D.aliases) {
-            aliases += `,${D.aliases.join()}`;
+            domains += `,${D.aliases.join()}`;
         }
         config += `server {\n`;
         config += `\tlisten 80;\n`;

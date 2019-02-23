@@ -6,6 +6,14 @@ tr {
     vertical-align: top;
 }
 
+.green {
+    color: green;
+}
+
+.red {
+    color: red;
+}
+
 .top-left {
     width: 100px;
     height: 100px;
