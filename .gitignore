@@ -64,9 +64,7 @@ package-lock.json
 .vscode
 config.js
 nginx
-frontends.json
-backends.json
-favicons.json
+*.json
 cache/*
 
 # ToDO

@@ -24,9 +24,9 @@ html(lang="en")
                         th Upstream name
                         th Server/Service addresses
                         th &nbsp;
-                tbody
+                tbody#servers
                     each server, name in servers
-                        tr
+                        tr(id=name)
                             td(style="width: 30px;")
                                 a(href="/edit/server/" + name)
                                         i.material-icons(title="Edit server") edit
@@ -36,9 +36,8 @@ html(lang="en")
                                     each S in server.servers
                                         - var proxyAddress = S.address
                                         - var proxyPort = S.port?':' + S.port:''
-                                        li
-                                            a(href=proxyAddress+proxyPort target="_blank") #{proxyAddress}#{proxyPort}
+                                        li #{proxyAddress}#{proxyPort}
                             td
-                                a(href="/ajax/delete/server/" + name)
-                                    i.material-icons(title="Remove server!!!" style="color: red;") delete
+                                a(href="/remove/server/" + name)
+                                    i.material-icons(title="Remove " + name + " server!!!" style="color: red;") delete
         include includes/footer.pug

@@ -3,33 +3,33 @@
 
 const express = require('express');
 const router = express.Router();
-const helper = require('../modules/helper');
+const Letsproxy = require('../modules/configs/letsproxy');
 
-router.get('/domains', (req, res) => {
+router.get('/domain', (req, res) => {
     if (!req.session.user) {
         return res.redirect(401, '/login');
     }
     var errorMessage = req.session.errorMessage;
     req.session.errorMessage = undefined;
-    var domains = helper.config.domains.array();
-    res.render('domains', {
+    res.render('domain', {
         user: req.session.user !== undefined?req.session.user.name:false,
         errorMessage: errorMessage,
-        domains: domains
+        domain: {}
     });
 });
 
-router.get('/servers', (req, res) => {
+router.get('/server', (req, res) => {
     if (!req.session.user) {
         return res.redirect(401, '/login');
     }
     var errorMessage = req.session.errorMessage;
     req.session.errorMessage = undefined;
-    var servers = helper.config.servers.array();
-    res.render('servers', {
+    const letsproxy = new Letsproxy();
+    res.render('server', {
         user: req.session.user !== undefined?req.session.user.name:false,
         errorMessage: errorMessage,
-        servers: servers
+        upstreamName: null,
+        upstreamServers: [{address: null, port: null}]
     });
 });
 

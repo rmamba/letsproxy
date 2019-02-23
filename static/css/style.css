@@ -1,3 +1,11 @@
+body {
+    font-size: 16px;
+}
+
+tr {
+    vertical-align: top;
+}
+
 .top-left {
     width: 100px;
     height: 100px;
@@ -7,10 +15,6 @@
     width: 100px;
     height: 100px;
     -webkit-clip-path: polygon(0 100%, 100% 100%, 100% 0);
-}
-
-body {
-    font-size: 16px;
 }
 
 .domain-list {
