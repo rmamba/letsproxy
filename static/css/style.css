@@ -69,6 +69,7 @@ body {
 .footer {
     position: fixed;
     left: 0;
+    right: 0;
     bottom: 0;
     width: 100%;
     /* background-color: #dddddd; */
@@ -78,9 +79,16 @@ body {
     text-align: center;
 }
 
-.footer ul li a {
+.footer ul {
+    margin-top: 10px;
+}
+
+.footer ul li {
     padding: 8px 16px;
     margin: 8px;
+}
+
+.footer ul li a {
     text-decoration: none;
     font-weight: bold;
 }
@@ -91,4 +99,16 @@ body {
     -ms-transform: rotate(-90deg);
     -o-transform: rotate(-90deg);
     transform: rotate(-90deg);
+}
+
+.float-left {
+    float: left;
+}
+
+.float-right {
+    float: right;
+}
+
+.space-right {
+    padding-right: 10px;
 }

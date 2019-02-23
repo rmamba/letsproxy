@@ -19,20 +19,47 @@ router.get('/domains', (req, res) => {
     });
 });
 
-router.get('/add', (req, res) => {
+router.get('/servers', (req, res) => {
     if (!req.session.user) {
         return res.redirect(401, '/login');
     }
     var errorMessage = req.session.errorMessage;
     req.session.errorMessage = undefined;
-    res.render('edit', {
+    var servers = helper.config.servers.array();
+    res.render('servers', {
+        user: req.session.user !== undefined?req.session.user.name:false,
+        errorMessage: errorMessage,
+        servers: servers
+    });
+});
+
+router.get('/add/domain', (req, res) => {
+    if (!req.session.user) {
+        return res.redirect(401, '/login');
+    }
+    var errorMessage = req.session.errorMessage;
+    req.session.errorMessage = undefined;
+    res.render('domain', {
         user: req.session.user !== undefined?req.session.user.name:false,
         errorMessage: errorMessage,
         domain: {}
     });
 });
 
-router.get('/edit/:domain', (req, res) => {
+router.get('/add/server', (req, res) => {
+    if (!req.session.user) {
+        return res.redirect(401, '/login');
+    }
+    var errorMessage = req.session.errorMessage;
+    req.session.errorMessage = undefined;
+    res.render('server', {
+        user: req.session.user !== undefined?req.session.user.name:false,
+        errorMessage: errorMessage,
+        domain: {}
+    });
+});
+
+router.get('/edit/domain/:domain', (req, res) => {
     if (!req.session.user) {
         return res.redirect(401, '/login');
     }
@@ -43,7 +70,26 @@ router.get('/edit/:domain', (req, res) => {
         req.session.errorMessage = 'Unknown domain!!!';
         return res.redirect('/domains');
     }
-    res.render('edit', {
+    res.render('domain', {
+        user: req.session.user !== undefined?req.session.user.name:false,
+        errorMessage: errorMessage,
+        domain: domains[req.params.domain],
+        externalDomain: req.params.domain
+    });
+});
+
+router.get('/edit/server/:server', (req, res) => {
+    if (!req.session.user) {
+        return res.redirect(401, '/login');
+    }
+    var errorMessage = req.session.errorMessage;
+    req.session.errorMessage = undefined;
+    var domains = helper.config.domains.json();
+    if (!domains.hasOwnProperty(req.params.domain)) {
+        req.session.errorMessage = 'Unknown domain!!!';
+        return res.redirect('/domains');
+    }
+    res.render('server', {
         user: req.session.user !== undefined?req.session.user.name:false,
         errorMessage: errorMessage,
         domain: domains[req.params.domain],

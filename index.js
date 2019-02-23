@@ -101,7 +101,9 @@ if (!FRONTENDS.hasOwnProperty(CONFIG.domain)) {
 }
 
 if (!fs.existsSync('./nginx/sites-available/letsproxy')) {
-    helper.config.generate();
+    const Nginx = require('./modules/configs/nginx');
+    const nginx = new Nginx();
+    nginx.write_configs();
 }
 
 const PORT = process.env.PORT || 3000;

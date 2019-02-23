@@ -14,25 +14,25 @@ html(lang="en")
             table.u-full-width
                 tbody
                     td
-                        h1 FrontEnd 
-                            a(href="/add/front")
+                        h1 Domains 
+                            a(href="/add/domain")
                                 i.material-icons.pointer.big-icon(title="Add domain" style="color: green;") add_circle_outline
                             i.material-icons.pointer.big-icon(title="Check NGINX config" style="color: blue;") sync_problem
                             i.material-icons.pointer.big-icon(title="Restart NGINX" style="color: orange;") sync
-                    td &nbsp;
-                    td
-                        h1 BackEnd 
-                            a(href="/add/back")
-                                i.material-icons.pointer.big-icon(title="Add server" style="color: green;") add_circle_outline
-                            i.material-icons.pointer.big-icon(title="Check NGINX config" style="color: blue;") sync_problem
-                            i.material-icons.pointer.big-icon(title="Restart NGINX" style="color: orange;") sync
+                    //- td &nbsp;
+                    //- td
+                    //-     h1 Servers 
+                    //-         a(href="/add/server")
+                    //-             i.material-icons.pointer.big-icon(title="Add server" style="color: green;") add_circle_outline
+                    //-         i.material-icons.pointer.big-icon(title="Check NGINX config" style="color: blue;") sync_problem
+                    //-         i.material-icons.pointer.big-icon(title="Restart NGINX" style="color: orange;") sync
             table.u-full-width
                 thead
                     tr
                         th Status
                         th External domain
                         th &nbsp;
-                        th Internal address
+                        th Server address
                         th &nbsp;
                 tbody
                     each domain in domains
@@ -49,22 +49,28 @@ html(lang="en")
                                 else
                                     i.material-icons.pointer(id=domain.name name="domain" title="Inactive" style="color: red;") cancel
                             td
-                                ul.domain-list
-                                    li
-                                        a(href="https://"+domain.name target="_blank") #{domain.name}
+                                .float-left.space-right
+                                    a(href="/edit/domain/"+domain.name)
+                                        i.material-icons(title="Edit domain") edit
+                                .float-left
+                                    ul.domain-list
+                                        li
+                                            a(href="https://"+domain.name target="_blank") #{domain.name}
                             td
                                 //- i.material-icons arrow_right_alt
                                 i.material-icons(title=redirectText) #{redirectIcon}
                             td
-                                ul.domain-list
-                                    each server in domain.backend.servers
-                                        - var proxyAddress = server.address
-                                        - var proxyPort = server.port?':'+server.port:''
-                                        li
-                                            a(href="http"+https+"://"+proxyAddress+proxyPort target="_blank") http#{https}://#{proxyAddress}#{proxyPort}
+                                .float-left.space-right
+                                    a(href="/edit/server/"+domain.name)
+                                        i.material-icons(title="Edit domain") edit
+                                .float-left
+                                    ul.domain-list
+                                        each server in domain.backend.servers
+                                            - var proxyAddress = server.address
+                                            - var proxyPort = server.port?':'+server.port:''
+                                            li
+                                                a(href="http"+https+"://"+proxyAddress+proxyPort target="_blank") http#{https}://#{proxyAddress}#{proxyPort}
                             td
-                                a(href="/edit/"+domain.name)
-                                    i.material-icons(title="Edit domain") edit
                                 if domain.settings.enabled
                                     a(href="/ajax/disable/"+domain.name)
                                         i.material-icons.rotate(title="Disable domain") toggle_off
