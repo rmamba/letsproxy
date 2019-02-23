@@ -2,6 +2,7 @@
 "use strict";
 
 const fs = require('fs');
+const { exec } = require('child_process');
 const express = require('express');
 const router = express.Router();
 const helper = require('../modules/helper');
@@ -15,6 +16,9 @@ const mime = {
 };
 
 router.get('/config/:domain', (req, res) => {
+    if (!req.session.user) {
+        return res.redirect(401, '/login');
+    }
     var data = '{\n\t"error": "No config found!!!"\n}';
     if (fs.existsSync(`./nginx/sites-available/${req.params.domain}`)) {
         data = fs.readFileSync(`./nginx/sites-available/${req.params.domain}`).toString();
@@ -64,6 +68,44 @@ router.get('/favicon/:protocol/:url', (req, res) => {
     helper.config.favicons.save(favicons);
     res.set('Content-Type', contentType);
     res.end(data, 'binary');
+});
+
+router.get('/nginx/test', (req, res) => {
+    if (!req.session.user) {
+        return res.redirect(401, '/login');
+    }
+
+    exec('sudo ./scripts/nginx-test.sh', (err, stdout, stderr) => {
+        if (err) {
+          // node couldn't execute the command
+          console.log(err);
+          return res.end('ERROR');
+        }
+      
+        // the *entire* stdout and stderr (buffered)
+        console.log(`stdout: ${stdout}`);
+        console.log(`stderr: ${stderr}`);
+        res.end('OK');
+    });
+});
+
+router.get('/nginx/restart', (req, res) => {
+    if (!req.session.user) {
+        return res.redirect(401, '/login');
+    }
+
+    exec('sudo ./scripts/nginx-restart.sh', (err, stdout, stderr) => {
+        if (err) {
+          // node couldn't execute the command
+          console.log(err);
+          return res.end('ERROR');
+        }
+      
+        // the *entire* stdout and stderr (buffered)
+        console.log(`stdout: ${stdout}`);
+        console.log(`stderr: ${stderr}`);
+        res.end('OK');
+    });
 });
 
 module.exports = router;
