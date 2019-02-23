@@ -104,7 +104,7 @@ module.exports = class Letsproxy {
         };
 
         if (body.domainAliases !== "") {
-            domain.aliases = body.domainAliases.split(',');
+            domain.aliases = body.domainAliases.replace(/ /g, "").split(',');
         }
 
         return domain;
