@@ -1,6 +1,6 @@
 {
   "name": "letsproxy",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "",
   "main": "index.js",
   "dependencies": {
@@ -8,13 +8,16 @@
     "cookie-session": "^2.0.0-beta.3",
     "express": "^4.16.4",
     "md5": "^2.2.1",
+    "node-dig-dns": "^0.2.10",
     "pug": "^2.0.3",
     "request": "^2.88.0",
     "wait-for-stuff": "^1.4.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "tap": "^12.5.3"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/.bin/tap -j8 test/*Test.js -T --cov --coverage-report=html"
   },
   "author": "",
   "license": "ISC"

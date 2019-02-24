@@ -2,7 +2,6 @@
 "use strict";
 
 const fs = require('fs');
-const CONFIG = require('../../config');
 const Acme = require('./acme');
 const Nginx = require('./nginx');
 

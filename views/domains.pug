@@ -39,7 +39,7 @@ html(lang="en")
                                     if domain.settings.certificates
                                         i.material-icons.pointer(id=domain.name name="domain" title="Active" style="color: green;") check_circle
                                     else
-                                        i.material-icons.pointer(id=domain.name name="domain" title="Active" style="color: orange;") pause_circle_filled
+                                        i.material-icons.pointer(id=domain.name name="domain" title="Active, no certificates" style="color: orange;") pause_circle_filled
                                 else
                                     i.material-icons.pointer(id=domain.name name="domain" title="Inactive" style="color: red;") cancel
                             td

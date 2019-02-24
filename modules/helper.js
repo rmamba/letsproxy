@@ -4,7 +4,6 @@
 const fs = require('fs');
 const wait = require('wait-for-stuff');
 const request = require('request');
-const CONFIG = require('../config');
 
 module.exports.domain = {
     to: {}
