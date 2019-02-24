@@ -7,6 +7,8 @@ const express = require('express');
 const router = express.Router();
 const helper = require('../modules/helper');
 const faviconFolder = './cache/favicon'
+const Favicons = require('../modules/configs/favicons');
+const Wget = require('../modules/wget');
 const mime = {
     ico: 'image/x-icon',
     gif: 'image/gif',
@@ -32,20 +34,21 @@ router.get('/favicon/:protocol/:url', (req, res) => {
         return res.redirect(401, '/login');
     }
     var data;
-    var favicons = helper.config.favicons.json();
+    const favicons = new Favicons()
     if (favicons.hasOwnProperty(req.params.url)) {
-        if (fs.existsSync(`${faviconFolder}/${favicons[req.params.url].fileName}`)) {
-            data = fs.readFileSync(`${faviconFolder}/${favicons[req.params.url].fileName}`);
-            res.set('Content-Type', favicons[req.params.url].contentType);
+        if (fs.existsSync(`${faviconFolder}/${favicons.faviconsDict[req.params.url].fileName}`)) {
+            data = fs.readFileSync(`${faviconFolder}/${favicons.faviconsDict[req.params.url].fileName}`);
+            res.set('Content-Type', favicons.faviconsDict[req.params.url].contentType);
             res.end(data, 'binary');
             return;
         }
     }
-    var favicon = helper.request.favicon(req.params.protocol==='https'?true:false, req.params.url);
+    const wget = new Wget();
+    var favicon = wget.favicon(req.params.protocol==='https'?true:false, req.params.url);
     if (favicon === undefined) {
         return res.redirect('/domains');
     }
-    data = helper.request.getImage(req.params.protocol==='https'?true:false, favicon);
+    data = wget.binary(req.params.protocol==='https'?true:false, favicon);
     if (data instanceof Error) {
         console.log(data);
         data = fs.readFileSync(`${faviconFolder}/favicon.ico`);

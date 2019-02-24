@@ -8,19 +8,8 @@ const express = require('express');
 const session = require('cookie-session');
 const app = express();
 const version = require('./version');
-// const helper = require('./modules/helper');
-const Letsproxy = require('./modules/configs/letsproxy');
-const letsproxy = new Letsproxy();
-
-// const CONFIG = require('./config');
-// var FRONTENDS = {};
-// var BACKENDS = {};
-// if (fs.existsSync('./frontends.json')) {
-//     FRONTENDS = JSON.parse(fs.readFileSync('./frontends.json').toString());
-// }
-// if (fs.existsSync('./backends.json')) {
-//     BACKENDS = JSON.parse(fs.readFileSync('./backends.json').toString());
-// }
+const ConfigLetsproxy = require('./modules/configs/letsproxy');
+const configLetsproxy = new ConfigLetsproxy();
 
 app.use(express.json());
 app.use(express.urlencoded({
@@ -70,52 +59,6 @@ app.use('/edit', edit_v1);
 app.use('/update', update_v1);
 app.use('/remove', remove_v1);
 app.use('/ajax', ajax_v1);
-
-// if (!BACKENDS.hasOwnProperty(helper.domain.to.backend(CONFIG.domain))) {
-//     BACKENDS[helper.domain.to.backend(CONFIG.domain)] = {
-//         servers: [{
-//             'address': '127.0.0.1',
-//             'port': '3000'
-//         }]
-//     };
-//     fs.writeFileSync('./backends.json', JSON.stringify(BACKENDS, null, 2));
-//     const Letsproxy = require('./modules/configs/letsproxy');
-//     const letsproxy = new Letsproxy();
-//     letsproxy.write_configs();
-// }
-// if (!FRONTENDS.hasOwnProperty(CONFIG.domain)) {
-//     FRONTENDS[CONFIG.domain] = {
-//         enabled: true,
-//         httpRedirect: true,
-//         location: {
-//             path: '/',
-//             proxy: {
-//                 pass: {
-//                     https: false,
-//                     backend: helper.domain.to.backend(CONFIG.domain)
-//                 },
-//                 next_upstream: 'error timeout invalid_header http_500 http_502 http_503 http_504',
-//                 redirect: false,
-//                 buffering: false,
-//                 ssl_verify: false,
-//                 set_header: {
-//                     'Host': '$host',
-//                     'X-Real-IP': '$remote_addr',
-//                     'X-Forwarded-For': '$proxy_add_x_forwarded_for',
-//                     'X-Forwarded-Ssl': 'on'
-//                 }
-//             }
-//         }
-//     };
-//     fs.writeFileSync('./frontends.json', JSON.stringify(FRONTENDS, null, 2));
-//     helper.config.generate();
-// }
-
-// if (!fs.existsSync('./nginx/sites-available/letsproxy')) {
-//     const Letsproxy = require('./modules/configs/letsproxy');
-//     const letsproxy = new Letsproxy();
-//     letsproxy.write_configs();
-// }
 
 const PORT = process.env.PORT || 3000;
 module.exports = app.listen(PORT, () => console.log(`Listening on port ${PORT}...`));

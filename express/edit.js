@@ -4,7 +4,7 @@
 const express = require('express');
 const router = express.Router();
 const helper = require('../modules/helper');
-const Letsproxy = require('../modules/configs/letsproxy');
+const ConfigLetsproxy = require('../modules/configs/letsproxy');
 
 router.get('/domain/:domain', (req, res) => {
     if (!req.session.user) {
@@ -12,22 +12,22 @@ router.get('/domain/:domain', (req, res) => {
     }
     var errorMessage = req.session.errorMessage;
     req.session.errorMessage = undefined;
-    const letsproxy = new Letsproxy();
-    if (!letsproxy.domainsDict.hasOwnProperty(req.params.domain)) {
+    const configLetsproxy = new ConfigLetsproxy();
+    if (!configLetsproxy.domainsDict.hasOwnProperty(req.params.domain)) {
         req.session.errorMessage = 'Unknown domain!!!';
         return res.redirect('/domains');
     }
     var aliases = '';
-    if (letsproxy.domainsDict[req.params.domain].hasOwnProperty('aliases')) {
-        aliases = letsproxy.domainsDict[req.params.domain].aliases.join(',');
+    if (configLetsproxy.domainsDict[req.params.domain].hasOwnProperty('aliases')) {
+        aliases = configLetsproxy.domainsDict[req.params.domain].aliases.join(',');
     }
     res.render('domain', {
         user: req.session.user !== undefined?req.session.user:false,
         errorMessage: errorMessage,
         externalDomain: req.params.domain,
-        domainUpstream: letsproxy.domainsDict[req.params.domain].location.proxy.pass.backend,
+        domainUpstream: configLetsproxy.domainsDict[req.params.domain].location.proxy.pass.backend,
         domainAliases: aliases,
-        upstreamServers: Object.keys(letsproxy.backendsDict)
+        upstreamServers: Object.keys(configLetsproxy.backendsDict)
     });
 });
 
@@ -37,8 +37,8 @@ router.get('/server/:server', (req, res) => {
     }
     var errorMessage = req.session.errorMessage;
     req.session.errorMessage = undefined;
-    const letsproxy = new Letsproxy();
-    if (!letsproxy.backendsDict.hasOwnProperty(req.params.server)) {
+    const configLetsproxy = new ConfigLetsproxy();
+    if (!configLetsproxy.backendsDict.hasOwnProperty(req.params.server)) {
         req.session.errorMessage = 'Unknown server!!!';
         return res.redirect('/servers');
     }
@@ -46,7 +46,7 @@ router.get('/server/:server', (req, res) => {
         user: req.session.user !== undefined?req.session.user:false,
         errorMessage: errorMessage,
         upstreamName: req.params.server,
-        upstreamServers: letsproxy.backendsDict[req.params.server].servers
+        upstreamServers: configLetsproxy.backendsDict[req.params.server].servers
     });
 });
 

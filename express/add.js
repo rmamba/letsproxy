@@ -3,7 +3,7 @@
 
 const express = require('express');
 const router = express.Router();
-const Letsproxy = require('../modules/configs/letsproxy');
+const ConfigLetsproxy = require('../modules/configs/letsproxy');
 
 router.get('/domain', (req, res) => {
     if (!req.session.user) {
@@ -11,7 +11,7 @@ router.get('/domain', (req, res) => {
     }
     var errorMessage = req.session.errorMessage;
     req.session.errorMessage = undefined;
-    const letsproxy = new Letsproxy();
+    const configLetsproxy = new ConfigLetsproxy();
     res.render('domain', {
         user: req.session.user !== undefined?req.session.user:false,
         errorMessage: errorMessage,
@@ -26,7 +26,7 @@ router.get('/server', (req, res) => {
     }
     var errorMessage = req.session.errorMessage;
     req.session.errorMessage = undefined;
-    const letsproxy = new Letsproxy();
+    const configLetsproxy = new ConfigLetsproxy();
     res.render('server', {
         user: req.session.user !== undefined?req.session.user:false,
         errorMessage: errorMessage,

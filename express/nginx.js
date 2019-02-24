@@ -3,8 +3,8 @@
 
 const express = require('express');
 const router = express.Router();
-const helper = require('../modules/helper');
-const Letsproxy = require('../modules/configs/letsproxy');
+const ConfigProxy = require('../modules/configs/letsproxy');
+const ConfigNginx = require('../modules/configs/nginx');
 
 router.get('/domains', (req, res) => {
     if (!req.session.user) {
@@ -12,11 +12,11 @@ router.get('/domains', (req, res) => {
     }
     var errorMessage = req.session.errorMessage;
     req.session.errorMessage = undefined;
-    var domains = helper.config.domains.array();
+    const configNginx = new ConfigNginx();
     res.render('domains', {
         user: req.session.user !== undefined?req.session.user:false,
         errorMessage: errorMessage,
-        domains: domains
+        domains: configNginx.domainsAsArray()
     });
 });
 
@@ -26,11 +26,11 @@ router.get('/servers', (req, res) => {
     }
     var errorMessage = req.session.errorMessage;
     req.session.errorMessage = undefined;
-    var servers = helper.config.servers.array();
+    const configNginx = new ConfigNginx();
     res.render('servers', {
         user: req.session.user !== undefined?req.session.user:false,
         errorMessage: errorMessage,
-        servers: servers
+        servers: configNginx.backendsDict
     });
 });
 
@@ -40,14 +40,14 @@ router.get('/domain/enable/:domain', (req, res) => {
     }
     var errorMessage = req.session.errorMessage;
     req.session.errorMessage = undefined;
-    const letsproxy = new Letsproxy();
-    if (!letsproxy.domainsDict.hasOwnProperty(req.params.domain)) {
+    const configLetsproxy = new ConfigProxy();
+    if (!configLetsproxy.domainsDict.hasOwnProperty(req.params.domain)) {
         req.session.errorMessage = 'Domain not found.';
         return res.redirect('/domains');
     }
-    letsproxy.domainsDict[req.params.domain].enabled = true;
-    letsproxy.write_domains();
-    letsproxy.write_config(req.params.domain);
+    configLetsproxy.domainsDict[req.params.domain].enabled = true;
+    configLetsproxy.write_domains();
+    configLetsproxy.write_config(req.params.domain);
     res.redirect('/domains');
 });
 
@@ -57,14 +57,14 @@ router.get('/domain/disable/:domain', (req, res) => {
     }
     var errorMessage = req.session.errorMessage;
     req.session.errorMessage = undefined;
-    const letsproxy = new Letsproxy();
-    if (!letsproxy.domainsDict.hasOwnProperty(req.params.domain)) {
+    const configLetsproxy = new ConfigProxy();
+    if (!configLetsproxy.domainsDict.hasOwnProperty(req.params.domain)) {
         req.session.errorMessage = 'Domain not found.';
         return res.redirect('/domains');
     }
-    letsproxy.domainsDict[req.params.domain].enabled = false;
-    letsproxy.write_domains();
-    letsproxy.write_config(req.params.domain);
+    configLetsproxy.domainsDict[req.params.domain].enabled = false;
+    configLetsproxy.write_domains();
+    configLetsproxy.write_config(req.params.domain);
     res.redirect('/domains');
 });
 

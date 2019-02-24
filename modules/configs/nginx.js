@@ -16,6 +16,21 @@ module.exports = class Nginx {
         }
     }
 
+    domainsAsArray() {
+        var domainsArray = [];
+        Object.keys(this.domainsDict).forEach(domain => {
+            var domainData = this.domainsDict[domain];
+            domainData.certificates = fs.existsSync(`/var/lib/acme/live/${domain}/fullchain`);
+            var data = {
+                name: domain,
+                settings: domainData,
+                backend: this.backendsDict[domainData.location.proxy.pass.backend]
+            };
+            domainsArray.push(data);
+        });
+        return domainsArray;
+    };
+
     write_config(domain) {
         var D = this.domainsDict[domain];
         var config = '';
