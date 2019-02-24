@@ -44,3 +44,12 @@ test('none existing domain tadomenaneobstaja.com', function(t) {
     }, 'Should NOT throw error');
     t.end();
 });
+
+test('invalid domain tadomenaneobstaja.krneki', function(t) {
+    t.doesNotThrow(function() {
+        var dig = new Dig('tadomenaneobstaja.krneki');
+        var IP = dig.ip();
+        t.equal(IP, undefined);
+    }, 'Should NOT throw error');
+    t.end();
+});
