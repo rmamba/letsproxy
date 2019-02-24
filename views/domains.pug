@@ -36,7 +36,10 @@ html(lang="en")
                         tr
                             td(style="width: 30px;")
                                 if domain.settings.enabled
-                                    i.material-icons.pointer(id=domain.name name="domain" title="Active" style="color: green;") check_circle
+                                    if domain.settings.certificates
+                                        i.material-icons.pointer(id=domain.name name="domain" title="Active" style="color: green;") check_circle
+                                    else
+                                        i.material-icons.pointer(id=domain.name name="domain" title="Active" style="color: orange;") pause_circle_filled
                                 else
                                     i.material-icons.pointer(id=domain.name name="domain" title="Inactive" style="color: red;") cancel
                             td

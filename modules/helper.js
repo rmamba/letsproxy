@@ -50,6 +50,7 @@ module.exports.config.domains.array = function domainsToArray() {
     var domainsArray = [];
     Object.keys(domainsDict).forEach(domain => {
         var domainData = domainsDict[domain];
+        domainData.certificates = fs.existsSync(`/var/lib/acme/live/${domain}/fullchain`);
         var data = {
             name: domain,
             settings: domainData,
