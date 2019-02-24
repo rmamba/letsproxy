@@ -19,13 +19,6 @@ html(lang="en")
                                 i.material-icons.pointer.big-icon(title="Add domain" style="color: green;") add_circle_outline
                             i.material-icons.pointer.big-icon(title="Check NGINX config" style="color: blue;") sync_problem
                             i.material-icons.pointer.big-icon(title="Restart NGINX" style="color: orange;") sync
-                    //- td &nbsp;
-                    //- td
-                    //-     h1 Servers 
-                    //-         a(href="/add/server")
-                    //-             i.material-icons.pointer.big-icon(title="Add server" style="color: green;") add_circle_outline
-                    //-         i.material-icons.pointer.big-icon(title="Check NGINX config" style="color: blue;") sync_problem
-                    //-         i.material-icons.pointer.big-icon(title="Restart NGINX" style="color: orange;") sync
             table.u-full-width
                 thead
                     tr
@@ -40,8 +33,6 @@ html(lang="en")
                         - var https = domain.settings.location.proxy.pass.https?'s':''
                         - var redirectIcon = domain.settings.location.proxy.redirect?'lock':'lock_open'
                         - var redirectText = domain.settings.location.proxy.redirect?'https only':'http redirect'
-                        //- - var proxyAddress = domain.settings.location.proxy.pass.address
-                        //- - var proxyPort = domain.settings.location.proxy.pass.port?':'+domain.settings.location.proxy.pass.port:''
                         tr
                             td(style="width: 30px;")
                                 if domain.settings.enabled
@@ -57,7 +48,6 @@ html(lang="en")
                                         li
                                             a(href="https://"+domain.name target="_blank") #{domain.name}
                             td
-                                //- i.material-icons arrow_right_alt
                                 i.material-icons(title=redirectText) #{redirectIcon}
                             td
                                 .float-left.space-right
@@ -72,17 +62,12 @@ html(lang="en")
                                                 a(href="http"+https+"://"+proxyAddress+proxyPort target="_blank") http#{https}://#{proxyAddress}#{proxyPort}
                             td
                                 if domain.settings.enabled
-                                    a(href="/ajax/disable/"+domain.name)
+                                    a(href="/domain/disable/"+domain.name)
                                         i.material-icons.rotate.green(title="Disable domain") toggle_on
                                 else
-                                    a(href="/ajax/enable/"+domain.name)
+                                    a(href="/domain/enable/"+domain.name)
                                         i.material-icons.rotate.red(title="Enable domain") toggle_off
                                 a(href="/ajax/delete/"+domain.name)
                                     i.material-icons(title="Remove domain!!!" style="color: red;") delete
-                        //- tr(id="code-"+ID style="display: none;")
-                        //-     td &nbsp;
-                        //-     td(colspan=4)
-                        //-         pre
-                        //-             code #{domain.config}
             include modal/config.pug
         include includes/footer.pug

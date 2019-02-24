@@ -29,6 +29,13 @@ module.exports = class Letsproxy {
         nginx.write_configs();
     }
 
+    write_config(domain) {
+        const acme = new Acme();
+        acme.write_config(domain);
+        const nginx = new Nginx();
+        nginx.write_config(domain);
+    }
+
     write_upstream() {
         fs.writeFileSync('./backends.json', JSON.stringify(this.backendsDict, null, 2));
         this.write_configs();

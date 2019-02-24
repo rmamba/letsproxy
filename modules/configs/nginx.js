@@ -94,12 +94,18 @@ module.exports = class Nginx {
 
         config += `}`;
         fs.writeFileSync(`./nginx/sites-available/${domain}`, config);
+        var exists = true;
+        try {
+            fs.lstatSync(`./nginx/sites-enabled/${domain}`);
+        } catch(e) {
+            exists = false;
+        }
         if (D.enabled) {
-            if (!fs.existsSync(`./nginx/sites-enabled/${domain}`)) {
-                fs.symlinkSync(`./nginx/sites-available/${domain}`, `./nginx/sites-enabled/${domain}`);
-            }
+            if (!exists) {
+                fs.symlinkSync(`../sites-available/${domain}`, `./nginx/sites-enabled/${domain}`);
+            }1
         } else {
-            if (fs.existsSync(`./nginx/sites-enabled/${domain}`)) {
+            if (exists) {
                 fs.unlinkSync(`./nginx/sites-enabled/${domain}`);
             }
         }

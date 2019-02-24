@@ -4,6 +4,7 @@
 const express = require('express');
 const router = express.Router();
 const helper = require('../modules/helper');
+const Letsproxy = require('../modules/configs/letsproxy');
 
 router.get('/domains', (req, res) => {
     if (!req.session.user) {
@@ -31,6 +32,40 @@ router.get('/servers', (req, res) => {
         errorMessage: errorMessage,
         servers: servers
     });
+});
+
+router.get('/domain/enable/:domain', (req, res) => {
+    if (!req.session.user) {
+        return res.redirect(401, '/login');
+    }
+    var errorMessage = req.session.errorMessage;
+    req.session.errorMessage = undefined;
+    const letsproxy = new Letsproxy();
+    if (!letsproxy.domainsDict.hasOwnProperty(req.params.domain)) {
+        req.session.errorMessage = 'Domain not found.';
+        return res.redirect('/domains');
+    }
+    letsproxy.domainsDict[req.params.domain].enabled = true;
+    letsproxy.write_domains();
+    letsproxy.write_config(req.params.domain);
+    res.redirect('/domains');
+});
+
+router.get('/domain/disable/:domain', (req, res) => {
+    if (!req.session.user) {
+        return res.redirect(401, '/login');
+    }
+    var errorMessage = req.session.errorMessage;
+    req.session.errorMessage = undefined;
+    const letsproxy = new Letsproxy();
+    if (!letsproxy.domainsDict.hasOwnProperty(req.params.domain)) {
+        req.session.errorMessage = 'Domain not found.';
+        return res.redirect('/domains');
+    }
+    letsproxy.domainsDict[req.params.domain].enabled = false;
+    letsproxy.write_domains();
+    letsproxy.write_config(req.params.domain);
+    res.redirect('/domains');
 });
 
 module.exports = router;
