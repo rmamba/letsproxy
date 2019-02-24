@@ -68,4 +68,38 @@ router.get('/domain/disable/:domain', (req, res) => {
     res.redirect('/domains');
 });
 
+router.get('/domain/redirect/enable/:domain', (req, res) => {
+    if (!req.session.user) {
+        return res.redirect(401, '/login');
+    }
+    var errorMessage = req.session.errorMessage;
+    req.session.errorMessage = undefined;
+    const configLetsproxy = new ConfigProxy();
+    if (!configLetsproxy.domainsDict.hasOwnProperty(req.params.domain)) {
+        req.session.errorMessage = 'Domain not found.';
+        return res.redirect('/domains');
+    }
+    configLetsproxy.domainsDict[req.params.domain].httpRedirect = true;
+    configLetsproxy.write_domains();
+    configLetsproxy.write_config(req.params.domain);
+    res.redirect('/domains');
+});
+
+router.get('/domain/redirect/disable/:domain', (req, res) => {
+    if (!req.session.user) {
+        return res.redirect(401, '/login');
+    }
+    var errorMessage = req.session.errorMessage;
+    req.session.errorMessage = undefined;
+    const configLetsproxy = new ConfigProxy();
+    if (!configLetsproxy.domainsDict.hasOwnProperty(req.params.domain)) {
+        req.session.errorMessage = 'Domain not found.';
+        return res.redirect('/domains');
+    }
+    configLetsproxy.domainsDict[req.params.domain].httpRedirect = false;
+    configLetsproxy.write_domains();
+    configLetsproxy.write_config(req.params.domain);
+    res.redirect('/domains');
+});
+
 module.exports = router;

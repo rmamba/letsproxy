@@ -31,8 +31,6 @@ html(lang="en")
                     each domain in domains
                         - var ID = domain.name.replace(/\./g, '-')
                         - var https = domain.settings.location.proxy.pass.https?'s':''
-                        - var redirectIcon = domain.settings.location.proxy.redirect?'lock':'lock_open'
-                        - var redirectText = domain.settings.location.proxy.redirect?'https only':'http redirect'
                         tr
                             td(style="width: 30px;")
                                 if domain.settings.enabled
@@ -51,7 +49,12 @@ html(lang="en")
                                         li
                                             a(href="https://"+domain.name target="_blank") #{domain.name}
                             td
-                                i.material-icons(title=redirectText) #{redirectIcon}
+                                if domain.httpRedirect
+                                    a(href="/domain/redirect/disable/"+domain.name)
+                                        i.material-icons(title="HTTP redirect") lock_open
+                                else
+                                    a(href="/domain/redirect/enable/"+domain.name)
+                                        i.material-icons(title="HTTPS only") lock
                             td
                                 .float-left.space-right
                                     a(href="/edit/server/"+domain.backendName)
