@@ -85,29 +85,35 @@ module.exports = class Letsproxy {
     }
 
     parse_domain(body) {
-        var domain = {
-            enabled: false,
-            httpRedirect: false,
-            location: {
-                path: "/",
-                proxy: {
-                    pass: {
-                        https: false,
-                        backend: body.domainUpstream
-                    },
-                    next_upstream: "error timeout invalid_header http_500 http_502 http_503 http_504",
-                    redirect: false,
-                    buffering: false,
-                    ssl_verify: false,
-                    set_header: {
-                        "Host": "$host",
-                        "X-Real-IP": "$remote_addr",
-                        "X-Forwarded-For": "$proxy_add_x_forwarded_for",
-                        "X-Forwarded-Ssl": "on"
+        var domain;
+        if (this.domainsDict.hasOwnProperty(body.externalDomain)) {
+            domain = this.domainsDict[body.externalDomain];
+            domain.location.proxy.pass.backend = body.domainUpstream;
+        } else {
+            domain = {
+                enabled: false,
+                httpRedirect: false,
+                location: {
+                    path: "/",
+                    proxy: {
+                        pass: {
+                            https: false,
+                            backend: body.domainUpstream
+                        },
+                        next_upstream: "error timeout invalid_header http_500 http_502 http_503 http_504",
+                        redirect: false,
+                        buffering: false,
+                        ssl_verify: false,
+                        set_header: {
+                            "Host": "$host",
+                            "X-Real-IP": "$remote_addr",
+                            "X-Forwarded-For": "$proxy_add_x_forwarded_for",
+                            "X-Forwarded-Ssl": "on"
+                        }
                     }
                 }
-            }
-        };
+            };
+        }
 
         if (body.domainAliases !== "") {
             domain.aliases = body.domainAliases.replace(/ /g, "").split(',');
