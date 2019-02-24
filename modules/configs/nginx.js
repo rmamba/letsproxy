@@ -24,7 +24,8 @@ module.exports = class Nginx {
             var data = {
                 name: domain,
                 settings: domainData,
-                backend: this.backendsDict[domainData.location.proxy.pass.backend]
+                backend: this.backendsDict[domainData.location.proxy.pass.backend],
+                backendName: domainData.location.proxy.pass.backend
             };
             domainsArray.push(data);
         });
