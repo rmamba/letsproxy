@@ -7,7 +7,7 @@ const express = require('express');
 const router = express.Router();
 const helper = require('../modules/helper');
 const faviconFolder = './cache/favicon'
-const Favicons = require('../modules/configs/favicons');
+const ConfigFavicons = require('../modules/configs/favicons');
 const Wget = require('../modules/wget');
 const mime = {
     ico: 'image/x-icon',
@@ -34,11 +34,11 @@ router.get('/favicon/:protocol/:url', (req, res) => {
         return res.redirect(401, '/login');
     }
     var data;
-    const favicons = new Favicons()
-    if (favicons.hasOwnProperty(req.params.url)) {
-        if (fs.existsSync(`${faviconFolder}/${favicons.faviconsDict[req.params.url].fileName}`)) {
-            data = fs.readFileSync(`${faviconFolder}/${favicons.faviconsDict[req.params.url].fileName}`);
-            res.set('Content-Type', favicons.faviconsDict[req.params.url].contentType);
+    const configFavicons = new ConfigFavicons();
+    if (configFavicons.hasOwnProperty(req.params.url)) {
+        if (fs.existsSync(`${faviconFolder}/${configFavicons.faviconsDict[req.params.url].fileName}`)) {
+            data = fs.readFileSync(`${faviconFolder}/${configFavicons.faviconsDict[req.params.url].fileName}`);
+            res.set('Content-Type', configFavicons.faviconsDict[req.params.url].contentType);
             res.end(data, 'binary');
             return;
         }
@@ -63,12 +63,12 @@ router.get('/favicon/:protocol/:url', (req, res) => {
         contentType = mime[iconType];
     }
     fs.writeFileSync(`${faviconFolder}/${fileName}`, data, 'binary');
-    favicons[req.params.url] = {
+    configFavicons.faviconsDict[req.params.url] = {
         fileName: fileName,
         contentType: contentType,
         lastUpdated: new Date()
     };
-    helper.config.favicons.save(favicons);
+    configFavicons.save();
     res.set('Content-Type', contentType);
     res.end(data, 'binary');
 });
