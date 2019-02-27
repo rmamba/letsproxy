@@ -18,15 +18,22 @@ html(lang="en")
                 input(type="text" name="upstreamName" value=upstreamName)
                 label 
                     | Address(es)
-                    i.material-icons.pointer(onclick="addUpstreamAddress();") add_circle_outline
+                    i.material-icons.pointer.medium-icon(onclick="addUpstreamAddress();") add_circle_outline
                 .addresses
                     each server, idx in upstreamServers
                         - var port = 1000+Math.floor(Math.random() * 1000);
                         div(id="port-"+port)
                             input(type="text" name="upstreamAddresses[]" placeholder="127.0.0.1" value=server.address)
                             | : 
-                            input(type="text" name="upstreamPorts[]" placeholder="3000" value=server.port)
+                            input(type="text" name="upstreamPorts[]" placeholder="3000" value=server.port style="width: 65px;")
+                            | 
+                            select(name="upstreamExtra[]" data-port=port)
+                                option(value=0) Default
+                                option(value=1) Weight
+                                option(value=2) Backup
+                                option(value=3) Down
+                            input(id="weight-"+port type="text" name="upstreamWeight[]" data-port=port placeholder=">=1" style="width: 50px; display: none;")
                             if idx > 0
-                                i.material-icons.pointer.delete(onclick="removeUpstreamAddress('" + port + "');") remove_circle_outline
+                                i.material-icons.pointer.delete.medium-icon(onclick="removeUpstreamAddress('" + port + "');") remove_circle_outline
                 input(type="submit" value="SAVE")
             include includes/footer.pug

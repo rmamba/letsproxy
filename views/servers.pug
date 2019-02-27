@@ -33,6 +33,7 @@ html(lang="en")
                             td #{name}
                             td
                                 ul.domain-list
+                                    - var cnt = server.servers.length
                                     each S in server.servers
                                         - var proxyAddress = S.address
                                         - var proxyPort = S.port?':' + S.port:''
@@ -40,4 +41,5 @@ html(lang="en")
                             td
                                 a(href="/remove/server/" + name)
                                     i.material-icons(title="Remove " + name + " server!!!" style="color: red;") delete
+            include modal/extra/address.pug
         include includes/footer.pug
