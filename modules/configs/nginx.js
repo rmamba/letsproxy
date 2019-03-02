@@ -33,23 +33,7 @@ module.exports = class Nginx {
         });
     }
 
-    set_proxy_headers(domain, properties) {
-        var D = this.domainsDict[domain];
-        if (!D.hasOwnProperty('location')) {
-            D.location = {};
-        }
-        if (!D.location.hasOwnProperty('proxy')) {
-            D.location.proxy = {};
-        }
-        if (!D.location.hasOwnProperty('proxy_set_header')) {
-            D.location.proxy_set_header = {};
-        }
-        Object.keys(properties).forEach(property => {
-            D.location.proxy_set_header[property] = properties[property];
-        });
-    }
-
-    assign_template(name) {
+    assign_template(domain, name) {
         switch(name.toLowerCase()) {
             case 'gitlab':
                 this.set_server_properties(domain, {
@@ -66,14 +50,14 @@ module.exports = class Nginx {
                     "proxy_read_timeout": "300",
                     "proxy_connect_timeout": "300",
                     "proxy_redirect": "off",
-                    "proxy_http_version": "1.1"
-                });
-                this.set_proxy_headers(domain, {
-                    "Host": "$http_host",
-                    "X-Real-IP": "$remote_addr",
-                    "X-Forwarded-Ssl": "on",
-                    "X-Forwarded-For": "$proxy_add_x_forwarded_for",
-                    "X-Forwarded-Proto": "$scheme"
+                    "proxy_http_version": "1.1",
+                    "proxy_set_header": {
+                        "Host": "$http_host",
+                        "X-Real-IP": "$remote_addr",
+                        "X-Forwarded-Ssl": "on",
+                        "X-Forwarded-For": "$proxy_add_x_forwarded_for",
+                        "X-Forwarded-Proto": "$scheme"
+                    }
                 });
                 break;
             default:
@@ -102,8 +86,10 @@ module.exports = class Nginx {
     write_config(domain) {
         var D = this.domainsDict[domain];
 
-        if (D.gitLab === true) {
-            this.assign_template('gitlab');
+        if (D.hasOwnProperty('template')) {
+            if (D.template !== '') {
+                this.assign_template(domain, D.template);
+            }
         }
 
         var config = '';
@@ -175,7 +161,7 @@ module.exports = class Nginx {
                     config += `\t\tproxy_set_header ${h} ${D.location.proxy_set_header[h]};\n`;
                 });
             } else {
-                if (p !== 'path') {
+                if (p !== 'path' && p !== 'template') {
                     config += `\t\t${p} ${D.location[p]};\n`;
                 }
             }

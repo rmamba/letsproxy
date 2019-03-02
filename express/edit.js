@@ -27,7 +27,8 @@ router.get('/domain/:domain', (req, res) => {
         externalDomain: req.params.domain,
         domainUpstream: configLetsproxy.domainsDict[req.params.domain].location.proxy_pass.backend,
         domainAliases: aliases,
-        upstreamServers: Object.keys(configLetsproxy.backendsDict)
+        upstreamServers: Object.keys(configLetsproxy.backendsDict),
+        domainTemplate: configLetsproxy.domainsDict[req.params.domain].template || '',
     });
 });
 

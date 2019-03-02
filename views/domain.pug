@@ -13,6 +13,11 @@ html(lang="en")
                 include includes/menu.pug
             h1 New domain 
             form(action="/update/domain" method="post")
+                label Template:
+                .templates
+                    select(name="domainTemplate" style="width: 100%;")
+                        option(value="" selected= domainTemplate == '') None
+                        option(value="gitlab" selected= domainTemplate == 'gitlab') GitLab
                 label External domain:
                 input(type="hidden" name="oldExternalDomain" value=oldExternalDomain)
                 input(type="text" name="externalDomain" placeholder="example.com" value=externalDomain style="width: 100%;")

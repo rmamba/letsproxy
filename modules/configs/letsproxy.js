@@ -89,6 +89,11 @@ module.exports = class Letsproxy {
         if (this.domainsDict.hasOwnProperty(body.externalDomain)) {
             domain = this.domainsDict[body.externalDomain];
             domain.location.proxy_pass.backend = body.domainUpstream;
+            if (body.domainTemplate !== '') {
+                domain.template = body.domainTemplate;
+            } else {
+                delete domain['template'];
+            }
         } else {
             domain = {
                 enabled: false,
