@@ -8,6 +8,7 @@ module.exports = class Nginx {
     constructor() {
         this.domainsDict = {};
         this.backendsDict = {}
+        this.IGNORE = ['enabled', 'path', 'template', 'location', 'httpRedirect'];
         if (fs.existsSync('./frontends.json')) {
             this.domainsDict = JSON.parse(fs.readFileSync('./frontends.json').toString());
         }
@@ -85,6 +86,7 @@ module.exports = class Nginx {
 
     write_config(domain) {
         var D = this.domainsDict[domain];
+        var isFirst;
 
         if (D.hasOwnProperty('template')) {
             if (D.template !== '') {
@@ -140,11 +142,24 @@ module.exports = class Nginx {
         config += `\taccess_log /var/log/nginx/${domain.toLowerCase()}.access.log;\n`;
         config += `\terror_log /var/log/nginx/${domain.toLowerCase()}.error.log;\n`;
 
+        var isCert = '#';
         if (fs.existsSync(`${CONFIG.acme.certificates}/${domain.toLowerCase()}/fullchain`)) {
-            config += `\tssl_dhparam ${CONFIG.nginx}/dhparam.pem;\n`;
-            config += `\tssl_certificate ${CONFIG.acme.certificates}/${domain.toLowerCase()}/fullchain;\n`;
-            config += `\tssl_certificate_key ${CONFIG.acme.certificates}/${domain.toLowerCase()}/privkey;\n`;
+            isCert = '';
         }
+        config += `${isCert}\tssl_dhparam ${CONFIG.nginx}/dhparam.pem;\n`;
+        config += `${isCert}\tssl_certificate ${CONFIG.acme.certificates}/${domain.toLowerCase()}/fullchain;\n`;
+        config += `${isCert}\tssl_certificate_key ${CONFIG.acme.certificates}/${domain.toLowerCase()}/privkey;\n`;
+
+        isFirst = true;
+        Object.keys(D).forEach(p => {
+            if (this.IGNORE.indexOf(p) === -1) {
+                if (isFirst) {
+                    config += `\t\n`;
+                    isFirst = false;
+                }
+                config += `\t${p} ${D[p]};\n`;
+            }
+        });
 
         config += `\t\n\tlocation ${D.location.path} {\n`;
         Object.keys(D.location).forEach(p => {
