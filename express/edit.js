@@ -25,7 +25,7 @@ router.get('/domain/:domain', (req, res) => {
         user: req.session.user !== undefined?req.session.user:false,
         errorMessage: errorMessage,
         externalDomain: req.params.domain,
-        domainUpstream: configLetsproxy.domainsDict[req.params.domain].location.proxy.pass.backend,
+        domainUpstream: configLetsproxy.domainsDict[req.params.domain].location.proxy_pass.backend,
         domainAliases: aliases,
         upstreamServers: Object.keys(configLetsproxy.backendsDict)
     });

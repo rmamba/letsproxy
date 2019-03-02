@@ -78,8 +78,8 @@ module.exports = class Letsproxy {
             delete this.backendsDict[oldName];
         }
         Object.keys(this.domainsDict).forEach(domain => {
-            if (this.domainsDict[domain].location.proxy.pass.backend === oldName) {
-                this.domainsDict[domain].location.proxy.pass.backend = newName;
+            if (this.domainsDict[domain].location.proxy_pass.backend === oldName) {
+                this.domainsDict[domain].location.proxy_pass.backend = newName;
             }
         });
     }
@@ -88,28 +88,26 @@ module.exports = class Letsproxy {
         var domain;
         if (this.domainsDict.hasOwnProperty(body.externalDomain)) {
             domain = this.domainsDict[body.externalDomain];
-            domain.location.proxy.pass.backend = body.domainUpstream;
+            domain.location.proxy_pass.backend = body.domainUpstream;
         } else {
             domain = {
                 enabled: false,
                 httpRedirect: false,
                 location: {
                     path: "/",
-                    proxy: {
-                        pass: {
-                            https: false,
-                            backend: body.domainUpstream
-                        },
-                        next_upstream: "error timeout invalid_header http_500 http_502 http_503 http_504",
-                        redirect: false,
-                        buffering: false,
-                        ssl_verify: false,
-                        set_header: {
-                            "Host": "$host",
-                            "X-Real-IP": "$remote_addr",
-                            "X-Forwarded-For": "$proxy_add_x_forwarded_for",
-                            "X-Forwarded-Ssl": "on"
-                        }
+                    proxy_pass: {
+                        https: false,
+                        backend: body.domainUpstream
+                    },
+                    proxy_next_upstream: "error timeout invalid_header http_500 http_502 http_503 http_504",
+                    proxy_redirect: false,
+                    proxy_buffering: false,
+                    proxy_ssl_verify: false,
+                    proxy_set_header: {
+                        "Host": "$host",
+                        "X-Real-IP": "$remote_addr",
+                        "X-Forwarded-For": "$proxy_add_x_forwarded_for",
+                        "X-Forwarded-Ssl": "on"
                     }
                 }
             };

@@ -30,7 +30,7 @@ html(lang="en")
                 tbody
                     each domain in domains
                         - var ID = domain.name.replace(/\./g, '-')
-                        - var https = domain.settings.location.proxy.pass.https?'s':''
+                        - var https = domain.settings.location.proxy_pass.https?'s':''
                         tr
                             td(style="width: 30px;")
                                 if domain.settings.enabled
