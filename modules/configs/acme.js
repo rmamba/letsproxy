@@ -7,8 +7,8 @@ const CONFIG = require('../../config');
 module.exports = class Acme {
     constructor() {
         this.domains = {};
-        if (fs.existsSync('./frontends.json')) {
-            this.domains = JSON.parse(fs.readFileSync('./frontends.json').toString());
+        if (fs.existsSync('./config/frontends.json')) {
+            this.domains = JSON.parse(fs.readFileSync('./config/frontends.json').toString());
         }
     }
 

@@ -9,11 +9,11 @@ module.exports = class Nginx {
         this.domainsDict = {};
         this.backendsDict = {}
         this.IGNORE = ['enabled', 'path', 'template', 'location', 'httpRedirect'];
-        if (fs.existsSync('./frontends.json')) {
-            this.domainsDict = JSON.parse(fs.readFileSync('./frontends.json').toString());
+        if (fs.existsSync('./config/frontends.json')) {
+            this.domainsDict = JSON.parse(fs.readFileSync('./config/frontends.json').toString());
         }
-        if (fs.existsSync('./backends.json')) {
-            this.backendsDict = JSON.parse(fs.readFileSync('./backends.json').toString());
+        if (fs.existsSync('./config/backends.json')) {
+            this.backendsDict = JSON.parse(fs.readFileSync('./config/backends.json').toString());
         }
     }
 

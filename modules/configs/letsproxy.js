@@ -9,13 +9,13 @@ module.exports = class Letsproxy {
     constructor() {
         this.domainsDict = {}
         this.backendsDict = {}
-        if (fs.existsSync('./backends.json')) {
-            this.backendsDict = JSON.parse(fs.readFileSync('./backends.json').toString());
+        if (fs.existsSync('./config/backends.json')) {
+            this.backendsDict = JSON.parse(fs.readFileSync('./config/backends.json').toString());
         } else {
             this.write_upstream();
         }
-        if (fs.existsSync('./frontends.json')) {
-            this.domainsDict = JSON.parse(fs.readFileSync('./frontends.json').toString());
+        if (fs.existsSync('./config/frontends.json')) {
+            this.domainsDict = JSON.parse(fs.readFileSync('./config/frontends.json').toString());
         } else {
             this.write_domains();
         }
@@ -36,7 +36,7 @@ module.exports = class Letsproxy {
     }
 
     write_upstream() {
-        fs.writeFileSync('./backends.json', JSON.stringify(this.backendsDict, null, 2));
+        fs.writeFileSync('./config/backends.json', JSON.stringify(this.backendsDict, null, 2));
         this.write_configs();
     }
 
@@ -130,7 +130,7 @@ module.exports = class Letsproxy {
     }
 
     write_domains() {
-        fs.writeFileSync('./frontends.json', JSON.stringify(this.domainsDict, null ,2));
+        fs.writeFileSync('./config/frontends.json', JSON.stringify(this.domainsDict, null ,2));
         this.write_configs();
     }
 }
