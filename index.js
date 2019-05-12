@@ -7,9 +7,6 @@ const fs = require('fs');
 const express = require('express');
 const session = require('cookie-session');
 const app = express();
-const version = require('./version');
-const ConfigLetsproxy = require('./modules/configs/letsproxy');
-const configLetsproxy = new ConfigLetsproxy();
 
 app.use(express.json());
 app.use(express.urlencoded({

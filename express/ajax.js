@@ -78,7 +78,7 @@ router.get('/nginx/test', (req, res) => {
         return res.redirect(401, '/login');
     }
 
-    exec('sudo ./scripts/nginx-test.sh', (err, stdout, stderr) => {
+    exec('nginx -t', (err, stdout, stderr) => {
         if (err) {
           // node couldn't execute the command
           console.log(err);
@@ -88,16 +88,20 @@ router.get('/nginx/test', (req, res) => {
         // the *entire* stdout and stderr (buffered)
         console.log(`stdout: ${stdout}`);
         console.log(`stderr: ${stderr}`);
-        res.end('OK');
+        if (stderr.indexOf('syntax is ok') > 0) {
+            res.end('OK');
+        } else {
+            res.end('ERROR');
+        }
     });
 });
 
-router.get('/nginx/restart', (req, res) => {
+router.get('/nginx/reload', (req, res) => {
     if (!req.session.user) {
         return res.redirect(401, '/login');
     }
 
-    exec('sudo ./scripts/nginx-restart.sh', (err, stdout, stderr) => {
+    exec('nginx -s reload', (err, stdout, stderr) => {
         if (err) {
           // node couldn't execute the command
           console.log(err);
@@ -107,7 +111,80 @@ router.get('/nginx/restart', (req, res) => {
         // the *entire* stdout and stderr (buffered)
         console.log(`stdout: ${stdout}`);
         console.log(`stderr: ${stderr}`);
-        res.end('OK');
+        if (stderr === '') {
+            res.end('OK');
+        } else {
+            res.end('ERROR');
+        }
+    });
+});
+
+router.get('/nginx/stop', (req, res) => {
+    if (!req.session.user) {
+        return res.redirect(401, '/login');
+    }
+
+    exec('nginx -s stop', (err, stdout, stderr) => {
+        if (err) {
+          // node couldn't execute the command
+          console.log(err);
+          return res.end('ERROR');
+        }
+      
+        // the *entire* stdout and stderr (buffered)
+        console.log(`stdout: ${stdout}`);
+        console.log(`stderr: ${stderr}`);
+        if (stderr.indexOf('error') === -1) {
+            res.end('OK');
+        } else {
+            res.end('ERROR');
+        }
+    });
+});
+
+router.get('/nginx/start', (req, res) => {
+    if (!req.session.user) {
+        return res.redirect(401, '/login');
+    }
+
+    exec('nginx', (err, stdout, stderr) => {
+        if (err) {
+          // node couldn't execute the command
+          console.log(err);
+          return res.end('ERROR');
+        }
+      
+        // the *entire* stdout and stderr (buffered)
+        console.log(`stdout: ${stdout}`);
+        console.log(`stderr: ${stderr}`);
+        if (stderr.indexOf('nginx: [emerg]') === -1) {
+            res.end('OK');
+        } else {
+            res.end('ERROR');
+        }
+    });
+});
+
+router.get('/nginx/running', (req, res) => {
+    if (!req.session.user) {
+        return res.redirect(401, '/login');
+    }
+
+    exec('ps waux | grep nginx', (err, stdout, stderr) => {
+        if (err) {
+          // node couldn't execute the command
+          console.log(err);
+          return res.end('ERROR');
+        }
+      
+        // the *entire* stdout and stderr (buffered)
+        console.log(`stdout: ${stdout}`);
+        console.log(`stderr: ${stderr}`);
+        if (stdout.indexOf('master process nginx') > 0) {
+            res.end('RUNNING');
+        } else {
+            res.end('STOPED');
+        }
     });
 });
 
