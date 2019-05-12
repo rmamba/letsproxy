@@ -26,6 +26,7 @@ html(lang="en")
                         th &nbsp;
                 tbody#servers
                     each server, name in servers
+                        - var contains = usedUpstreams.indexOf(name) < 0
                         tr(id=name)
                             td(style="width: 30px;")
                                 a(href="/edit/server/" + name)
@@ -39,6 +40,9 @@ html(lang="en")
                                         - var proxyPort = S.port?':' + S.port:''
                                         li #{proxyAddress}#{proxyPort}
                             td
-                                a(href="/remove/server/" + name)
-                                    i.material-icons(title="Remove " + name + " server!!!" style="color: red;") delete
+                                if contains
+                                    a(href="/remove/server/" + name)
+                                        i.material-icons(title="Remove " + name + " server!!!" style="color: red;") delete
+                                else
+                                    i.material-icons(title=name + " can NOT be deleted, in use!!!" style="color: orange;") delete_forever
         include includes/footer.pug

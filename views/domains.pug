@@ -15,10 +15,13 @@ html(lang="en")
                 tbody
                     td
                         h1 Domains 
-                            a(href="/add/domain")
-                                i.material-icons.pointer.big-icon(title="Add domain" style="color: green;") add_circle_outline
-                            i.material-icons.pointer.big-icon(title="Check NGINX config" style="color: blue;") sync_problem
-                            i.material-icons.pointer.big-icon(title="Restart NGINX" style="color: orange;") sync
+                            if hasBackends
+                                a(href="/add/domain")
+                                    i.material-icons.pointer.big-icon(title="Add domain" style="color: green;") add_circle_outline
+                                //- i.material-icons.pointer.big-icon(title="Check NGINX config" style="color: blue;") sync_problem
+                                //- i.material-icons.pointer.big-icon(title="Restart NGINX" style="color: orange;") sync
+                            else
+                                i.material-icons.pointer.big-icon(title="Add some servers before adding domains!!!" style="color: red;") add_circle_outline
             table.u-full-width
                 thead
                     tr
@@ -31,6 +34,7 @@ html(lang="en")
                     each domain in domains
                         - var ID = domain.name.replace(/\./g, '-')
                         - var https = domain.settings.location.proxy_pass.https?'s':''
+                        - var backend = domain.settings.location.proxy_pass.backend
                         tr
                             td(style="width: 30px;")
                                 if domain.settings.enabled
@@ -46,8 +50,8 @@ html(lang="en")
                                         i.material-icons(title="Edit domain") edit
                                 .float-left
                                     ul.domain-list
-                                        li
-                                            a(href="https://"+domain.name target="_blank") #{domain.name}
+                                        li(alt=backend)
+                                            a(href="https://"+domain.name target="_blank") #{domain.name} => #{backend}
                             td
                                 if domain.httpRedirect
                                     a(href="/domain/redirect/disable/"+domain.name)
@@ -60,12 +64,16 @@ html(lang="en")
                                     a(href="/edit/server/"+domain.backendName)
                                         i.material-icons(title="Edit domain") edit
                                 .float-left
-                                    ul.domain-list
-                                        each server in domain.backend.servers
-                                            - var proxyAddress = server.address
-                                            - var proxyPort = server.port?':'+server.port:''
-                                            li
-                                                a(href="http"+https+"://"+proxyAddress+proxyPort target="_blank") http#{https}://#{proxyAddress}#{proxyPort}
+                                    - var hasBackend = domain.backend !== undefined
+                                    if hasBackend
+                                        ul.domain-list
+                                            each server in domain.backend.servers
+                                                - var proxyAddress = server.address
+                                                - var proxyPort = server.port?':'+server.port:''
+                                                li
+                                                    a(href="http"+https+"://"+proxyAddress+proxyPort target="_blank") http#{https}://#{proxyAddress}#{proxyPort}
+                                    else
+                                        span Undefined
                             td
                                 if domain.settings.enabled
                                     a(href="/domain/disable/"+domain.name)
@@ -73,7 +81,7 @@ html(lang="en")
                                 else
                                     a(href="/domain/enable/"+domain.name)
                                         i.material-icons.rotate.red(title="Enable domain") toggle_off
-                                a(href="/ajax/delete/"+domain.name)
+                                a(href="/remove/domain/"+domain.name)
                                     i.material-icons(title="Remove domain!!!" style="color: red;") delete
             include modal/config.pug
         include includes/footer.pug

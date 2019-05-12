@@ -70,7 +70,19 @@ module.exports = class Letsproxy {
         if (!this.backendsDict.hasOwnProperty(name)) {
             throw new Error(`Upstream '${name}' not found.`);
         }
+        const used = this.used_upstreams()
+        if (used.indexOf( name ) != -1) {
+            // Upstream is used, needs to be removed first!
+            return;
+        }
         delete this.backendsDict[name];
+    }
+
+    remove_domain(name) {
+        if (!this.domainsDict.hasOwnProperty(name)) {
+            throw new Error(`Upstream '${name}' not found.`);
+        }
+        delete this.domainsDict[name];
     }
 
     rename_upstream(oldName, newName) {
@@ -82,6 +94,16 @@ module.exports = class Letsproxy {
                 this.domainsDict[domain].location.proxy_pass.backend = newName;
             }
         });
+    }
+
+    used_upstreams() {
+        var used = [];
+        Object.keys(this.domainsDict).forEach(domain => {
+            if (this.domainsDict[domain].location.proxy_pass.backend !== undefined && this.domainsDict[domain].location.proxy_pass.backend !== '') {
+                used.push(this.domainsDict[domain].location.proxy_pass.backend);
+            }
+        });
+        return used;
     }
 
     parse_domain(body) {

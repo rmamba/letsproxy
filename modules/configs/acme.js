@@ -2,7 +2,7 @@
 "use strict";
 
 const fs = require('fs');
-const CONFIG = require('../../config');
+const CONFIG = require('../../config/config');
 
 module.exports = class Acme {
     constructor() {

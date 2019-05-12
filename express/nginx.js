@@ -16,7 +16,8 @@ router.get('/domains', (req, res) => {
     res.render('domains', {
         user: req.session.user !== undefined?req.session.user:false,
         errorMessage: errorMessage,
-        domains: configNginx.domainsAsArray()
+        domains: configNginx.domainsAsArray(),
+        hasBackends: Object.keys(configNginx.backendsDict).length > 0
     });
 });
 
@@ -30,7 +31,8 @@ router.get('/servers', (req, res) => {
     res.render('servers', {
         user: req.session.user !== undefined?req.session.user:false,
         errorMessage: errorMessage,
-        servers: configNginx.backendsDict
+        servers: configNginx.backendsDict,
+        usedUpstreams: configNginx.usedUpstreamsAsArray()
     });
 });
 

@@ -16,7 +16,7 @@ router.get('/domain', (req, res) => {
         user: req.session.user !== undefined?req.session.user:false,
         errorMessage: errorMessage,
         domain: {},
-        upstreamServers: Object.keys(letsproxy.backendsDict)
+        upstreamServers: Object.keys(configLetsproxy.backendsDict)
     });
 });
 
@@ -26,7 +26,6 @@ router.get('/server', (req, res) => {
     }
     var errorMessage = req.session.errorMessage;
     req.session.errorMessage = undefined;
-    const configLetsproxy = new ConfigLetsproxy();
     res.render('server', {
         user: req.session.user !== undefined?req.session.user:false,
         errorMessage: errorMessage,

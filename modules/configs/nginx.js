@@ -2,7 +2,7 @@
 "use strict";
 
 const fs = require('fs');
-const CONFIG = require('../../config');
+const CONFIG = require('../../config/config');
 
 module.exports = class Nginx {
     constructor() {
@@ -83,6 +83,16 @@ module.exports = class Nginx {
         });
         return domainsArray;
     };
+
+    usedUpstreamsAsArray() {
+        var used = [];
+        Object.keys(this.domainsDict).forEach(domain => {
+            if (this.domainsDict[domain].location.proxy_pass.backend !== undefined && this.domainsDict[domain].location.proxy_pass.backend !== '') {
+                used.push(this.domainsDict[domain].location.proxy_pass.backend);
+            }
+        });
+        return used
+    }
 
     write_config(domain) {
         var D = this.domainsDict[domain];

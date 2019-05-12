@@ -6,24 +6,16 @@ const router = express.Router();
 const helper = require('../modules/helper');
 const ConfigLetsproxy = require('../modules/configs/letsproxy');
 
-// router.post('/domain/:domain', (req, res) => {
-//     if (!req.session.user) {
-//         return res.redirect(401, '/login');
-//     }
-//     var errorMessage = req.session.errorMessage;
-//     req.session.errorMessage = undefined;
-//     var domains = helper.config.domains.json();
-//     if (!domains.hasOwnProperty(req.params.domain)) {
-//         req.session.errorMessage = 'Unknown domain!!!';
-//         return res.redirect('/domains');
-//     }
-//     res.render('domain', {
-//         user: req.session.user !== undefined?req.session.user:false,
-//         errorMessage: errorMessage,
-//         domain: domains[req.params.domain],
-//         externalDomain: req.params.domain
-//     });
-// });
+router.get('/domain/:domain', (req, res) => {
+    if (!req.session.user) {
+        return res.redirect(401, '/login');
+    }
+    req.session.errorMessage = undefined;
+    const configLetsproxy = new ConfigLetsproxy();
+    configLetsproxy.remove_domain(req.params.domain);
+    configLetsproxy.write_domains();
+    return res.redirect('/domains');
+});
 
 router.get('/server/:server', (req, res) => {
     if (!req.session.user) {

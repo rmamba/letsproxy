@@ -62,9 +62,10 @@ typings/
 
 package-lock.json
 .vscode
-config.js
+config/*.json
+config/config.js
+!config/templates.json
 nginx
-*.json
 cache/*
 acme/*
 
