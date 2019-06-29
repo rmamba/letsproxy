@@ -17,6 +17,8 @@ const mime = {
     svg: 'image/svg+xml'
 };
 
+const SUDO = 'sudo ';
+
 router.get('/config/:domain', (req, res) => {
     if (!req.session.user) {
         return res.redirect(401, '/login');
@@ -78,7 +80,7 @@ router.get('/nginx/test', (req, res) => {
         return res.redirect(401, '/login');
     }
 
-    exec('nginx -t', (err, stdout, stderr) => {
+    exec(`${SUDO}nginx -t`, (err, stdout, stderr) => {
         if (err) {
           // node couldn't execute the command
           console.log(err);
@@ -101,7 +103,7 @@ router.get('/nginx/reload', (req, res) => {
         return res.redirect(401, '/login');
     }
 
-    exec('nginx -s reload', (err, stdout, stderr) => {
+    exec(`${SUDO}nginx -s reload`, (err, stdout, stderr) => {
         if (err) {
           // node couldn't execute the command
           console.log(err);
@@ -124,7 +126,7 @@ router.get('/nginx/stop', (req, res) => {
         return res.redirect(401, '/login');
     }
 
-    exec('nginx -s stop', (err, stdout, stderr) => {
+    exec(`${SUDO}nginx -s stop`, (err, stdout, stderr) => {
         if (err) {
           // node couldn't execute the command
           console.log(err);
@@ -147,7 +149,7 @@ router.get('/nginx/start', (req, res) => {
         return res.redirect(401, '/login');
     }
 
-    exec('nginx', (err, stdout, stderr) => {
+    exec(`${SUDO}nginx`, (err, stdout, stderr) => {
         if (err) {
           // node couldn't execute the command
           console.log(err);
@@ -180,7 +182,7 @@ router.get('/nginx/running', (req, res) => {
         // the *entire* stdout and stderr (buffered)
         console.log(`stdout: ${stdout}`);
         console.log(`stderr: ${stderr}`);
-        if (stdout.indexOf('master process nginx') > 0) {
+        if (stdout.indexOf('nginx: master process') > 0) {
             res.end('RUNNING');
         } else {
             res.end('STOPED');
