@@ -2,13 +2,14 @@
 "use strict";
 
 const fs = require('fs');
-const { exec } = require('child_process');
 const express = require('express');
 const router = express.Router();
 const helper = require('../modules/helper');
 const faviconFolder = './cache/favicon'
 const ConfigFavicons = require('../modules/configs/favicons');
 const Wget = require('../modules/wget');
+const Nginx = require('../modules/system/nginx');
+const nginx = new Nginx();
 const mime = {
     ico: 'image/x-icon',
     gif: 'image/gif',
@@ -16,8 +17,6 @@ const mime = {
     png: 'image/png',
     svg: 'image/svg+xml'
 };
-
-const SUDO = 'sudo ';
 
 router.get('/config/:domain', (req, res) => {
     if (!req.session.user) {
@@ -80,21 +79,8 @@ router.get('/nginx/test', (req, res) => {
         return res.redirect(401, '/login');
     }
 
-    exec(`${SUDO}nginx -t`, (err, stdout, stderr) => {
-        if (err) {
-          // node couldn't execute the command
-          console.log(err);
-          return res.end('ERROR');
-        }
-      
-        // the *entire* stdout and stderr (buffered)
-        console.log(`stdout: ${stdout}`);
-        console.log(`stderr: ${stderr}`);
-        if (stderr.indexOf('syntax is ok') > 0) {
-            res.end('OK');
-        } else {
-            res.end('ERROR');
-        }
+    nginx.test().then(response => {
+        res.end(response);
     });
 });
 
@@ -103,21 +89,8 @@ router.get('/nginx/reload', (req, res) => {
         return res.redirect(401, '/login');
     }
 
-    exec(`${SUDO}nginx -s reload`, (err, stdout, stderr) => {
-        if (err) {
-          // node couldn't execute the command
-          console.log(err);
-          return res.end('ERROR');
-        }
-      
-        // the *entire* stdout and stderr (buffered)
-        console.log(`stdout: ${stdout}`);
-        console.log(`stderr: ${stderr}`);
-        if (stderr === '') {
-            res.end('OK');
-        } else {
-            res.end('ERROR');
-        }
+    nginx.reload().then(response => {
+        res.end(response);
     });
 });
 
@@ -126,21 +99,8 @@ router.get('/nginx/stop', (req, res) => {
         return res.redirect(401, '/login');
     }
 
-    exec(`${SUDO}nginx -s stop`, (err, stdout, stderr) => {
-        if (err) {
-          // node couldn't execute the command
-          console.log(err);
-          return res.end('ERROR');
-        }
-      
-        // the *entire* stdout and stderr (buffered)
-        console.log(`stdout: ${stdout}`);
-        console.log(`stderr: ${stderr}`);
-        if (stderr.indexOf('error') === -1) {
-            res.end('OK');
-        } else {
-            res.end('ERROR');
-        }
+    nginx.stop().then(response => {
+        res.end(response);
     });
 });
 
@@ -149,21 +109,8 @@ router.get('/nginx/start', (req, res) => {
         return res.redirect(401, '/login');
     }
 
-    exec(`${SUDO}nginx`, (err, stdout, stderr) => {
-        if (err) {
-          // node couldn't execute the command
-          console.log(err);
-          return res.end('ERROR');
-        }
-      
-        // the *entire* stdout and stderr (buffered)
-        console.log(`stdout: ${stdout}`);
-        console.log(`stderr: ${stderr}`);
-        if (stderr.indexOf('nginx: [emerg]') === -1) {
-            res.end('OK');
-        } else {
-            res.end('ERROR');
-        }
+    nginx.start().then(response => {
+        res.end(response);
     });
 });
 
@@ -172,21 +119,8 @@ router.get('/nginx/running', (req, res) => {
         return res.redirect(401, '/login');
     }
 
-    exec('ps waux | grep nginx', (err, stdout, stderr) => {
-        if (err) {
-          // node couldn't execute the command
-          console.log(err);
-          return res.end('ERROR');
-        }
-      
-        // the *entire* stdout and stderr (buffered)
-        console.log(`stdout: ${stdout}`);
-        console.log(`stderr: ${stderr}`);
-        if (stdout.indexOf('nginx: master process') > 0) {
-            res.end('RUNNING');
-        } else {
-            res.end('STOPED');
-        }
+    nginx.running().then(response => {
+        res.end(response);
     });
 });
 
