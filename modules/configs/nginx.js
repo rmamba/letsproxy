@@ -147,7 +147,7 @@ module.exports = class Nginx {
         }
 
         config += `\nserver {\n`;
-        config += `\tlisten 443;\n`;
+        config += `\tlisten 443 ssl;\n`;
         config += `\tserver_name ${domain.toLowerCase()};\n`;
         config += `\taccess_log /var/log/nginx/${domain.toLowerCase()}.access.log;\n`;
         config += `\terror_log /var/log/nginx/${domain.toLowerCase()}.error.log;\n`;

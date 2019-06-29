@@ -3,5 +3,6 @@ module.exports = {
     acme: {
         challenge: '/var/www/.well-known/acme-challenge',
         certificates: '/var/lib/acme/live'
-    }
+    },
+    nginx: "/etc/nginx"
 }
