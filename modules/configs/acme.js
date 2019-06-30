@@ -2,7 +2,8 @@
 "use strict";
 
 const fs = require('fs');
-const CONFIG = require('../../config/config');
+const Acme = require('../system/acmetool');
+const acme = new Acme();
 
 module.exports = class Acme {
     constructor() {
@@ -26,6 +27,8 @@ module.exports = class Acme {
                 config += `  - ${d}\n`;
             });
             fs.writeFileSync(`./acme/desired/${domain}`, config);
+
+            acme.want(domains.join(' '));
         }
     }
 
