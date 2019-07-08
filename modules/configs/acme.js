@@ -27,7 +27,9 @@ module.exports = class Acme {
             });
             fs.writeFileSync(`./acme/desired/${domain}`, config);
 
-            acme.want(domains.join(' '));
+            if (domainConfig.enabled === true) {
+                const res = acme.want(domains.join(' '));
+            }
         }
     }
 

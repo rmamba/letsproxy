@@ -16,15 +16,15 @@ module.exports = class Nginx {
                   // node couldn't execute the command
                   console.log(err);
                   reject('ERROR');
-                }
-              
-                // the *entire* stdout and stderr (buffered)
-                console.log(`stdout: ${stdout}`);
-                console.log(`stderr: ${stderr}`);
-                if (stderr.indexOf('nginx: [emerg]') === -1) {
-                    resolve('OK');
                 } else {
-                    resolve('ERROR');
+                    // the *entire* stdout and stderr (buffered)
+                    console.log(`stdout: ${stdout}`);
+                    console.log(`stderr: ${stderr}`);
+                    if (stderr.indexOf('nginx: [emerg]') === -1) {
+                        resolve('OK');
+                    } else {
+                        resolve('ERROR');
+                    }
                 }
             });
         });
@@ -38,15 +38,15 @@ module.exports = class Nginx {
                   // node couldn't execute the command
                   console.log(err);
                   reject('ERROR');
-                }
-              
-                // the *entire* stdout and stderr (buffered)
-                console.log(`stdout: ${stdout}`);
-                console.log(`stderr: ${stderr}`);
-                if (stderr.indexOf('error') === -1) {
-                    resolve('OK');
                 } else {
-                    resolve('ERROR');
+                    // the *entire* stdout and stderr (buffered)
+                    console.log(`stdout: ${stdout}`);
+                    console.log(`stderr: ${stderr}`);
+                    if (stderr.indexOf('error') === -1) {
+                        resolve('OK');
+                    } else {
+                        resolve('ERROR');
+                    }
                 }
             });
         });
@@ -60,15 +60,15 @@ module.exports = class Nginx {
                   // node couldn't execute the command
                   console.log(err);
                   reject('ERROR');
-                }
-              
-                // the *entire* stdout and stderr (buffered)
-                console.log(`stdout: ${stdout}`);
-                console.log(`stderr: ${stderr}`);
-                if (stderr === '') {
-                    resolve('OK');
                 } else {
-                    resolve('ERROR');
+                    // the *entire* stdout and stderr (buffered)
+                    console.log(`stdout: ${stdout}`);
+                    console.log(`stderr: ${stderr}`);
+                    if (stderr === '') {
+                        resolve('OK');
+                    } else {
+                        resolve('ERROR');
+                    }
                 }
             });
         });
@@ -82,15 +82,15 @@ module.exports = class Nginx {
                   // node couldn't execute the command
                   console.log(err);
                   reject('ERROR');
-                }
-            
-                // the *entire* stdout and stderr (buffered)
-                console.log(`stdout: ${stdout}`);
-                console.log(`stderr: ${stderr}`);
-                if (stderr.indexOf('syntax is ok') > 0) {
-                    resolve('OK');
                 } else {
-                    resolve('ERROR');
+                    // the *entire* stdout and stderr (buffered)
+                    console.log(`stdout: ${stdout}`);
+                    console.log(`stderr: ${stderr}`);
+                    if (stderr.indexOf('syntax is ok') > 0) {
+                        resolve('OK');
+                    } else {
+                        resolve('ERROR');
+                    }
                 }
             });
         });
@@ -103,15 +103,15 @@ module.exports = class Nginx {
                   // node couldn't execute the command
                   console.log(err);
                   reject('ERROR');
-                }
-              
-                // the *entire* stdout and stderr (buffered)
-                console.log(`stdout: ${stdout}`);
-                console.log(`stderr: ${stderr}`);
-                if (stdout.indexOf('nginx: master process') > 0) {
-                    resolve('RUNNING');
                 } else {
-                    resolve('STOPPED');
+                    // the *entire* stdout and stderr (buffered)
+                    console.log(`stdout: ${stdout}`);
+                    console.log(`stderr: ${stderr}`);
+                    if (stdout.indexOf('nginx: master process') > 0) {
+                        resolve('RUNNING');
+                    } else {
+                        resolve('STOPPED');
+                    }
                 }
             });
         });

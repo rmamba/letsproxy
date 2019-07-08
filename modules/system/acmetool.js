@@ -18,12 +18,30 @@ module.exports = class Acmetool {
                   // node couldn't execute the command
                   console.log(err);
                   reject(err);
+                } else {
+                    // the *entire* stdout and stderr (buffered)
+                    console.log(`stdout: ${stdout}`);
+                    console.log(`stderr: ${stderr}`);
+                    resolve(true);
                 }
-              
-                // the *entire* stdout and stderr (buffered)
-                console.log(`stdout: ${stdout}`);
-                console.log(`stderr: ${stderr}`);
-                resolve(true);
+            });
+        });
+    }
+
+    status() {
+        const SUDO = this.SUDO;
+        return new Promise(function(resolve, reject){
+            exec(`${SUDO}acmetool status`, (err, stdout, stderr) => {
+                if (err) {
+                  // node couldn't execute the command
+                  console.log(err);
+                  reject(err);
+                } else {
+                    // the *entire* stdout and stderr (buffered)
+                    console.log(`stdout: ${stdout}`);
+                    console.log(`stderr: ${stderr}`);
+                    resolve(true);
+                }
             });
         });
     }
@@ -37,12 +55,12 @@ module.exports = class Acmetool {
                   // node couldn't execute the command
                   console.log(err);
                   reject(err);
+                } else {
+                    // the *entire* stdout and stderr (buffered)
+                    console.log(`stdout: ${stdout}`);
+                    console.log(`stderr: ${stderr}`);
+                    resolve(true);
                 }
-              
-                // the *entire* stdout and stderr (buffered)
-                console.log(`stdout: ${stdout}`);
-                console.log(`stderr: ${stderr}`);
-                resolve(true);
             });
         });
     }
