@@ -4,7 +4,6 @@
 const fs = require('fs');
 const Acme = require('../system/acmetool');
 const acme = new Acme();
-
 module.exports = class Acme {
     constructor() {
         this.domains = {};

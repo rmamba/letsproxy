@@ -10,8 +10,9 @@ module.exports = class Acmetool {
     }
 
     want(domains) {
-        return Promise(function(resolve, reject){
-            exec(`${this.SUDO}acmetool want ${domains}`, (err, stdout, stderr) => {
+        const DOMAINS = domains
+        return new Promise(function(resolve, reject){
+            exec(`${this.SUDO}acmetool want ${DOMAINS}`, (err, stdout, stderr) => {
                 if (err) {
                   // node couldn't execute the command
                   console.log(err);
