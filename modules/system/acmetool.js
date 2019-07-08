@@ -11,8 +11,9 @@ module.exports = class Acmetool {
 
     want(domains) {
         const DOMAINS = domains
+        const SUDO = this.SUDO;
         return new Promise(function(resolve, reject){
-            exec(`${this.SUDO}acmetool want ${DOMAINS}`, (err, stdout, stderr) => {
+            exec(`${SUDO}acmetool want ${DOMAINS}`, (err, stdout, stderr) => {
                 if (err) {
                   // node couldn't execute the command
                   console.log(err);
@@ -28,8 +29,10 @@ module.exports = class Acmetool {
     }
 
     run() {
+        const SUDO = this.SUDO;
+        const BATCH = this.BATCH;
         return new Promise(function(resolve, reject){
-            exec(`${this.SUDO}acmetool${this.BATCH}`, (err, stdout, stderr) => {
+            exec(`${SUDO}acmetool${BATCH}`, (err, stdout, stderr) => {
                 if (err) {
                   // node couldn't execute the command
                   console.log(err);

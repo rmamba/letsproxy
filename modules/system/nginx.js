@@ -9,6 +9,7 @@ module.exports = class Nginx {
     }
 
     start() {
+        const SUDO = this.SUDO;
         return new Promise(function(resolve, reject){
             exec(`${SUDO}nginx`, (err, stdout, stderr) => {
                 if (err) {
@@ -30,6 +31,7 @@ module.exports = class Nginx {
     }
 
     stop() {
+        const SUDO = this.SUDO;
         return new Promise(function(resolve, reject){
             exec(`${SUDO}nginx -s stop`, (err, stdout, stderr) => {
                 if (err) {
@@ -51,6 +53,7 @@ module.exports = class Nginx {
     }
 
     reload() {
+        const SUDO = this.SUDO;
         return new Promise(function(resolve, reject){
             exec(`${SUDO}nginx -s reload`, (err, stdout, stderr) => {
                 if (err) {
@@ -72,6 +75,7 @@ module.exports = class Nginx {
     }
 
     test() {
+        const SUDO = this.SUDO;
         return new Promise(function(resolve, reject){
             exec(`${this.SUDO}nginx -t`, (err, stdout, stderr) => {
                 if (err) {
