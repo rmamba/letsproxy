@@ -155,7 +155,7 @@ module.exports = class Nginx {
         config += `\tlisten 443`;
 
         if (isCert === '') {
-            config += 'ssl';
+            config += ' ssl';
         }
         config += ';\n';
 
