@@ -26,6 +26,7 @@ router.get('/domain/:domain', (req, res) => {
         errorMessage: errorMessage,
         externalDomain: req.params.domain,
         domainUpstream: configLetsproxy.domainsDict[req.params.domain].location.proxy_pass.backend,
+        domainUpstreamHttps: configLetsproxy.domainsDict[req.params.domain].location.proxy_pass.https===true ? 'true' : 'false',
         domainAliases: aliases,
         upstreamServers: Object.keys(configLetsproxy.backendsDict),
         domainTemplate: configLetsproxy.domainsDict[req.params.domain].template || '',

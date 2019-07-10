@@ -24,8 +24,17 @@ html(lang="en")
                 label Aliases:
                 input(type="text" name="domainAliases" placeholder="www.example.com,img1.example.com,img2.example.com" value=domainAliases style="width: 100%;")
                 label Upstream:
+                .https
+                    select(name="domainUpstreamHttps" style="width: 25%;")
+                        if domainUpstreamHttps==="true"
+                            option(value="false") http
+                            option(value="true" selected) https
+                        else
+                            option(value="false" selected) http
+                            option(value="true") https
+                            
                 .upstreams
-                    select(name="domainUpstream" style="width: 100%;")
+                    select(name="domainUpstream" style="width: 75%;")
                         each server in upstreamServers
                             if domainUpstream===server
                                 option(value=server selected) #{server}

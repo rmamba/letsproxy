@@ -111,6 +111,7 @@ module.exports = class Letsproxy {
         if (this.domainsDict.hasOwnProperty(body.externalDomain)) {
             domain = this.domainsDict[body.externalDomain];
             domain.location.proxy_pass.backend = body.domainUpstream;
+            domain.location.proxy_pass.https = body.domainUpstreamHttps==="true" ? true : false;
             if (body.domainTemplate !== '') {
                 domain.template = body.domainTemplate;
             } else {
@@ -123,7 +124,7 @@ module.exports = class Letsproxy {
                 location: {
                     path: "/",
                     proxy_pass: {
-                        https: false,
+                        https: body.domainUpstreamHttps===true ? true : false,
                         backend: body.domainUpstream
                     },
                     proxy_next_upstream: "error timeout invalid_header http_500 http_502 http_503 http_504",
