@@ -4,6 +4,7 @@
 const fs = require('fs');
 const Acme = require('../system/acmetool');
 const acme = new Acme();
+const Wget = require('../wget');
 module.exports = class Acme {
     constructor() {
         this.domains = {};
@@ -28,7 +29,11 @@ module.exports = class Acme {
             fs.writeFileSync(`./acme/desired/${domain}`, config);
 
             if (domainConfig.enabled === true) {
-                const res = acme.want(domains.join(' '));
+                const wget = new Wget();
+                const check = wget.data(false, `${domain}/.well-known/acme-challenge/test`);
+                if (check === 'working!!!') {
+                    const res = acme.want(domains.join(' '));
+                }
             }
         }
     }
