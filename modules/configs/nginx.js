@@ -3,6 +3,8 @@
 
 const fs = require('fs');
 const CONFIG = require('../../config/config');
+const SystemNginx = require('../system/nginx');
+const nginx = new SystemNginx();
 
 module.exports = class Nginx {
     constructor() {
@@ -214,10 +216,22 @@ module.exports = class Nginx {
         if (D.enabled) {
             if (!exists) {
                 fs.symlinkSync(`../sites-available/${domain}`, `./nginx/sites-enabled/${domain}`);
+                if (nginx.test() === 'OK') {
+                    const ret = nginx.reload();
+                    if (ret !== 'OK') {
+                        console.log('Error: ' + ret);
+                    }
+                }
             }1
         } else {
             if (exists) {
                 fs.unlinkSync(`./nginx/sites-enabled/${domain}`);
+                if (nginx.test() === 'OK') {
+                    const ret = nginx.reload();
+                    if (ret !== 'OK') {
+                        console.log('Error: ' + ret);
+                    }
+                }
             }
         }
     };
