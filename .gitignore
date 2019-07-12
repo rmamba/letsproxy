@@ -65,7 +65,7 @@ package-lock.json
 config/*.json
 config/config.js
 !config/templates.json
-nginx
+nginx/sites*
 cache/*
 acme/*
 

@@ -47,36 +47,6 @@ module.exports = class Nginx {
         if (template.hasOwnProperty('location')) {
             this.set_location_properties(domain, template.location);
         }
-        // switch(name.toLowerCase()) {
-        //     case 'gitlab':
-        //         this.set_server_properties(domain, {
-        //             "server_tokens": "off",
-        //             // "ssl_ciphers": "'ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA:ECDHE-RSA-DES-CBC3-SHA:AES256-GCM-SHA384:AES128-GCM-SHA256:AES256-SHA256:AES128-SHA256:AES256-SHA:AES128-SHA:DES-CBC3-SHA:!aNULL:!eNULL:!EXPORT:!DES:!MD5:!PSK:!RC4'",
-        //             "ssl_protocols": "TLSv1 TLSv1.1 TLSv1.2",
-        //             "ssl_prefer_server_ciphers": "on",
-        //             "ssl_session_cache": "shared:SSL:10m",
-        //             "ssl_session_timeout": "5m"
-        //         });
-        //         this.set_location_properties(domain, {
-        //             "client_max_body_size": "0",
-        //             "gzip": "off",
-        //             "proxy_read_timeout": "300",
-        //             "proxy_connect_timeout": "300",
-        //             "proxy_redirect": "off",
-        //             "proxy_http_version": "1.1",
-        //             "proxy_set_header": {
-        //                 "Host": "$http_host",
-        //                 "X-Real-IP": "$remote_addr",
-        //                 "X-Forwarded-Ssl": "on",
-        //                 "X-Forwarded-For": "$proxy_add_x_forwarded_for",
-        //                 "X-Forwarded-Proto": "$scheme"
-        //             }
-        //         });
-        //         break;
-        //     default:
-                
-        //         break;
-        // }
     }
 
     domainsAsArray() {
