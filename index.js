@@ -2,8 +2,10 @@
 "use strict";
 
 process.env.NODE_ENV = 'test';
+const VERSION = require('./version');
+console.log(`Letsproxy v${VERSION.version}`);
+process.env.VERSION = VERSION.version;
 
-const fs = require('fs');
 const express = require('express');
 const session = require('cookie-session');
 const app = express();
@@ -38,7 +40,8 @@ if (process.env.NodeDB_COMPRESSION === 'true') {
 app.get('/', (req, res) => {
     req.session.errorMessage = undefined;
     res.render('index', {
-        user: req.session.user !== undefined?req.session.user:false
+        user: req.session.user !== undefined?req.session.user:false,
+        VERSION: process.env.VERSION
     });
 });
 

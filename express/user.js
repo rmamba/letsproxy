@@ -11,7 +11,8 @@ router.get('/login', (req, res) => {
     var errorMessage = req.session.errorMessage;
     req.session.errorMessage = undefined;
     res.render('login', {
-        errorMessage: errorMessage
+        errorMessage: errorMessage,
+        VERSION: process.env.VERSION
     });
 });
 

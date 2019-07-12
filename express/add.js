@@ -16,7 +16,8 @@ router.get('/domain', (req, res) => {
         user: req.session.user !== undefined?req.session.user:false,
         errorMessage: errorMessage,
         domain: {},
-        upstreamServers: Object.keys(configLetsproxy.backendsDict)
+        upstreamServers: Object.keys(configLetsproxy.backendsDict),
+        VERSION: process.env.VERSION
     });
 });
 
@@ -30,7 +31,8 @@ router.get('/server', (req, res) => {
         user: req.session.user !== undefined?req.session.user:false,
         errorMessage: errorMessage,
         upstreamName: null,
-        upstreamServers: [{address: null, port: null}]
+        upstreamServers: [{address: null, port: null}],
+        VERSION: process.env.VERSION
     });
 });
 

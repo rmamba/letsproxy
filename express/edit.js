@@ -30,6 +30,7 @@ router.get('/domain/:domain', (req, res) => {
         domainAliases: aliases,
         upstreamServers: Object.keys(configLetsproxy.backendsDict),
         domainTemplate: configLetsproxy.domainsDict[req.params.domain].template || '',
+        VERSION: process.env.VERSION
     });
 });
 
@@ -48,7 +49,8 @@ router.get('/server/:server', (req, res) => {
         user: req.session.user !== undefined?req.session.user:false,
         errorMessage: errorMessage,
         upstreamName: req.params.server,
-        upstreamServers: configLetsproxy.backendsDict[req.params.server].servers
+        upstreamServers: configLetsproxy.backendsDict[req.params.server].servers,
+        VERSION: process.env.VERSION
     });
 });
 
