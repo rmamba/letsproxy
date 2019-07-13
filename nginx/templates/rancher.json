@@ -2,6 +2,8 @@
     "description": "Allows webSocket connections to the server.",
     "location": {
 		"proxy_set_header": {
+            "Host": "$host",
+		    "X-Real-IP": "$remote_addr",
             "X-Forwarded-Proto": "$scheme",
             "X-Forwarded-Port": "$server_port",
             "X-Forwarded-For": "$proxy_add_x_forwarded_for",
