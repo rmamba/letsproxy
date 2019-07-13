@@ -3,8 +3,10 @@
     "location": {
 		"proxy_set_header": {
             "X-Forwarded-Proto": "$scheme",
+            "X-Forwarded-Port": "$server_port",
+            "X-Forwarded-For": "$proxy_add_x_forwarded_for",
             "Upgrade": "$http_upgrade",
-            "Connection": "\"upgrade\""
+            "Connection": "$connection_upgrade"
 		}
     }
 }
