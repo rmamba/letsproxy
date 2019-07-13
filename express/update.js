@@ -45,14 +45,19 @@ router.post('/server', (req, res) => {
             port: req.body.upstreamPorts[i]
         });
     }
-    configLetsproxy.update_upstream(req.body.upstreamName, servers);
+    
     if (req.body.oldUpstreamName !== '' && req.body.oldUpstreamName !== req.body.upstreamName) {
-        configLetsproxy.rename_upstream(req.body.oldUpstreamName, req.body.upstreamName);
-        configLetsproxy.write_upstream();
-        configLetsproxy.write_domains();
-    } else {
-        configLetsproxy.write_upstream();
+        configLetsproxy.replace_upstream(req.body.oldUpstreamName, req.body.upstreamName);
     }
+
+    configLetsproxy.update_upstream(req.body.upstreamName, servers);
+    configLetsproxy.write_upstream();
+    configLetsproxy.write_domains();
+
+    // if (req.body.oldUpstreamName !== '' && req.body.oldUpstreamName !== req.body.upstreamName) {
+    //     configLetsproxy.remove_upstream(req.body.oldUpstreamName)
+    //     configLetsproxy.write_upstream();
+    // }
 
     return res.redirect('/servers');
 });

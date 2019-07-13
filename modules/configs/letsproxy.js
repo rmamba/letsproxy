@@ -96,6 +96,14 @@ module.exports = class Letsproxy {
         });
     }
 
+    replace_upstream(oldName, newName) {
+        Object.keys(this.domainsDict).forEach(domain => {
+            if (this.domainsDict[domain].location.proxy_pass.backend === oldName) {
+                this.domainsDict[domain].location.proxy_pass.backend = newName;
+            }
+        });
+    }
+
     used_upstreams() {
         var used = [];
         Object.keys(this.domainsDict).forEach(domain => {
