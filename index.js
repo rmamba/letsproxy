@@ -1,4 +1,5 @@
 /*jslint es6 node */
+//@ts-check
 "use strict";
 
 process.env.NODE_ENV = 'test';

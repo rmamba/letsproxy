@@ -1,4 +1,5 @@
 /*jslint es6 node:true */
+//@ts-check
 "use strict";
 
 const fs = require('fs');
@@ -6,6 +7,8 @@ const Acme = require('./acme');
 const Nginx = require('./nginx');
 
 module.exports = class Letsproxy {
+    error = undefined;
+
     constructor() {
         this.error = undefined;
         this.domainsDict = {}
@@ -25,18 +28,18 @@ module.exports = class Letsproxy {
     write_configs() {
         var ret = true;
         const acme = new Acme();
-        ret = ret & acme.write_configs();
+        ret = ret && acme.write_configs();
         const nginx = new Nginx();
-        ret = ret & nginx.write_configs();
+        ret = ret && nginx.write_configs();
         return ret;
     }
 
     write_config(domain) {
         var ret = true;
         const acme = new Acme();
-        ret = ret & acme.write_config(domain);
+        ret = ret && acme.write_config(domain);
         const nginx = new Nginx();
-        ret = ret & nginx.write_config(domain);
+        ret = ret && nginx.write_config(domain);
         return ret;
     }
 

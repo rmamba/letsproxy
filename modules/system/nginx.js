@@ -1,4 +1,5 @@
 /*jslint es6 node:true */
+//@ts-check
 "use strict";
 
 const { exec } = require('child_process');

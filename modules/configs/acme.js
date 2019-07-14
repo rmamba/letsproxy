@@ -1,4 +1,5 @@
 /*jslint es6 node:true */
+//@ts-check
 "use strict";
 
 const fs = require('fs');
@@ -52,7 +53,7 @@ module.exports = class Acme {
         this.checks = {};
         var ret = true;
         Object.keys(this.domains).forEach(domain => {
-            ret = ret & this.write_config(domain);
+            ret = ret && this.write_config(domain);
         });
         return ret;
     }

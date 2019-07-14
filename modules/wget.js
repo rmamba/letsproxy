@@ -1,7 +1,10 @@
 /*jslint es6 node:true */
+//@ts-check
 "use strict";
 
 const wait = require('wait-for-stuff');
+const http = require('http');
+const https = require('https');
 
 module.exports = class Wget {
     constructor() {
@@ -27,7 +30,7 @@ module.exports = class Wget {
     
         var response = wait.for.promise(P);
         if (response instanceof Error) {
-            throw new response;
+            throw response;
         }
         return response;
     }
@@ -38,8 +41,9 @@ module.exports = class Wget {
             method: 'GET',
             encoding: null
         };
+        const R = this.request;
         var P = new Promise(function(resolve, reject){
-            request.get(options, function (error, response, body) {
+            R.get(options, function (error, response, body) {
                 if (error) {
                     reject(error);
                 }
@@ -50,7 +54,7 @@ module.exports = class Wget {
     
         var response = wait.for.promise(P);
         if (response instanceof Error) {
-            throw new response;
+            throw response;
         }
         return response;
     }
@@ -61,9 +65,9 @@ module.exports = class Wget {
             hostname: www,
             headers: { 'User-Agent': 'Mozilla/5.0 (X11; Linux i686; rv:10.0) Gecko/20100101 Firefox/10.0' }
         };
-        var H = require('http');
+        var H = http;
         if (https) {
-            H = require('https');
+            H = https;
         }
         var P = new Promise(function(resolve, reject){
             H.get(options, (resp) => {
@@ -89,7 +93,7 @@ module.exports = class Wget {
     
         var response = wait.for.promise(P);
         if (response instanceof Error) {
-            throw new response;
+            throw response;
         }
         return response;
     }    

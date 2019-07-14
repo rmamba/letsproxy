@@ -1,4 +1,5 @@
 /*jslint es6 node:true */
+//@ts-check
 "use strict";
 
 const wait = require('wait-for-stuff');
@@ -34,7 +35,7 @@ module.exports = class Dig {
         var pA = this.promiseA();
         var response = wait.for.promise(pA);
         if (response instanceof Error) {
-            throw new response;
+            throw response;
         }
         var ip = undefined;
         if (!response.answer) {

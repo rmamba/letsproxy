@@ -1,7 +1,9 @@
 /*jslint es6 node:true */
+//@ts-check
 "use strict";
 
 const fs = require('fs');
+const wait = require('wait-for-stuff');
 const CONFIG = require('../../config/config');
 const SystemNginx = require('../system/nginx');
 const nginx = new SystemNginx();
@@ -41,7 +43,7 @@ module.exports = class Nginx {
         if (!fs.existsSync(`./nginx/templates/${name}.json`)) {
             throw new Error('Unknown template.');
         }
-        var template = JSON.parse(fs.readFileSync(`./nginx/templates/${name}.json`));
+        var template = JSON.parse(fs.readFileSync(`./nginx/templates/${name}.json`).toString());
         if (template.hasOwnProperty('server')) {
             this.set_server_properties(domain, template.server);
         }
@@ -199,8 +201,9 @@ module.exports = class Nginx {
         if (D.enabled) {
             if (!exists) {
                 fs.symlinkSync(`../sites-available/${domain}`, `./nginx/sites-enabled/${domain}`);
-                if (nginx.test() === 'OK') {
-                    const response = nginx.reload();
+                var response = wait.for.promise(nginx.test());
+                if (response === 'OK') {
+                    response = wait.for.promise(nginx.reload());
                     this.responses[domain] = response;
                     if (response !== 'OK') {
                         console.log('Error: ' + response);
@@ -213,8 +216,9 @@ module.exports = class Nginx {
         } else {
             if (exists) {
                 fs.unlinkSync(`./nginx/sites-enabled/${domain}`);
-                if (nginx.test() === 'OK') {
-                    const response = nginx.reload();
+                var response = wait.for.promise(nginx.test());
+                if (response === 'OK') {
+                    response = wait.for.promise(nginx.reload());
                     this.responses[domain] = response;
                     if (response !== 'OK') {
                         console.log('Error: ' + response);
@@ -232,7 +236,7 @@ module.exports = class Nginx {
         this.responses = {};
         var ret = true;
         Object.keys(this.domainsDict).forEach(domain => {
-            ret = ret & this.write_config(domain);
+            ret = ret && this.write_config(domain);
         });
         return ret;
     }
