@@ -74,3 +74,9 @@ acme/*
 *.md
 *.sh
 .dockerignore
+dist/*
+src/*
+tsconfig.json
+*copy.json
+nginx/templates/wordpress.json
+rootfs/etc/nginx

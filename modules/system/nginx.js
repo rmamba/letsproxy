@@ -77,7 +77,7 @@ module.exports = class Nginx {
     test() {
         const SUDO = this.SUDO;
         return new Promise(function(resolve, reject){
-            exec(`${this.SUDO}nginx -t`, (err, stdout, stderr) => {
+            exec(`${SUDO}nginx -t`, (err, stdout, stderr) => {
                 if (err) {
                   // node couldn't execute the command
                   console.log(err);

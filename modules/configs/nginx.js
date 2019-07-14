@@ -10,6 +10,7 @@ module.exports = class Nginx {
     constructor() {
         this.domainsDict = {};
         this.backendsDict = {}
+        this.responses = {};
         this.IGNORE = ['enabled', 'path', 'template', 'location', 'httpRedirect'];
         if (fs.existsSync('./config/frontends.json')) {
             this.domainsDict = JSON.parse(fs.readFileSync('./config/frontends.json').toString());
@@ -79,6 +80,8 @@ module.exports = class Nginx {
     write_config(domain) {
         var D = this.domainsDict[domain];
         var isFirst;
+        var ret = true;
+        this.responses[domain] = undefined;
 
         if (D.hasOwnProperty('template')) {
             if (D.template !== '') {
@@ -197,28 +200,40 @@ module.exports = class Nginx {
             if (!exists) {
                 fs.symlinkSync(`../sites-available/${domain}`, `./nginx/sites-enabled/${domain}`);
                 if (nginx.test() === 'OK') {
-                    const ret = nginx.reload();
-                    if (ret !== 'OK') {
-                        console.log('Error: ' + ret);
+                    const response = nginx.reload();
+                    this.responses[domain] = response;
+                    if (response !== 'OK') {
+                        console.log('Error: ' + response);
+                        ret = false;
                     }
+                } else {
+                    this.responses[domain] = "Invalid Nginx configuration.";
                 }
             }1
         } else {
             if (exists) {
                 fs.unlinkSync(`./nginx/sites-enabled/${domain}`);
                 if (nginx.test() === 'OK') {
-                    const ret = nginx.reload();
-                    if (ret !== 'OK') {
-                        console.log('Error: ' + ret);
+                    const response = nginx.reload();
+                    this.responses[domain] = response;
+                    if (response !== 'OK') {
+                        console.log('Error: ' + response);
+                        ret = false;
                     }
+                } else {
+                    this.responses[domain] = "Invalid Nginx configuration.";
                 }
             }
         }
+        return ret;
     };
 
     write_configs() {
+        this.responses = {};
+        var ret = true;
         Object.keys(this.domainsDict).forEach(domain => {
-            this.write_config(domain);
+            ret = ret & this.write_config(domain);
         });
+        return ret;
     }
 }

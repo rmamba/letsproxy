@@ -7,6 +7,7 @@ const Nginx = require('./nginx');
 
 module.exports = class Letsproxy {
     constructor() {
+        this.error = undefined;
         this.domainsDict = {}
         this.backendsDict = {}
         if (fs.existsSync('./config/backends.json')) {
@@ -22,17 +23,21 @@ module.exports = class Letsproxy {
     }
 
     write_configs() {
+        var ret = true;
         const acme = new Acme();
-        acme.write_configs();
+        ret = ret & acme.write_configs();
         const nginx = new Nginx();
-        nginx.write_configs();
+        ret = ret & nginx.write_configs();
+        return ret;
     }
 
     write_config(domain) {
+        var ret = true;
         const acme = new Acme();
-        acme.write_config(domain);
+        ret = ret & acme.write_config(domain);
         const nginx = new Nginx();
-        nginx.write_config(domain);
+        ret = ret & nginx.write_config(domain);
+        return ret;
     }
 
     write_upstream() {
@@ -79,10 +84,13 @@ module.exports = class Letsproxy {
     }
 
     remove_domain(name) {
+        this.error = undefined;
         if (!this.domainsDict.hasOwnProperty(name)) {
-            throw new Error(`Upstream '${name}' not found.`);
+            this.error = new Error(`Upstream '${name}' not found.`);
+            return false;
         }
         delete this.domainsDict[name];
+        return true;
     }
 
     rename_upstream(oldName, newName) {
@@ -162,6 +170,6 @@ module.exports = class Letsproxy {
 
     write_domains() {
         fs.writeFileSync('./config/frontends.json', JSON.stringify(this.domainsDict, null ,2));
-        this.write_configs();
+        return this.write_configs();
     }
 }
