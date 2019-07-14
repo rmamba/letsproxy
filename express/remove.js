@@ -14,10 +14,10 @@ router.get('/domain/:domain', (req, res) => {
     const configLetsproxy = new ConfigLetsproxy();
     if (configLetsproxy.remove_domain(req.params.domain)) {
         if (!configLetsproxy.write_domains()) {
-            req.session.errorMessage = ConfigLetsproxy.error.message;    
+            req.session.errorMessage = configLetsproxy.error.message;    
         }
     } else {
-        req.session.errorMessage = ConfigLetsproxy.error.message;
+        req.session.errorMessage = configLetsproxy.error.message;
     }
     return res.redirect('/domains');
 });

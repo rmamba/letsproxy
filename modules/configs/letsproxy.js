@@ -7,8 +7,6 @@ const Acme = require('./acme');
 const Nginx = require('./nginx');
 
 module.exports = class Letsproxy {
-    error = undefined;
-
     constructor() {
         this.error = undefined;
         this.domainsDict = {}
