@@ -51,8 +51,8 @@ router.get('/domain/enable/:domain', (req, res) => {
         return res.redirect('/domains');
     }
     configLetsproxy.domainsDict[req.params.domain].enabled = true;
-    configLetsproxy.write_domains();
-    configLetsproxy.write_config(req.params.domain);
+    configLetsproxy.writeDomains();
+    configLetsproxy.writeConfig(req.params.domain);
     res.redirect('/domains');
 });
 
@@ -68,8 +68,8 @@ router.get('/domain/disable/:domain', (req, res) => {
         return res.redirect('/domains');
     }
     configLetsproxy.domainsDict[req.params.domain].enabled = false;
-    configLetsproxy.write_domains();
-    configLetsproxy.write_config(req.params.domain);
+    configLetsproxy.writeDomains();
+    configLetsproxy.writeConfig(req.params.domain);
     res.redirect('/domains');
 });
 
@@ -85,8 +85,8 @@ router.get('/domain/redirect/enable/:domain', (req, res) => {
         return res.redirect('/domains');
     }
     configLetsproxy.domainsDict[req.params.domain].httpRedirect = true;
-    configLetsproxy.write_domains();
-    configLetsproxy.write_config(req.params.domain);
+    configLetsproxy.writeDomains();
+    configLetsproxy.writeConfig(req.params.domain);
     res.redirect('/domains');
 });
 
@@ -102,8 +102,8 @@ router.get('/domain/redirect/disable/:domain', (req, res) => {
         return res.redirect('/domains');
     }
     configLetsproxy.domainsDict[req.params.domain].httpRedirect = false;
-    configLetsproxy.write_domains();
-    configLetsproxy.write_config(req.params.domain);
+    configLetsproxy.writeDomains();
+    configLetsproxy.writeConfig(req.params.domain);
     res.redirect('/domains');
 });
 

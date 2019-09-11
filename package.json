@@ -32,7 +32,7 @@
     "test-console": "^1.1.0"
   },
   "scripts": {
-    "test": "./node_modules/.bin/tap -j8 test/*Test.js -T --cov --coverage-report=html"
+    "test": "./node_modules/.bin/tap -j8 test/*Test.js test/*/*Test.js -T --cov --coverage-report=html"
   },
   "author": "",
   "license": "ISC"

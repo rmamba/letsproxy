@@ -12,8 +12,8 @@ router.get('/domain/:domain', (req, res) => {
     }
     req.session.errorMessage = undefined;
     const configLetsproxy = new ConfigLetsproxy();
-    if (configLetsproxy.remove_domain(req.params.domain)) {
-        if (!configLetsproxy.write_domains()) {
+    if (configLetsproxy.removeDomain(req.params.domain)) {
+        if (!configLetsproxy.writeDomains()) {
             req.session.errorMessage = configLetsproxy.error.message;    
         }
     } else {
@@ -28,8 +28,8 @@ router.get('/server/:server', (req, res) => {
     }
     req.session.errorMessage = undefined;
     const configLetsproxy = new ConfigLetsproxy();
-    configLetsproxy.remove_upstream(req.params.server);
-    configLetsproxy.write_upstream();
+    configLetsproxy.removeUpstream(req.params.server);
+    configLetsproxy.writeUpstream();
     return res.redirect('/servers');
 });
 

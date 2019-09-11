@@ -14,13 +14,13 @@ router.post('/domain', (req, res) => {
     req.session.errorMessage = undefined;
     const configLetsproxy = new ConfigLetsproxy();
 
-    var data = configLetsproxy.parse_domain(req.body);
-    configLetsproxy.update_domain(req.body.externalDomain, data);
-    configLetsproxy.write_domains();
+    var data = configLetsproxy.parseDomain(req.body);
+    configLetsproxy.updateDomain(req.body.externalDomain, data);
+    configLetsproxy.writeDomains();
     if (req.body.oldExternalDomain !== '' && req.body.oldExternalDomain !== req.body.externalDomain) {
-        configLetsproxy.remove_domain(req.body.oldExternalDomain);
+        configLetsproxy.removeDomain(req.body.oldExternalDomain);
     }
-    configLetsproxy.write_configs();
+    configLetsproxy.writeConfigs();
 
     return res.redirect('/domains');
 });
@@ -48,16 +48,16 @@ router.post('/server', (req, res) => {
     }
     
     if (req.body.oldUpstreamName !== '' && req.body.oldUpstreamName !== req.body.upstreamName) {
-        configLetsproxy.replace_upstream(req.body.oldUpstreamName, req.body.upstreamName);
+        configLetsproxy.replaceUpstream(req.body.oldUpstreamName, req.body.upstreamName);
     }
 
-    configLetsproxy.update_upstream(req.body.upstreamName, servers);
-    configLetsproxy.write_upstream();
-    configLetsproxy.write_domains();
+    configLetsproxy.updateUpstream(req.body.upstreamName, servers);
+    configLetsproxy.writeUpstream();
+    configLetsproxy.writeDomains();
 
     // if (req.body.oldUpstreamName !== '' && req.body.oldUpstreamName !== req.body.upstreamName) {
-    //     configLetsproxy.remove_upstream(req.body.oldUpstreamName)
-    //     configLetsproxy.write_upstream();
+    //     configLetsproxy.removeUpstream(req.body.oldUpstreamName)
+    //     configLetsproxy.writeUpstream();
     // }
 
     return res.redirect('/servers');
