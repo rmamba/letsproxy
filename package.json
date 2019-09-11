@@ -14,7 +14,22 @@
     "wait-for-stuff": "^1.4.0"
   },
   "devDependencies": {
-    "tap": "^12.5.3"
+    "chai": "^4.2.0",
+    "chai-fs": "^2.0.0",
+    "chai-http": "^4.0.0",
+    "jsonschema": "^1.2.4",
+    "mocha": "^5.1.1",
+    "nyc": "^11.8.0",
+    "should": "^13.2.1",
+    "eslint": "^6.3.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "rewiremock": "^3.13.7",
+    "tap": "^14.6.1",
+    "test-console": "^1.1.0"
   },
   "scripts": {
     "test": "./node_modules/.bin/tap -j8 test/*Test.js -T --cov --coverage-report=html"
