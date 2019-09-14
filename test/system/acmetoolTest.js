@@ -7,9 +7,9 @@ const test = require('tap').test
 const Acmetool = require('../../modules/system/acmetool')
 
 test('Empty init', function (t) {
-  t.throws(function () {
+  t.doesNotThrow(function () {
     // eslint-disable-next-line no-new
     new Acmetool()
-  }, new Error('Missing domain.'), 'Should NOT throw error')
+  }, 'Should NOT throw error')
   t.end()
 })
