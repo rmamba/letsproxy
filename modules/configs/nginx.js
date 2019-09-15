@@ -10,15 +10,22 @@ const nginx = new SystemNginx()
 
 module.exports = class Nginx {
   constructor () {
+    const PREFIX = process.env.NODE_ENV === 'test' ? './test' : '.'
+    const ROOT_PREFIX = process.env.NODE_ENV === 'test' ? './test' : ''
+    this.BACKEND_CONFIG = `${PREFIX}/config/backends.json`
+    this.FRONTEND_CONFIG = `${PREFIX}/config/frontends.json`
+    this.NGINX_FOLDER = `${PREFIX}/nginx`
+    this.NGINX_TEMPLATES = `${this.NGINX_FOLDER}/templates`
+    this.ACME_FOLDER = `${ROOT_PREFIX}/var/lib/acme`
     this.domainsDict = {}
     this.backendsDict = {}
     this.responses = {}
     this.IGNORE = ['aliases', 'enabled', 'path', 'template', 'location', 'httpRedirect']
-    if (fs.existsSync('./config/frontends.json')) {
-      this.domainsDict = JSON.parse(fs.readFileSync('./config/frontends.json').toString())
+    if (fs.existsSync(this.FRONTEND_CONFIG)) {
+      this.domainsDict = JSON.parse(fs.readFileSync(this.FRONTEND_CONFIG).toString())
     }
-    if (fs.existsSync('./config/backends.json')) {
-      this.backendsDict = JSON.parse(fs.readFileSync('./config/backends.json').toString())
+    if (fs.existsSync(this.BACKEND_CONFIG)) {
+      this.backendsDict = JSON.parse(fs.readFileSync(this.BACKEND_CONFIG).toString())
     }
   }
 
@@ -40,10 +47,10 @@ module.exports = class Nginx {
   }
 
   assignTemplate (domain, name) {
-    if (!fs.existsSync(`./nginx/templates/${name}.json`)) {
+    if (!fs.existsSync(`${this.NGINX_TEMPLATES}/${name}.json`)) {
       throw new Error('Unknown template.')
     }
-    var template = JSON.parse(fs.readFileSync(`./nginx/templates/${name}.json`).toString())
+    var template = JSON.parse(fs.readFileSync(`${this.NGINX_TEMPLATES}/${name}.json`).toString())
     if (template.server) {
       this.setServerProperties(domain, template.server)
     }
@@ -56,7 +63,7 @@ module.exports = class Nginx {
     var domainsArray = []
     Object.keys(this.domainsDict).forEach(domain => {
       var domainData = this.domainsDict[domain]
-      domainData.certificates = fs.existsSync(`/var/lib/acme/live/${domain}/fullchain`)
+      domainData.certificates = fs.existsSync(`${this.ACME_FOLDER}/live/${domain}/fullchain`)
       var data = {
         name: domain,
         settings: domainData,
@@ -197,17 +204,17 @@ module.exports = class Nginx {
     config += '\t}\n'
 
     config += '}'
-    fs.writeFileSync(`./nginx/sites-available/${domain}`, config)
+    fs.writeFileSync(`${this.NGINX_FOLDER}/sites-available/${domain}`, config)
     var exists = true
     try {
-      fs.lstatSync(`./nginx/sites-enabled/${domain}`)
+      fs.lstatSync(`${this.NGINX_FOLDER}/sites-enabled/${domain}`)
     } catch (e) {
       exists = false
     }
     var response = null
     if (D.enabled) {
       if (!exists) {
-        fs.symlinkSync(`../sites-available/${domain}`, `./nginx/sites-enabled/${domain}`)
+        fs.symlinkSync(`../sites-available/${domain}`, `${this.NGINX_FOLDER}/sites-enabled/${domain}`)
         response = wait.for.promise(nginx.test())
         if (response === 'OK') {
           response = wait.for.promise(nginx.reload())
@@ -222,7 +229,7 @@ module.exports = class Nginx {
       }
     } else {
       if (exists) {
-        fs.unlinkSync(`./nginx/sites-enabled/${domain}`)
+        fs.unlinkSync(`${this.NGINX_FOLDER}/sites-enabled/${domain}`)
         response = wait.for.promise(nginx.test())
         if (response === 'OK') {
           response = wait.for.promise(nginx.reload())

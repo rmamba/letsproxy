@@ -8,12 +8,15 @@ const acme = new Acme()
 const Wget = require('../wget')
 module.exports = class Acme {
   constructor () {
+    const PREFIX = process.env.NODE_ENV === 'test' ? './test' : '.'
+    this.ACME_FOLDER = `${PREFIX}/acme/desired`
+    this.FRONTEND_CONFIG = `${PREFIX}/config/frontends.json`
     this.domains = {}
     this.checks = {}
     this.responses = {}
     this.errors = {}
-    if (fs.existsSync('./config/frontends.json')) {
-      this.domains = JSON.parse(fs.readFileSync('./config/frontends.json').toString())
+    if (fs.existsSync(this.FRONTEND_CONFIG)) {
+      this.domains = JSON.parse(fs.readFileSync(this.FRONTEND_CONFIG).toString())
     }
   }
 
@@ -32,7 +35,7 @@ module.exports = class Acme {
       domains.forEach(d => {
         config += `  - ${d}\n`
       })
-      fs.writeFileSync(`./acme/desired/${domain}`, config)
+      fs.writeFileSync(`${this.ACME_FOLDER}/${domain}`, config)
 
       if (domainConfig.enabled === true) {
         const wget = new Wget()

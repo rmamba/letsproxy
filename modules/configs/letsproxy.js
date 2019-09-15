@@ -8,16 +8,19 @@ const Nginx = require('./nginx')
 
 module.exports = class Letsproxy {
   constructor () {
+    const PREFIX = process.env.NODE_ENV === 'test' ? './test' : '.'
+    this.BACKEND_CONFIG = `${PREFIX}/config/backends.json`
+    this.FRONTEND_CONFIG = `${PREFIX}/config/frontends.json`
     this.error = undefined
     this.domainsDict = {}
     this.backendsDict = {}
-    if (fs.existsSync('./config/backends.json')) {
-      this.backendsDict = JSON.parse(fs.readFileSync('./config/backends.json').toString())
+    if (fs.existsSync(this.BACKEND_CONFIG)) {
+      this.backendsDict = JSON.parse(fs.readFileSync(this.BACKEND_CONFIG).toString())
     } else {
       this.writeUpstream()
     }
-    if (fs.existsSync('./config/frontends.json')) {
-      this.domainsDict = JSON.parse(fs.readFileSync('./config/frontends.json').toString())
+    if (fs.existsSync(this.FRONTEND_CONFIG)) {
+      this.domainsDict = JSON.parse(fs.readFileSync(this.FRONTEND_CONFIG).toString())
     } else {
       this.writeDomains()
     }
@@ -42,7 +45,7 @@ module.exports = class Letsproxy {
   }
 
   writeUpstream () {
-    fs.writeFileSync('./config/backends.json', JSON.stringify(this.backendsDict, null, 2))
+    fs.writeFileSync(this.BACKEND_CONFIG, JSON.stringify(this.backendsDict, null, 2))
     this.writeConfigs()
   }
 
@@ -170,7 +173,7 @@ module.exports = class Letsproxy {
   }
 
   writeDomains () {
-    fs.writeFileSync('./config/frontends.json', JSON.stringify(this.domainsDict, null, 2))
+    fs.writeFileSync(this.FRONTEND_CONFIG, JSON.stringify(this.domainsDict, null, 2))
     return this.writeConfigs()
   }
 }
