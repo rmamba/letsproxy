@@ -1,0 +1,47 @@
+{
+  "letsproxy.mambix.com": {
+    "enabled": true,
+    "httpRedirect": false,
+    "location": {
+      "path": "/",
+      "proxy_pass": {
+        "https": true,
+        "backend": "letsproxy"
+      },
+      "proxy_next_upstream": "error timeout invalid_header http_500 http_502 http_503 http_504",
+      "proxy_redirect": false,
+      "proxy_buffering": false,
+      "proxy_ssl_verify": false,
+      "proxy_set_header": {
+        "Host": "$host",
+        "X-Real-IP": "$remote_addr",
+        "X-Forwarded-For": "$proxy_add_x_forwarded_for",
+        "X-Forwarded-Ssl": "on"
+      }
+    },
+    "aliases": [
+      "www.letsproxy.mambix.com"
+    ]
+  },
+  "test.example.com": {
+    "enabled": false,
+    "httpRedirect": false,
+    "location": {
+      "path": "/",
+      "proxy_pass": {
+        "https": false,
+        "backend": "test123"
+      },
+      "proxy_next_upstream": "error timeout invalid_header http_500 http_502 http_503 http_504",
+      "proxy_redirect": false,
+      "proxy_buffering": false,
+      "proxy_ssl_verify": false,
+      "proxy_set_header": {
+        "Host": "$host",
+        "X-Real-IP": "$remote_addr",
+        "X-Forwarded-For": "$proxy_add_x_forwarded_for",
+        "X-Forwarded-Ssl": "on"
+      }
+    }
+  }
+}

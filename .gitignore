@@ -80,3 +80,5 @@ tsconfig.json
 *copy.json
 nginx/templates/wordpress.json
 rootfs/etc/nginx
+
+test/acme/desired/*.com

@@ -3,9 +3,7 @@
 'use strict'
 
 const fs = require('fs')
-const Acme = require('../system/acmetool')
-const acme = new Acme()
-const Wget = require('../wget')
+
 module.exports = class Acme {
   constructor () {
     const PREFIX = process.env.NODE_ENV === 'test' ? './test' : '.'
@@ -15,6 +13,12 @@ module.exports = class Acme {
     this.checks = {}
     this.responses = {}
     this.errors = {}
+
+    const Acme = require('../system/acmetool')
+    const Wget = require('../wget')
+    this.wget = new Wget()
+    this.acme = new Acme()
+
     if (fs.existsSync(this.FRONTEND_CONFIG)) {
       this.domains = JSON.parse(fs.readFileSync(this.FRONTEND_CONFIG).toString())
     }
@@ -23,7 +27,7 @@ module.exports = class Acme {
   writeConfig (domain) {
     this.responses[domain] = undefined
     this.checks[domain] = undefined
-    if (this.domains.domain) {
+    if (this.domains[domain]) {
       var domainConfig = this.domains[domain]
       var domains = [domain]
 
@@ -38,14 +42,14 @@ module.exports = class Acme {
       fs.writeFileSync(`${this.ACME_FOLDER}/${domain}`, config)
 
       if (domainConfig.enabled === true) {
-        const wget = new Wget()
-        const check = wget.data(false, `${domain}/.well-known/acme-challenge/test`)
+        const check = this.wget.data(false, `${domain}/.well-known/acme-challenge/test`)
         this.checks[domain] = check
         if (check === 'working!!!') {
-          this.responses[domain] = acme.want(domains.join(' '))
+          this.responses[domain] = this.acme.want(domains.join(' '))
           return true
         }
       }
+      return true
     }
     this.responses[domain] = `Domain '${domain}' not found.`
     return false
