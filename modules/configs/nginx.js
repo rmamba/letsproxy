@@ -30,13 +30,22 @@ module.exports = class Nginx {
   }
 
   setServerProperties (domain, properties) {
+    if (!this.domainsDict[domain]) {
+      console.error(`domainsDict does not contain '${domain}'.`)
+      return false
+    }
     var D = this.domainsDict[domain]
     Object.keys(properties).forEach(property => {
       D[property] = properties[property]
     })
+    return true
   }
 
   setLocationProperties (domain, properties) {
+    if (!this.domainsDict[domain]) {
+      console.error(`domainsDict does not contain '${domain}'.`)
+      return false
+    }
     var D = this.domainsDict[domain]
     if (!D.location) {
       D.location = {}
@@ -44,6 +53,7 @@ module.exports = class Nginx {
     Object.keys(properties).forEach(property => {
       D.location[property] = properties[property]
     })
+    return true
   }
 
   assignTemplate (domain, name) {
