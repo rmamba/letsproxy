@@ -121,7 +121,7 @@ module.exports = class Nginx {
     }
     config += 'server {\n'
     config += '\tlisten 80\n'
-    config += `\tserver_name ${domains}\n`
+    config += `\tserver_name ${domains.toLowerCase()}\n`
 
     // #ACME
     config += '\n\tlocation ^~ /.well-known/acme-challenge/ {\n'
