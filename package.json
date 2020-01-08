@@ -1,7 +1,7 @@
 {
   "name": "letsproxy",
-  "version": "0.1.8",
-  "description": "",
+  "version": "0.1.9",
+  "description": "Web front-end for letsencrypt certificates and Nginx proxy server",
   "main": "index.js",
   "dependencies": {
     "child_process": "^1.0.2",
