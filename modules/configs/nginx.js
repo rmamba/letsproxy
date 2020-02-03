@@ -97,6 +97,57 @@ module.exports = class Nginx {
   }
 
   /**
+   * Write upstream configuration to drive. It returns false
+   * on error.
+   * @returns {boolean}
+   */
+  writeUpstreams () {
+    var config = ''
+
+    if (this.backendsDict !== undefined) {
+      Object.keys(this.backendsDict).forEach(upstream => {
+        config += `upstream ${upstream} {\n`
+        this.backendsDict[upstream].servers.forEach(server => {
+          config += `\tserver ${server.address}`
+          if (server.port) {
+            config += `:${server.port}`
+          }
+          if (server.extra) {
+            config += ` ${server.extra}`
+          }
+          config += '\n'
+        })
+        config += '}\n\n'
+      })
+    }
+
+    fs.writeFileSync(`${this.NGINX_FOLDER}/sites-available/upstreams`, config)
+    var exists = true
+    try {
+      fs.lstatSync(`${this.NGINX_FOLDER}/sites-enabled/upstreams`)
+    } catch (e) {
+      exists = false
+    }
+
+    var ret = true
+    if (!exists) {
+      fs.symlinkSync('../sites-available/upstreams', `${this.NGINX_FOLDER}/sites-enabled/upstreams`)
+      var response = wait.for.promise(nginx.test())
+      if (response === 'OK') {
+        response = wait.for.promise(nginx.reload())
+        this.responses.upstream = response
+        if (response !== 'OK') {
+          console.log('Error: ' + response)
+          ret = false
+        }
+      } else {
+        this.responses.response = 'Invalid Nginx configuration.'
+      }
+    }
+    return ret
+  }
+
+  /**
    * Write `domain` configuration to drive. It returns false
    * on error.
    * @param {string} domain
@@ -138,23 +189,7 @@ module.exports = class Nginx {
       config += '\t\treturn 301 https://$host$request_uri\n'
       config += '\t}\n'
     }
-
     config += '}\n'
-
-    if (D.location.proxy_pass.backend !== undefined) {
-      config += `\nupstream ${D.location.proxy_pass.backend} {\n`
-      this.backendsDict[D.location.proxy_pass.backend].servers.forEach(server => {
-        config += `\tserver ${server.address}`
-        if (server.port) {
-          config += `:${server.port}`
-        }
-        if (server.extra) {
-          config += ` ${server.extra}`
-        }
-        config += '\n'
-      })
-      config += '}\n'
-    }
 
     var isCert = '#'
     if (fs.existsSync(`${CONFIG.acme.certificates}/${domain.toLowerCase()}/fullchain`)) {

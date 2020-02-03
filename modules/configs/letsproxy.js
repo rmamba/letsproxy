@@ -35,6 +35,13 @@ module.exports = class Letsproxy {
     return ret
   }
 
+  writeUpstreams () {
+    var ret = true
+    const nginx = new Nginx()
+    ret = ret && nginx.writeUpstreams()
+    return ret
+  }
+
   writeConfig (domain) {
     var ret = true
     const acme = new Acme()
@@ -46,7 +53,7 @@ module.exports = class Letsproxy {
 
   writeUpstream () {
     fs.writeFileSync(this.BACKEND_CONFIG, JSON.stringify(this.backendsDict, null, 2))
-    this.writeConfigs()
+    this.writeUpstreams()
   }
 
   updateUpstream (name, servers) {

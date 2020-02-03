@@ -82,5 +82,6 @@ nginx/templates/wordpress.json
 rootfs/etc/nginx
 
 test/acme/desired/*.com
+test/nginx/*
 /2019-*
 /2020-*

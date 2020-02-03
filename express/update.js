@@ -1,66 +1,65 @@
-/*jslint es6 node:true */
-//@ts-check
-"use strict";
+/* jslint es6 node:true */
+// @ts-check
+'use strict'
 
-const express = require('express');
-const router = express.Router();
-const helper = require('../modules/helper');
-const ConfigLetsproxy = require('../modules/configs/letsproxy');
+const express = require('express')
+const router = express.Router()
+const ConfigLetsproxy = require('../modules/configs/letsproxy')
 
 router.post('/domain', (req, res) => {
-    if (!req.session.user) {
-        return res.redirect(401, '/login');
-    }
-    req.session.errorMessage = undefined;
-    const configLetsproxy = new ConfigLetsproxy();
+  if (!req.session.user) {
+    return res.redirect(401, '/login')
+  }
+  req.session.errorMessage = undefined
+  const configLetsproxy = new ConfigLetsproxy()
 
-    var data = configLetsproxy.parseDomain(req.body);
-    configLetsproxy.updateDomain(req.body.externalDomain, data);
-    configLetsproxy.writeDomains();
-    if (req.body.oldExternalDomain !== '' && req.body.oldExternalDomain !== req.body.externalDomain) {
-        configLetsproxy.removeDomain(req.body.oldExternalDomain);
-    }
-    configLetsproxy.writeConfigs();
+  var data = configLetsproxy.parseDomain(req.body)
+  configLetsproxy.updateDomain(req.body.externalDomain, data)
+  configLetsproxy.writeDomains()
+  if (req.body.oldExternalDomain !== '' && req.body.oldExternalDomain !== req.body.externalDomain) {
+    configLetsproxy.removeDomain(req.body.oldExternalDomain)
+  }
+  configLetsproxy.writeConfigs()
 
-    return res.redirect('/domains');
-});
+  return res.redirect('/domains')
+})
 
 router.post('/server', (req, res) => {
-    if (!req.session.user) {
-        return res.redirect(401, '/login');
+  if (!req.session.user) {
+    return res.redirect(401, '/login')
+  }
+  req.session.errorMessage = undefined
+  const configLetsproxy = new ConfigLetsproxy()
+
+  if (req.body.oldUpstreamName === '') {
+    if (Object.prototype.hasOwnProperty.call(configLetsproxy.backendsDict, req.body.upstreamName)) {
+      req.session.errorMessage = 'Server with this name already exists.'
+      return res.redirect('/add/server')
     }
-    req.session.errorMessage = undefined;
-    const configLetsproxy = new ConfigLetsproxy();
+  }
 
-    if (req.body.oldUpstreamName === '') {
-        if (configLetsproxy.backendsDict.hasOwnProperty(req.body.upstreamName)) {
-            req.session.errorMessage = "Server with this name already exists.";
-            return res.redirect('/add/server');
-        }
-    }
+  var servers = []
+  for (let i = 0; i < req.body.upstreamAddresses.length; i++) {
+    servers.push({
+      address: req.body.upstreamAddresses[i],
+      port: req.body.upstreamPorts[i]
+    })
+  }
 
-    var servers = [];
-    for (let i=0; i<req.body.upstreamAddresses.length; i++) {
-        servers.push({
-            address: req.body.upstreamAddresses[i],
-            port: req.body.upstreamPorts[i]
-        });
-    }
-    
-    if (req.body.oldUpstreamName !== '' && req.body.oldUpstreamName !== req.body.upstreamName) {
-        configLetsproxy.replaceUpstream(req.body.oldUpstreamName, req.body.upstreamName);
-    }
+  if (req.body.oldUpstreamName !== '' && req.body.oldUpstreamName !== req.body.upstreamName) {
+    configLetsproxy.replaceUpstream(req.body.oldUpstreamName, req.body.upstreamName)
+  }
 
-    configLetsproxy.updateUpstream(req.body.upstreamName, servers);
-    configLetsproxy.writeUpstream();
-    configLetsproxy.writeDomains();
+  configLetsproxy.updateUpstream(req.body.upstreamName, servers)
+  configLetsproxy.writeUpstream()
+  configLetsproxy.writeDomains()
 
-    // if (req.body.oldUpstreamName !== '' && req.body.oldUpstreamName !== req.body.upstreamName) {
-    //     configLetsproxy.removeUpstream(req.body.oldUpstreamName)
-    //     configLetsproxy.writeUpstream();
-    // }
+  // if (req.body.oldUpstreamName !== '' && req.body.oldUpstreamName !== req.body.upstreamName) {
+  //     configLetsproxy.removeUpstream(req.body.oldUpstreamName)
+  //     configLetsproxy.writeUpstream();
+  // }
 
-    return res.redirect('/servers');
-});
+  return res.redirect('/servers')
+})
 
-module.exports = router;
+module.exports = router

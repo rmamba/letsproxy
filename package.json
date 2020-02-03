@@ -1,6 +1,6 @@
 {
   "name": "letsproxy",
-  "version": "0.1.9",
+  "version": "0.2.0",
   "description": "Web front-end for letsencrypt certificates and Nginx proxy server",
   "main": "index.js",
   "dependencies": {
