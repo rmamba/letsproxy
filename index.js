@@ -2,7 +2,6 @@
 // @ts-check
 'use strict'
 
-process.env.NODE_ENV = 'test'
 const VERSION = require('./version')
 console.log(`Letsproxy v${VERSION.version}`)
 process.env.VERSION = VERSION.version
