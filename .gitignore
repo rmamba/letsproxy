@@ -68,6 +68,7 @@ config/config.js
 nginx/sites*
 cache/*
 acme/*
+passwd.js
 
 # ToDO
 .github
