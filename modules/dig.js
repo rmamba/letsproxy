@@ -46,7 +46,7 @@ module.exports = class Dig {
       domains[answer.domain] = answer.value
     })
     ip = `${this.domain}.`
-    while (domains.hasOwnProperty(ip)) {
+    while (Object.prototype.hasOwnProperty.call(domains, ip)) {
       ip = domains[ip]
     }
     if (ip === '92.242.132.24' || ip === `${this.domain}.`) {

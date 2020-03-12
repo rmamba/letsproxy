@@ -46,7 +46,7 @@ router.get('/domain/enable/:domain', (req, res) => {
   // var errorMessage = req.session.errorMessage
   req.session.errorMessage = undefined
   const configLetsproxy = new ConfigProxy()
-  if (!configLetsproxy.domainsDict.hasOwnProperty(req.params.domain)) {
+  if (!Object.prototype.hasOwnProperty.call(configLetsproxy.domainsDict, req.params.domain)) {
     req.session.errorMessage = 'Domain not found.'
     return res.redirect('/domains')
   }
@@ -63,7 +63,7 @@ router.get('/domain/disable/:domain', (req, res) => {
   // var errorMessage = req.session.errorMessage
   req.session.errorMessage = undefined
   const configLetsproxy = new ConfigProxy()
-  if (!configLetsproxy.domainsDict.hasOwnProperty(req.params.domain)) {
+  if (!Object.prototype.hasOwnProperty.call(configLetsproxy.domainsDict, req.params.domain)) {
     req.session.errorMessage = 'Domain not found.'
     return res.redirect('/domains')
   }
@@ -80,7 +80,7 @@ router.get('/domain/redirect/enable/:domain', (req, res) => {
   // var errorMessage = req.session.errorMessage
   req.session.errorMessage = undefined
   const configLetsproxy = new ConfigProxy()
-  if (!configLetsproxy.domainsDict.hasOwnProperty(req.params.domain)) {
+  if (!Object.prototype.hasOwnProperty.call(configLetsproxy.domainsDict, req.params.domain)) {
     req.session.errorMessage = 'Domain not found.'
     return res.redirect('/domains')
   }
@@ -97,7 +97,7 @@ router.get('/domain/redirect/disable/:domain', (req, res) => {
   // var errorMessage = req.session.errorMessage
   req.session.errorMessage = undefined
   const configLetsproxy = new ConfigProxy()
-  if (!configLetsproxy.domainsDict.hasOwnProperty(req.params.domain)) {
+  if (!Object.prototype.hasOwnProperty.call(configLetsproxy.domainsDict, req.params.domain)) {
     req.session.errorMessage = 'Domain not found.'
     return res.redirect('/domains')
   }

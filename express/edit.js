@@ -13,12 +13,12 @@ router.get('/domain/:domain', (req, res) => {
   var errorMessage = req.session.errorMessage
   req.session.errorMessage = undefined
   const configLetsproxy = new ConfigLetsproxy()
-  if (!configLetsproxy.domainsDict.hasOwnProperty(req.params.domain)) {
+  if (!Object.prototype.hasOwnProperty.call(configLetsproxy.domainsDict, req.params.domain)) {
     req.session.errorMessage = 'Unknown domain!!!'
     return res.redirect('/domains')
   }
   var aliases = ''
-  if (configLetsproxy.domainsDict[req.params.domain].hasOwnProperty('aliases')) {
+  if (Object.prototype.hasOwnProperty.call(configLetsproxy.domainsDict[req.params.domain], 'aliases')) {
     aliases = configLetsproxy.domainsDict[req.params.domain].aliases.join(',')
   }
   res.render('domain', {
@@ -41,7 +41,7 @@ router.get('/server/:server', (req, res) => {
   var errorMessage = req.session.errorMessage
   req.session.errorMessage = undefined
   const configLetsproxy = new ConfigLetsproxy()
-  if (!configLetsproxy.backendsDict.hasOwnProperty(req.params.server)) {
+  if (!Object.prototype.hasOwnProperty.call(configLetsproxy.backendsDict, req.params.server)) {
     req.session.errorMessage = 'Unknown server!!!'
     return res.redirect('/servers')
   }

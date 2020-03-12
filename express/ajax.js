@@ -39,7 +39,7 @@ router.get('/favicon/:protocol/:url', (req, res) => {
   var contentType = 'image/x-icon'
 
   const configFavicons = new ConfigFavicons()
-  if (configFavicons.hasOwnProperty(req.params.url)) {
+  if (Object.prototype.hasOwnProperty.call(configFavicons, req.params.url)) {
     if (fs.existsSync(`${faviconFolder}/${configFavicons.faviconsDict[req.params.url].fileName}`)) {
       data = fs.readFileSync(`${faviconFolder}/${configFavicons.faviconsDict[req.params.url].fileName}`)
       res.set('Content-Type', configFavicons.faviconsDict[req.params.url].contentType)
@@ -62,7 +62,7 @@ router.get('/favicon/:protocol/:url', (req, res) => {
   var parts = favicon.split('.')
   var iconType = parts[parts.length - 1]
   var fileName = `${helper.domain.to.backend(req.params.url)}.${iconType}`
-  if (mime.hasOwnProperty(iconType)) {
+  if (Object.prototype.hasOwnProperty.call(mime, iconType)) {
     contentType = mime[iconType]
   }
   fs.writeFileSync(`${faviconFolder}/${fileName}`, data, 'binary')
