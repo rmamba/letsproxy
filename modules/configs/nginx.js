@@ -115,7 +115,7 @@ module.exports = class Nginx {
           if (server.extra) {
             config += ` ${server.extra}`
           }
-          config += '\n'
+          config += ';\n'
         })
         config += '}\n\n'
       })
@@ -171,22 +171,22 @@ module.exports = class Nginx {
       domains += ` ${D.aliases.join(' ')}`
     }
     config += 'server {\n'
-    config += '\tlisten 80\n'
-    config += `\tserver_name ${domains.toLowerCase()}\n`
+    config += '\tlisten 80;\n'
+    config += `\tserver_name ${domains.toLowerCase()};\n`
 
     // #ACME
     config += '\n\tlocation ^~ /.well-known/acme-challenge/ {\n'
-    config += '\t\tallow all\n'
-    config += '\t\tdefault_type "text/plain"\n'
-    config += `\t\talias ${CONFIG.acme.challenge}/\n`
+    config += '\t\tallow all;\n'
+    config += '\t\tdefault_type "text/plain";\n'
+    config += `\t\talias ${CONFIG.acme.challenge}/;\n`
     config += '\t}\n'
     config += '\t\n\tlocation = /.well-known/acme-challenge/ {\n'
-    config += '\t\treturn 404\n'
+    config += '\t\treturn 404;\n'
     config += '\t}\n'
 
     if (D.httpRedirect === true) {
       config += '\n\tlocation / {\n'
-      config += '\t\treturn 301 https://$host$request_uri\n'
+      config += '\t\treturn 301 https://$host$request_uri;\n'
       config += '\t}\n'
     }
     config += '}\n'
@@ -202,17 +202,17 @@ module.exports = class Nginx {
     if (isCert === '') {
       config += ' ssl'
     }
-    config += '\n'
+    config += ';\n'
 
-    config += `\tserver_name ${domains.toLowerCase()}\n`
-    config += `\taccess_log /var/log/nginx/${domain.toLowerCase()}.access.log\n`
-    config += `\terror_log /var/log/nginx/${domain.toLowerCase()}.error.log\n`
+    config += `\tserver_name ${domains.toLowerCase()};\n`
+    config += `\taccess_log /var/log/nginx/${domain.toLowerCase()}.access.log;\n`
+    config += `\terror_log /var/log/nginx/${domain.toLowerCase()}.error.log;\n`
 
-    config += `${isCert}\tssl_dhparam ${CONFIG.nginx}/dhparam.pem\n`
-    config += `${isCert}\tssl_prefer_server_ciphers on\n`
-    config += `${isCert}\tssl_ciphers 'ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:AES:CAMELLIA:DES-CBC3-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA'\n`
-    config += `${isCert}\tssl_certificate ${CONFIG.acme.certificates}/${domain.toLowerCase()}/fullchain\n`
-    config += `${isCert}\tssl_certificate_key ${CONFIG.acme.certificates}/${domain.toLowerCase()}/privkey\n`
+    config += `${isCert}\tssl_dhparam ${CONFIG.nginx}/dhparam.pem;\n`
+    config += `${isCert}\tssl_prefer_server_ciphers on;\n`
+    config += `${isCert}\tssl_ciphers 'ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:AES:CAMELLIA:DES-CBC3-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA';\n`
+    config += `${isCert}\tssl_certificate ${CONFIG.acme.certificates}/${domain.toLowerCase()}/fullchain;\n`
+    config += `${isCert}\tssl_certificate_key ${CONFIG.acme.certificates}/${domain.toLowerCase()}/privkey;\n`
 
     isFirst = true
     Object.keys(D).forEach(p => {
@@ -221,7 +221,7 @@ module.exports = class Nginx {
           config += '\t\n'
           isFirst = false
         }
-        config += `\t${p} ${D[p]}\n`
+        config += `\t${p} ${D[p]};\n`
       }
     })
 
@@ -229,19 +229,19 @@ module.exports = class Nginx {
     Object.keys(D.location).forEach(p => {
       if (p === 'proxy_pass') {
         if (D.location.proxy_pass.backend) {
-          config += `\t\tproxy_pass http${D.location.proxy_pass.https ? 's' : ''}://${D.location.proxy_pass.backend}\n`
+          config += `\t\tproxy_pass http${D.location.proxy_pass.https ? 's' : ''}://${D.location.proxy_pass.backend};\n`
         } else {
-          config += `\t\tproxy_pass http${D.location.proxy_pass.https ? 's' : ''}://${D.location.proxy_pass.address}${D.location.proxy_pass.port ? ':' + D.location.proxy_pass.port : ''}\n`
+          config += `\t\tproxy_pass http${D.location.proxy_pass.https ? 's' : ''}://${D.location.proxy_pass.address}${D.location.proxy_pass.port ? ':' + D.location.proxy_pass.port : ''};\n`
         }
       } else if (p === 'proxy_redirect' || p === 'proxy_buffering' || p === 'proxy_ssl_verify') {
-        config += `\t\t${p} ${D.location[p] === true ? 'on' : 'off'}\n`
+        config += `\t\t${p} ${D.location[p] === true ? 'on' : 'off'};\n`
       } else if (p === 'proxy_set_header') {
         Object.keys(D.location.proxy_set_header).forEach(h => {
-          config += `\t\tproxy_set_header ${h} ${D.location.proxy_set_header[h]}\n`
+          config += `\t\tproxy_set_header ${h} ${D.location.proxy_set_header[h]};\n`
         })
       } else {
         if (p !== 'path' && p !== 'template') {
-          config += `\t\t${p} ${D.location[p]}\n`
+          config += `\t\t${p} ${D.location[p]};\n`
         }
       }
     })
