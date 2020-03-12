@@ -23,20 +23,20 @@ app.use(session({
 app.set('view engine', 'pug')
 app.use(express.static('static'))
 
-const compression = require('compression')
-function shouldCompress (req, res) {
-  if (req.headers['x-no-compression']) {
-    // don't compress responses with this request header
-    return false
-  }
+// const compression = require('compression')
+// function shouldCompress (req, res) {
+//   if (req.headers['x-no-compression']) {
+//     // don't compress responses with this request header
+//     return false
+//   }
 
-  // fallback to standard filter function
-  return compression.filter(req, res)
-}
+//   // fallback to standard filter function
+//   return compression.filter(req, res)
+// }
 
-if (process.env.NodeDB_COMPRESSION === 'true') {
-  app.use(compression({ filter: shouldCompress }))
-}
+// if (process.env.NodeDB_COMPRESSION === 'true') {
+//   app.use(compression({ filter: shouldCompress }))
+// }
 // app.set('json spaces', 2);
 
 app.get('/', (req, res) => {
