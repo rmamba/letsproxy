@@ -38,6 +38,25 @@ module.exports = class Acmetool {
     })
   }
 
+  unwant (domains) {
+    const DOMAINS = domains
+    const SUDO = this.SUDO
+    return new Promise(function (resolve, reject) {
+      exec(`${SUDO}acmetool unwant ${DOMAINS}`, (err, stdout, stderr) => {
+        if (err) {
+          // node couldn't execute the command
+          console.error(err)
+          reject(err)
+        } else {
+          // the *entire* stdout and stderr (buffered)
+          this.log(`stdout: ${stdout}`)
+          this.log(`stderr: ${stderr}`)
+          resolve(true)
+        }
+      })
+    })
+  }
+
   status () {
     const SUDO = this.SUDO
     return new Promise(function (resolve, reject) {

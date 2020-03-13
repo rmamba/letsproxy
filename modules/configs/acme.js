@@ -48,6 +48,10 @@ module.exports = class Acme {
           this.responses[domain] = this.acme.want(domains.join(' '))
           return true
         }
+      } else {
+        // disabled certificates will not be able to be renewed after ma 3 months
+        // so we just unwant them
+        this.responses[domain] = this.acme.unwant(domains.join(' '))
       }
       return true
     }
