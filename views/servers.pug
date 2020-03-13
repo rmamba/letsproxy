@@ -25,7 +25,8 @@ html(lang="en")
                         th Server/Service addresses
                         th &nbsp;
                 tbody#servers
-                    each server, name in servers
+                    each name in Object.keys(servers).sort()
+                        - var server = servers[name]
                         - var contains = usedUpstreams.indexOf(name) < 0
                         tr(id=name)
                             td(style="width: 30px;")

@@ -71,7 +71,7 @@ module.exports = class Nginx {
 
   domainsAsArray () {
     var domainsArray = []
-    Object.keys(this.domainsDict).forEach(domain => {
+    Object.keys(this.domainsDict).sort().forEach(domain => {
       var domainData = this.domainsDict[domain]
       domainData.certificates = fs.existsSync(`${this.ACME_FOLDER}/live/${domain}/fullchain`)
       var data = {
@@ -88,7 +88,7 @@ module.exports = class Nginx {
 
   usedUpstreamsAsArray () {
     var used = []
-    Object.keys(this.domainsDict).forEach(domain => {
+    Object.keys(this.domainsDict).sort().forEach(domain => {
       if (this.domainsDict[domain].location.proxy_pass.backend !== undefined && this.domainsDict[domain].location.proxy_pass.backend !== '') {
         used.push(this.domainsDict[domain].location.proxy_pass.backend)
       }
