@@ -22,6 +22,7 @@ module.exports = class Acmetool {
   want (domains) {
     const DOMAINS = domains
     const SUDO = this.SUDO
+    const THIS = this
     return new Promise(function (resolve, reject) {
       exec(`${SUDO}acmetool want ${DOMAINS}`, (err, stdout, stderr) => {
         if (err) {
@@ -30,8 +31,8 @@ module.exports = class Acmetool {
           reject(err)
         } else {
           // the *entire* stdout and stderr (buffered)
-          this.log(`stdout: ${stdout}`)
-          this.log(`stderr: ${stderr}`)
+          THIS.log(`stdout: ${stdout}`)
+          THIS.log(`stderr: ${stderr}`)
           resolve(true)
         }
       })
