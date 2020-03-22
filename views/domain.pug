@@ -19,7 +19,7 @@ html(lang="en")
                         option(value="" selected= domainTemplate == '') None
                         option(value="gitlab" selected= domainTemplate == 'gitlab') GitLab
                         option(value="rancher" selected= domainTemplate == 'rancher') Rancher
-                        option(value="wss" selected= domainTemplate == 'wss') WebSocket
+                        option(value="rcon" selected= domainTemplate == 'rcon') RCON
                 label External domain:
                 input(type="hidden" name="oldExternalDomain" value=oldExternalDomain)
                 input(type="text" name="externalDomain" placeholder="example.com" value=externalDomain style="width: 100%;")
