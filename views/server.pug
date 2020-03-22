@@ -35,5 +35,10 @@ html(lang="en")
                                 i.material-icons.pointer.medium-icon(onclick="addUpstreamAddress();") add_circle_outline
                             else
                                 i.material-icons.pointer.delete.medium-icon(onclick="removeUpstreamAddress('" + port + "');") remove_circle_outline
+                .options
+                    - var isChecked = isSticky == true
+                    input(type="checkbox" id="stickySession" name="stickySession" value="on" checked=isChecked)
+                    |
+                    label(for="stickySession" style="display: inline-block;") Sticky session
                 input(type="submit" value="SAVE")
             include includes/footer.pug

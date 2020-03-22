@@ -50,6 +50,7 @@ router.get('/server/:server', (req, res) => {
     errorMessage: errorMessage,
     upstreamName: req.params.server,
     upstreamServers: configLetsproxy.backendsDict[req.params.server].servers,
+    isSticky: configLetsproxy.backendsDict[req.params.server].sticky,
     VERSION: process.env.VERSION
   })
 })

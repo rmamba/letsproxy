@@ -36,7 +36,11 @@ module.exports = class Nginx {
     }
     var D = this.domainsDict[domain]
     Object.keys(properties).forEach(property => {
-      D[property] = properties[property]
+      if (properties[property] === null) {
+        delete D[property]
+      } else {
+        D[property] = properties[property]
+      }
     })
     return true
   }
@@ -51,7 +55,11 @@ module.exports = class Nginx {
       D.location = {}
     }
     Object.keys(properties).forEach(property => {
-      D.location[property] = properties[property]
+      if (properties[property] === null) {
+        delete D.location[property]
+      } else {
+        D.location[property] = properties[property]
+      }
     })
     return true
   }
@@ -86,6 +94,10 @@ module.exports = class Nginx {
     return domainsArray
   }
 
+  /**
+   * Return array of upstreams in use. This is so you can not delete upstream if it belongs to domain.
+   * @returns {array} Upstreams
+   */
   usedUpstreamsAsArray () {
     var used = []
     Object.keys(this.domainsDict).sort().forEach(domain => {
@@ -107,6 +119,9 @@ module.exports = class Nginx {
     if (this.backendsDict !== undefined) {
       Object.keys(this.backendsDict).forEach(upstream => {
         config += `upstream ${upstream} {\n`
+        if (this.backendsDict[upstream].sticky) {
+          config += '\tip_hash;\n\n'
+        }
         this.backendsDict[upstream].servers.forEach(server => {
           config += `\tserver ${server.address}`
           if (server.port) {
@@ -159,7 +174,7 @@ module.exports = class Nginx {
     var ret = true
     this.responses[domain] = undefined
 
-    if (D.hasOwnProperty.template) {
+    if (Object.prototype.hasOwnProperty.call(D, 'template')) {
       if (D.template !== '') {
         this.assignTemplate(domain, D.template)
       }

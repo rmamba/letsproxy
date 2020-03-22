@@ -56,7 +56,7 @@ module.exports = class Letsproxy {
     this.writeUpstreams()
   }
 
-  updateUpstream (name, servers) {
+  updateUpstream (name, servers, sticky) {
     if (!(servers instanceof Array)) {
       throw new Error('Servers argument must be Array.')
     }
@@ -78,7 +78,8 @@ module.exports = class Letsproxy {
       }
     })
     this.backendsDict[name] = {
-      servers: servers
+      servers: servers,
+      sticky: sticky
     }
   }
 

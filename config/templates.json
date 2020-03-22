@@ -1,17 +1,21 @@
-[
-    {
-        "enabled": true,
-        "name": "GitLab",
-        "fileName": "gitlab.json"
-    },
-    {
-        "enabled": false,
-        "name": "Joomla",
-        "fileName": "joomla.json"
-    },
-    {
-        "enabled": false,
-        "name": "Wordpress",
-        "fileName": "wordpress.json"
-    }
+[{
+    "enabled": true,
+    "name": "GitLab",
+    "fileName": "gitlab.json"
+  },
+  {
+    "enabled": false,
+    "name": "Joomla",
+    "fileName": "joomla.json"
+  },
+  {
+    "enabled": false,
+    "name": "Wordpress",
+    "fileName": "wordpress.json"
+  },
+  {
+    "enabled": true,
+    "name": "WebSockets",
+    "fileName": "wss.json"
+  }
 ]

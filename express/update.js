@@ -50,7 +50,7 @@ router.post('/server', (req, res) => {
     configLetsproxy.replaceUpstream(req.body.oldUpstreamName, req.body.upstreamName)
   }
 
-  configLetsproxy.updateUpstream(req.body.upstreamName, servers)
+  configLetsproxy.updateUpstream(req.body.upstreamName, servers, req.body.stickySession === 'on')
   configLetsproxy.writeUpstream()
   configLetsproxy.writeDomains()
 
