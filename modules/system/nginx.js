@@ -20,6 +20,7 @@ module.exports = class Nginx {
 
   start () {
     const SUDO = this.SUDO
+    const THIS = this
     return new Promise(function (resolve, reject) {
       exec(`${SUDO}nginx`, (err, stdout, stderr) => {
         if (err) {
@@ -28,8 +29,8 @@ module.exports = class Nginx {
           reject(err)
         } else {
           // the *entire* stdout and stderr (buffered)
-          this.log(`stdout: ${stdout}`)
-          this.log(`stderr: ${stderr}`)
+          THIS.log(`stdout: ${stdout}`)
+          THIS.log(`stderr: ${stderr}`)
           if (stderr.indexOf('nginx: [emerg]') === -1) {
             resolve('OK')
           } else {
@@ -42,6 +43,7 @@ module.exports = class Nginx {
 
   stop () {
     const SUDO = this.SUDO
+    const THIS = this
     return new Promise(function (resolve, reject) {
       exec(`${SUDO}nginx -s stop`, (err, stdout, stderr) => {
         if (err) {
@@ -50,8 +52,8 @@ module.exports = class Nginx {
           reject(err)
         } else {
           // the *entire* stdout and stderr (buffered)
-          this.log(`stdout: ${stdout}`)
-          this.log(`stderr: ${stderr}`)
+          THIS.log(`stdout: ${stdout}`)
+          THIS.log(`stderr: ${stderr}`)
           if (stderr.indexOf('error') === -1) {
             resolve('OK')
           } else {
@@ -64,6 +66,7 @@ module.exports = class Nginx {
 
   reload () {
     const SUDO = this.SUDO
+    const THIS = this
     return new Promise(function (resolve, reject) {
       exec(`${SUDO}nginx -s reload`, (err, stdout, stderr) => {
         if (err) {
@@ -72,8 +75,8 @@ module.exports = class Nginx {
           reject(err)
         } else {
           // the *entire* stdout and stderr (buffered)
-          this.log(`stdout: ${stdout}`)
-          this.log(`stderr: ${stderr}`)
+          THIS.log(`stdout: ${stdout}`)
+          THIS.log(`stderr: ${stderr}`)
           if (stderr === '') {
             resolve('OK')
           } else {
@@ -86,6 +89,7 @@ module.exports = class Nginx {
 
   test () {
     const SUDO = this.SUDO
+    const THIS = this
     return new Promise(function (resolve, reject) {
       exec(`${SUDO}nginx -t`, (err, stdout, stderr) => {
         if (err) {
@@ -94,8 +98,8 @@ module.exports = class Nginx {
           reject(err)
         } else {
           // the *entire* stdout and stderr (buffered)
-          this.log(`stdout: ${stdout}`)
-          this.log(`stderr: ${stderr}`)
+          THIS.log(`stdout: ${stdout}`)
+          THIS.log(`stderr: ${stderr}`)
           if (stderr.indexOf('syntax is ok') > 0) {
             resolve('OK')
           } else {
@@ -107,6 +111,7 @@ module.exports = class Nginx {
   }
 
   running () {
+    const THIS = this
     return new Promise(function (resolve, reject) {
       exec('ps waux | grep nginx', (err, stdout, stderr) => {
         if (err) {
@@ -115,8 +120,8 @@ module.exports = class Nginx {
           reject(err)
         } else {
           // the *entire* stdout and stderr (buffered)
-          this.log(`stdout: ${stdout}`)
-          this.log(`stderr: ${stderr}`)
+          THIS.log(`stdout: ${stdout}`)
+          THIS.log(`stderr: ${stderr}`)
           if (stdout.indexOf('nginx: master process') > 0) {
             resolve('RUNNING')
           } else {
