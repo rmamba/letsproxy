@@ -145,6 +145,20 @@ module.exports = class Letsproxy {
       } else {
         delete domain.template
       }
+      if (body.rewriteKeys) {
+        var rewrites = {}
+        for (let i = 0; i < body.rewriteKeys.length; i++) {
+          if (body.rewriteKeys[i] !== '' && body.rewriteValues[i] !== '') {
+            rewrites[body.rewriteKeys[i]] = body.rewriteValues[i]
+          } else {
+            // ToDO: Force user to enter data!
+            // For now it is just going to be ignored!
+          }
+        }
+        domain.rewrites = rewrites
+      } else {
+        delete domain.rewrites
+      }
     } else {
       domain = {
         enabled: false,

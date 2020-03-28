@@ -1,46 +1,57 @@
 doctype html
 html(lang="en")
-    head
-        meta(charset="UTF-8")
-        meta(name="viewport", content="width=device-width, initial-scale=1.0")
-        meta(http-equiv="X-UA-Compatible", content="ie=edge")
-        title letsProxy
-        include includes/styles.pug
-        include includes/code.pug
-    body
-        .container
-            .row
-                include includes/menu.pug
-            h1 New domain 
-            form(action="/update/domain" method="post")
-                label Template:
-                .templates
-                    select(name="domainTemplate" style="width: 100%;")
-                        option(value="" selected= domainTemplate == '') None
-                        option(value="gitlab" selected= domainTemplate == 'gitlab') GitLab
-                        option(value="rancher" selected= domainTemplate == 'rancher') Rancher
-                        option(value="rcon" selected= domainTemplate == 'rcon') RCON
-                label External domain:
-                input(type="hidden" name="oldExternalDomain" value=oldExternalDomain)
-                input(type="text" name="externalDomain" placeholder="example.com" value=externalDomain style="width: 100%;")
-                label Aliases:
-                input(type="text" name="domainAliases" placeholder="www.example.com,img1.example.com,img2.example.com" value=domainAliases style="width: 100%;")
-                label Upstream:
-                .https
-                    select(name="domainUpstreamHttps" style="width: 25%;")
-                        if domainUpstreamHttps==="true"
-                            option(value="false") http
-                            option(value="true" selected) https
-                        else
-                            option(value="false" selected) http
-                            option(value="true") https
-                            
-                .upstreams
-                    select(name="domainUpstream" style="width: 75%;")
-                        each server in upstreamServers
-                            if domainUpstream===server
-                                option(value=server selected) #{server}
-                            else
-                                option(value=server) #{server}
-                input(type="submit" value="SAVE")
-            include includes/footer.pug
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    meta(http-equiv="X-UA-Compatible", content="ie=edge")
+    title letsProxy
+    include includes/styles.pug
+    include includes/code.pug
+  body
+    .container
+      .row
+        include includes/menu.pug
+      h1 New domain 
+      form(action="/update/domain" method="post")
+        label Template:
+        .templates
+          select(name="domainTemplate" style="width: 100%;")
+            option(value="" selected= domainTemplate == '') None
+            option(value="gitlab" selected= domainTemplate == 'gitlab') GitLab
+            option(value="rancher" selected= domainTemplate == 'rancher') Rancher
+            option(value="rcon" selected= domainTemplate == 'rcon') RCON
+        label External domain:
+        input(type="hidden" name="oldExternalDomain" value=oldExternalDomain)
+        input(type="text" name="externalDomain" placeholder="example.com" value=externalDomain style="width: 100%;")
+        label Domain Aliases:
+        input(type="text" name="domainAliases" placeholder="www.example.com,img1.example.com,img2.example.com" value=domainAliases style="width: 100%;")
+        label Upstream:
+        .https(style="width: 24%; display: inline-block;")
+          select(name="domainUpstreamHttps" style="width: 100%;")
+            if domainUpstreamHttps==="true"
+              option(value="false") http
+              option(value="true" selected) https
+            else
+              option(value="false" selected) http
+              option(value="true") https
+        .upstreams(style="width: 75%; display: inline-block; float: right;")
+          select(name="domainUpstream" style="width: 100%;")
+            each server in upstreamServers
+              if domainUpstream===server
+                option(value=server selected) #{server}
+              else
+                option(value=server) #{server}
+        label Rewrites:
+          |
+          i.material-icons.pointer.medium-icon(onclick="addServerRewrite();") add_circle_outline
+        .rewrites
+          each val, key in serverRewrites
+            - var rndId = 1000+Math.floor(Math.random() * 1000);
+            div(id="rewrite-"+rndId)
+              input(type="text" name="rewriteKeys[]" placeholder="^/(?:jackets|sweats)/.*/(.*)$" value=key style="width: 75%;")
+              | : 
+              input(type="text" name="rewriteValues[]" placeholder="/products/$1" value=val style="width: auto;")
+              | 
+              i.material-icons.pointer.delete.medium-icon(onclick="removeServerRewrite('" + rndId + "');") remove_circle_outline
+        input(type="submit" value="SAVE")
+      include includes/footer.pug

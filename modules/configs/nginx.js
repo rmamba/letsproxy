@@ -20,7 +20,12 @@ module.exports = class Nginx {
     this.domainsDict = {}
     this.backendsDict = {}
     this.responses = {}
-    this.IGNORE = ['aliases', 'enabled', 'path', 'template', 'location', 'httpRedirect', 'ssl_dhparam', 'ssl_prefer_server_ciphers', 'ssl_ciphers']
+    this.IGNORE = [
+      'aliases', 'enabled', 'path', 'template',
+      'location', 'httpRedirect', 'ssl_dhparam',
+      'ssl_prefer_server_ciphers', 'ssl_ciphers',
+      'rewrites'
+    ]
     if (fs.existsSync(this.FRONTEND_CONFIG)) {
       this.domainsDict = JSON.parse(fs.readFileSync(this.FRONTEND_CONFIG).toString())
     }
@@ -238,6 +243,13 @@ module.exports = class Nginx {
     }
     config += `${isCert}\tssl_certificate ${CONFIG.acme.certificates}/${domain.toLowerCase()}/fullchain;\n`
     config += `${isCert}\tssl_certificate_key ${CONFIG.acme.certificates}/${domain.toLowerCase()}/privkey;\n`
+
+    if (D.rewrites) {
+      config += '\n'
+      Object.keys(D.rewrites).forEach(r => {
+        config += `\trewrite ${r} ${D.rewrites[r]};\n`
+      })
+    }
 
     isFirst = true
     Object.keys(D).forEach(p => {
