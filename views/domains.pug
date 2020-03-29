@@ -1,87 +1,88 @@
 doctype html
 html(lang="en")
-    head
-        meta(charset="UTF-8")
-        meta(name="viewport", content="width=device-width, initial-scale=1.0")
-        meta(http-equiv="X-UA-Compatible", content="ie=edge")
-        title letsProxy
-        include includes/styles.pug
-        include includes/code.pug
-    body
-        .container.bottom-space
-            .row
-                include includes/menu.pug
-            table.u-full-width
-                tbody
-                    td
-                        h1 Domains 
-                            if hasBackends
-                                a(href="/add/domain")
-                                    i.material-icons.pointer.big-icon(title="Add domain" style="color: green;") add_circle_outline
-                                //- i.material-icons.pointer.big-icon(title="Check NGINX config" style="color: blue;") sync_problem
-                                //- i.material-icons.pointer.big-icon(title="Restart NGINX" style="color: orange;") sync
-                            else
-                                i.material-icons.pointer.big-icon(title="Add some servers before adding domains!!!" style="color: red;") add_circle_outline
-            table.u-full-width
-                thead
-                    tr
-                        th Status
-                        th External domain
-                        th &nbsp;
-                        th Server address
-                        th &nbsp;
-                tbody
-                    each domain in domains
-                        - var ID = domain.name.replace(/\./g, '-')
-                        - var https = domain.settings.location.proxy_pass.https?'s':''
-                        - var backend = domain.settings.location.proxy_pass.backend
-                        tr
-                            td(style="width: 30px;")
-                                if domain.settings.enabled
-                                    if domain.settings.certificates
-                                        i.material-icons.pointer(id=domain.name name="domain" title="Active" style="color: green;") check_circle
-                                    else
-                                        i.material-icons.pointer(id=domain.name name="domain" title="Active, no certificates" style="color: orange;") pause_circle_filled
-                                else
-                                    i.material-icons.pointer(id=domain.name name="domain" title="Inactive" style="color: red;") cancel
-                            td
-                                .float-left.space-right
-                                    a(href="/edit/domain/"+domain.name)
-                                        i.material-icons(title="Edit domain") edit
-                                .float-left
-                                    ul.domain-list
-                                        li(alt=backend)
-                                            a(href="https://"+domain.name target="_blank") #{domain.name} => #{backend}
-                            td
-                                if domain.httpRedirect
-                                    a(href="/domain/redirect/disable/"+domain.name)
-                                        i.material-icons(title="HTTP redirect") lock_open
-                                else
-                                    a(href="/domain/redirect/enable/"+domain.name)
-                                        i.material-icons(title="HTTPS only") lock
-                            td
-                                .float-left.space-right
-                                    a(href="/edit/server/"+domain.backendName)
-                                        i.material-icons(title="Edit domain") edit
-                                .float-left
-                                    - var hasBackend = domain.backend !== undefined
-                                    if hasBackend
-                                        ul.domain-list
-                                            each server in domain.backend.servers
-                                                - var proxyAddress = server.address
-                                                - var proxyPort = server.port?':'+server.port:''
-                                                li
-                                                    a(href="http"+https+"://"+proxyAddress+proxyPort target="_blank") http#{https}://#{proxyAddress}#{proxyPort}
-                                    else
-                                        span Undefined
-                            td
-                                if domain.settings.enabled
-                                    a(href="/domain/disable/"+domain.name)
-                                        i.material-icons.rotate.green(title="Disable domain") toggle_on
-                                else
-                                    a(href="/domain/enable/"+domain.name)
-                                        i.material-icons.rotate.red(title="Enable domain") toggle_off
-                                a(href="/remove/domain/"+domain.name)
-                                    i.material-icons(title="Remove domain!!!" style="color: red;") delete
-            include modal/config.pug
-        include includes/footer.pug
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    meta(http-equiv="X-UA-Compatible", content="ie=edge")
+    title letsProxy
+    include includes/styles.pug
+    include includes/code.pug
+  body
+    .container.bottom-space
+      .row
+        include includes/menu.pug
+      table.u-full-width
+        tbody
+          td
+            h1 Domains 
+              if hasBackends
+                a(href="/add/domain")
+                  i.material-icons.pointer.big-icon(title="Add domain" style="color: green;") add_circle_outline
+                //- i.material-icons.pointer.big-icon(title="Check NGINX config" style="color: blue;") sync_problem
+                //- i.material-icons.pointer.big-icon(title="Restart NGINX" style="color: orange;") sync
+              else
+                i.material-icons.pointer.big-icon(title="Add some servers before adding domains!!!" style="color: red;") add_circle_outline
+      table.u-full-width
+        thead
+          tr
+            th Status
+            th External domain
+            th &nbsp;
+            th Server address
+            th &nbsp;
+        tbody
+          each domain in domains
+            - var ID = domain.name.replace(/\./g, '-')
+            - var https = domain.settings.location.proxy_pass.https?'s':''
+            - var backend = domain.settings.location.proxy_pass.backend
+            tr
+              td(style="width: 30px;")
+                if domain.settings.enabled
+                  if domain.settings.certificates
+                    i.material-icons.pointer(id=domain.name name="domain" title="Active" style="color: green;") check_circle
+                  else
+                    i.material-icons.pointer(id=domain.name name="domain" title="Active, no certificates" style="color: orange;") pause_circle_filled
+                else
+                  i.material-icons.pointer(id=domain.name name="domain" title="Inactive" style="color: red;") cancel
+              td
+                .float-left.space-right
+                  a(href="/edit/domain/"+domain.name)
+                    i.material-icons(title="Edit domain") edit
+                .float-left
+                  ul.domain-list
+                    li(alt=backend)
+                      a(href="https://"+domain.name target="_blank") #{domain.name} => #{backend}
+              td
+                if domain.httpRedirect
+                  a(href="/domain/redirect/disable/"+domain.name)
+                    i.material-icons(title="HTTP redirect") lock_open
+                else
+                  a(href="/domain/redirect/enable/"+domain.name)
+                    i.material-icons(title="HTTPS only") lock
+              td
+                .float-left.space-right
+                  a(href="/edit/server/"+domain.backendName)
+                    i.material-icons(title="Edit domain") edit
+                .float-left
+                  - var hasBackend = domain.backend !== undefined
+                  if hasBackend
+                    ul.domain-list
+                      each server in domain.backend.servers
+                        - var proxyAddress = server.address
+                        - var proxyPort = server.port?':'+server.port:''
+                        li
+                          a(href="http"+https+"://"+proxyAddress+proxyPort target="_blank") http#{https}://#{proxyAddress}#{proxyPort}
+                  else
+                    span Undefined
+              td
+                if domain.settings.enabled
+                  a(href="/domain/disable/"+domain.name)
+                    i.material-icons.rotate.green(title="Disable domain") toggle_on
+                else
+                  a(href="/domain/enable/"+domain.name)
+                    i.material-icons.rotate.red(title="Enable domain") toggle_off
+                a(href="/remove/domain/"+domain.name)
+                  i.material-icons(title="Remove domain!!!" style="color: red;") delete
+      include modal/config.pug
+    include includes/noty.pug
+    include includes/footer.pug

@@ -28,6 +28,21 @@ $(document).ready(function () {
   MicroModal.init();
 });
 
+function notyAlert (msg, type = 'error', to = 5000) {
+  if (msg !== undefined && msg !== 'undefined') {
+    new Noty({
+      theme: 'relax',
+      type: type,
+      text: msg,
+      timeout: to,
+      // animation: {
+      //   open: 'animated bounceInRight',
+      //   close: 'animated bounceOutRight'
+      // }
+    }).show()
+  }
+}
+
 function upstreamExtraEvents() {
   $("select[name='upstreamExtra[]']:not(.bound)").addClass('bound').click(function () {
     var port = $(this).data('port');

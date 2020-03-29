@@ -1,49 +1,50 @@
 doctype html
 html(lang="en")
-    head
-        meta(charset="UTF-8")
-        meta(name="viewport", content="width=device-width, initial-scale=1.0")
-        meta(http-equiv="X-UA-Compatible", content="ie=edge")
-        title letsProxy
-        include includes/styles.pug
-        include includes/code.pug
-    body
-        .container.bottom-space
-            .row
-                include includes/menu.pug
-            table.u-full-width
-                tbody
-                    td
-                        h1 Servers/Services
-                            a(href="/add/server")
-                                i.material-icons.pointer.big-icon(title="Add server" style="color: green;") add_circle_outline
-            table.u-full-width
-                thead
-                    tr
-                        th &nbsp;
-                        th Upstream name
-                        th Server/Service addresses
-                        th &nbsp;
-                tbody#servers
-                    each name in Object.keys(servers).sort()
-                        - var server = servers[name]
-                        - var contains = usedUpstreams.indexOf(name) < 0
-                        tr(id=name)
-                            td(style="width: 30px;")
-                                a(href="/edit/server/" + name)
-                                        i.material-icons(title="Edit server") edit
-                            td #{name}
-                            td
-                                ul.domain-list
-                                    - var cnt = server.servers.length
-                                    each S in server.servers
-                                        - var proxyAddress = S.address
-                                        - var proxyPort = S.port?':' + S.port:''
-                                        li #{proxyAddress}#{proxyPort}
-                            td
-                                if contains
-                                    a(href="/remove/server/" + name)
-                                        i.material-icons(title="Remove " + name + " server!!!" style="color: red;") delete
-                                else
-                                    i.material-icons(title=name + " can NOT be deleted, in use!!!" style="color: orange;") delete_forever
-        include includes/footer.pug
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    meta(http-equiv="X-UA-Compatible", content="ie=edge")
+    title letsProxy
+    include includes/styles.pug
+    include includes/code.pug
+  body
+    .container.bottom-space
+      .row
+        include includes/menu.pug
+      table.u-full-width
+        tbody
+          td
+            h1 Servers/Services
+              a(href="/add/server")
+                i.material-icons.pointer.big-icon(title="Add server" style="color: green;") add_circle_outline
+      table.u-full-width
+        thead
+          tr
+            th &nbsp;
+            th Upstream name
+            th Server/Service addresses
+            th &nbsp;
+        tbody#servers
+          each name in Object.keys(servers).sort()
+            - var server = servers[name]
+            - var contains = usedUpstreams.indexOf(name) < 0
+            tr(id=name)
+              td(style="width: 30px;")
+                a(href="/edit/server/" + name)
+                  i.material-icons(title="Edit server") edit
+              td #{name}
+              td
+                ul.domain-list
+                  - var cnt = server.servers.length
+                  each S in server.servers
+                    - var proxyAddress = S.address
+                    - var proxyPort = S.port?':' + S.port:''
+                    li #{proxyAddress}#{proxyPort}
+              td
+                if contains
+                  a(href="/remove/server/" + name)
+                    i.material-icons(title="Remove " + name + " server!!!" style="color: red;") delete
+                else
+                  i.material-icons(title=name + " can NOT be deleted, in use!!!" style="color: orange;") delete_forever
+    include includes/noty.pug
+    include includes/footer.pug

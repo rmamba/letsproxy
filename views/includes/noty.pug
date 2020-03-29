@@ -1,4 +1,3 @@
-script.
-    $( document ).ready(function () {
-        notyAlert('<?= $message ?>', '<?= $type ?>');
-    });
+- var msg = errorMessage
+- var type = messageType ? messageType : 'error'
+  script!= '$( document ).ready(function () { if (\'' + msg + '\' !== \'\' && \'' + msg + '\' !== \'undefined\') { notyAlert(\'' + msg + '\', \'' + type + '\') } })'

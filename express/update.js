@@ -13,7 +13,14 @@ router.post('/domain', (req, res) => {
   req.session.errorMessage = undefined
   const configLetsproxy = new ConfigLetsproxy()
 
-  var data = configLetsproxy.parseDomain(req.body)
+  var data
+  try {
+    data = configLetsproxy.parseDomain(req.body)
+  } catch (error) {
+    req.session.errorMessage = error.message
+    return res.redirect('/edit/domain/' + req.body.externalDomain)
+  }
+
   configLetsproxy.updateDomain(req.body.externalDomain, data)
   configLetsproxy.writeDomains()
   if (req.body.oldExternalDomain !== '' && req.body.oldExternalDomain !== req.body.externalDomain) {
@@ -50,7 +57,12 @@ router.post('/server', (req, res) => {
     configLetsproxy.replaceUpstream(req.body.oldUpstreamName, req.body.upstreamName)
   }
 
-  configLetsproxy.updateUpstream(req.body.upstreamName, servers, req.body.stickySession === 'on')
+  try {
+    configLetsproxy.updateUpstream(req.body.upstreamName, servers, req.body.stickySession === 'on')
+  } catch (error) {
+    req.session.errorMessage = error.message
+    return res.redirect('/edit/server/' + req.body.upstreamName)
+  }
   configLetsproxy.writeUpstream()
   configLetsproxy.writeDomains()
 

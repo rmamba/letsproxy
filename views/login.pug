@@ -1,21 +1,22 @@
 doctype html
 html(lang="en")
-    head
-        meta(charset="UTF-8")
-        meta(name="viewport", content="width=device-width, initial-scale=1.0")
-        meta(http-equiv="X-UA-Compatible", content="ie=edge")
-        title Login
-        include includes/styles.pug
-    body
-        .section
-            .container
-                form.form-signin(action="/login" method="post")
-                    .row
-                        .columns.twelwe
-                            h2.form-signin-heading Please sign in
-                            p.error #{errorMessage}
-                        .columns.twelwe
-                            input.input-block-level(type='text', name="user", placeholder='User name...')
-                        .columns.twelwe
-                            input.input-block-level(type='password', name="password", placeholder='Password...')
-                        button.btn.btn-large.btn-primary(type='submit') Sign in
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    meta(http-equiv="X-UA-Compatible", content="ie=edge")
+    title Login
+    include includes/styles.pug
+    include includes/code.pug
+  body
+    .section
+      .container
+        form.form-signin(action="/login" method="post")
+          .row
+            .columns.twelwe
+              h2.form-signin-heading Please sign in
+            .columns.twelwe
+              input.input-block-level(type='text', name="user", placeholder='User name...')
+            .columns.twelwe
+              input.input-block-level(type='password', name="password", placeholder='Password...')
+            button.btn.btn-large.btn-primary(type='submit') Sign in
+    include includes/noty.pug

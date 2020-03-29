@@ -145,6 +145,7 @@ module.exports = class Letsproxy {
         } else {
           // ToDO: Force user to enter data!
           // For now it is just going to be ignored!
+          throw new Error('Can not save empty field!')
         }
       }
       return rewrites
@@ -158,6 +159,7 @@ module.exports = class Letsproxy {
         } else {
           // ToDO: Force user to enter data!
           // For now it is just going to be ignored!
+          throw new Error('Can not save empty field!')
         }
       }
       return locations
