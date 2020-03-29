@@ -136,6 +136,33 @@ module.exports = class Letsproxy {
 
   parseDomain (body) {
     var domain
+
+    function parseRewrites (body) {
+      var rewrites = {}
+      for (let i = 0; i < body.rewriteKeys.length; i++) {
+        if (body.rewriteKeys[i] !== '' && body.rewriteValues[i] !== '') {
+          rewrites[body.rewriteKeys[i]] = body.rewriteValues[i]
+        } else {
+          // ToDO: Force user to enter data!
+          // For now it is just going to be ignored!
+        }
+      }
+      return rewrites
+    }
+
+    function parseLocations (body) {
+      var locations = {}
+      for (let i = 0; i < body.locationKeys.length; i++) {
+        if (body.locationKeys[i] !== '' && body.locationValues[i] !== '') {
+          locations[body.locationKeys[i]] = body.locationValues[i].replace(/\r/g, '').replace(/\n\n/g, '\n').split('\n')
+        } else {
+          // ToDO: Force user to enter data!
+          // For now it is just going to be ignored!
+        }
+      }
+      return locations
+    }
+
     if (this.domainsDict[body.externalDomain]) {
       domain = this.domainsDict[body.externalDomain]
       domain.location.proxy_pass.backend = body.domainUpstream
@@ -146,18 +173,14 @@ module.exports = class Letsproxy {
         delete domain.template
       }
       if (body.rewriteKeys) {
-        var rewrites = {}
-        for (let i = 0; i < body.rewriteKeys.length; i++) {
-          if (body.rewriteKeys[i] !== '' && body.rewriteValues[i] !== '') {
-            rewrites[body.rewriteKeys[i]] = body.rewriteValues[i]
-          } else {
-            // ToDO: Force user to enter data!
-            // For now it is just going to be ignored!
-          }
-        }
-        domain.rewrites = rewrites
+        domain.rewrites = parseRewrites(body)
       } else {
         delete domain.rewrites
+      }
+      if (body.locationKeys) {
+        domain.locations = parseLocations(body)
+      } else {
+        delete domain.locations
       }
     } else {
       domain = {
@@ -179,7 +202,20 @@ module.exports = class Letsproxy {
             'X-Forwarded-For': '$proxy_add_x_forwarded_for',
             'X-Forwarded-Ssl': 'on'
           }
-        }
+        },
+        template: undefined,
+        rewrites: undefined,
+        locations: undefined
+      }
+
+      if (body.domainTemplate !== '') {
+        domain.template = body.domainTemplate
+      }
+      if (body.rewriteKeys) {
+        domain.rewrites = parseRewrites(body)
+      }
+      if (body.locationKeys) {
+        domain.locations = parseLocations(body)
       }
     }
 

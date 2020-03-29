@@ -53,5 +53,18 @@ html(lang="en")
               input(type="text" name="rewriteValues[]" placeholder="/products/$1" value=val style="width: auto;")
               | 
               i.material-icons.pointer.delete.medium-icon(onclick="removeServerRewrite('" + rndId + "');") remove_circle_outline
+        label Locations:
+          |
+          i.material-icons.pointer.medium-icon(onclick="addServerLocation();") add_circle_outline
+        .locations
+          each val, key in serverLocations
+            - var rndId = 1000+Math.floor(Math.random() * 2000);
+            - var values = val.join('\n')
+            div(id="location-"+rndId)
+              input(type="text" name="locationKeys[]" placeholder="~* /redirect/(.*)" value=key style="width: 96%;")
+              |
+              i.material-icons.pointer.delete.medium-icon(onclick="removeServerLocation('" + rndId + "');" style="float: right;") remove_circle_outline
+              |
+              textarea(type="textbox" name="locationValues[]" placeholder="return 301 https://letspro.xyz/$1;" style="width: 100%;")= values
         input(type="submit" value="SAVE")
       include includes/footer.pug

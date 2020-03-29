@@ -31,6 +31,7 @@ router.get('/domain/:domain', (req, res) => {
     upstreamServers: Object.keys(configLetsproxy.backendsDict),
     domainTemplate: configLetsproxy.domainsDict[req.params.domain].template || '',
     serverRewrites: configLetsproxy.domainsDict[req.params.domain].rewrites || {},
+    serverLocations: configLetsproxy.domainsDict[req.params.domain].locations || {},
     VERSION: process.env.VERSION
   })
 })

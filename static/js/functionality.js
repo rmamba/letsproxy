@@ -72,3 +72,22 @@ function removeServerRewrite(id) {
   $('#rewrite-' + id).remove();
   cnt--;
 }
+
+function addServerLocation() {
+  if (cnt < 7) {
+    var wrapper = $('.locations');
+    var id = 2000 + Math.floor(Math.random() * 1000);
+    var html = '<div id="location-' + id + '">';
+    html += '<input type="text" name="locationKeys[]" placeholder="~* /redirect/(.*)" style="width: 96%">';
+    html += '<i class="material-icons pointer delete medium-icon" onclick="removeServerLocation(' + id + ');" style="float: right;">remove_circle_outline</i>';
+    html += '<textarea rows="5" name="locationValues[]" placeholder="return 301 https://letspro.xyz/$1;" style="width: 100%;"></textarea>';
+    html += '</div>';
+    wrapper.append(html);
+    cnt++;
+  }
+}
+
+function removeServerLocation(id) {
+  $('#location-' + id).remove();
+  cnt--;
+}

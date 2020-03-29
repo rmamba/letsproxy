@@ -22,8 +22,8 @@ module.exports = class Nginx {
     this.responses = {}
     this.IGNORE = [
       'aliases', 'enabled', 'path', 'template',
-      'location', 'httpRedirect', 'ssl_dhparam',
-      'ssl_prefer_server_ciphers', 'ssl_ciphers',
+      'location', 'locations', 'httpRedirect',
+      'ssl_dhparam', 'ssl_prefer_server_ciphers', 'ssl_ciphers',
       'rewrites'
     ]
     if (fs.existsSync(this.FRONTEND_CONFIG)) {
@@ -284,6 +284,20 @@ module.exports = class Nginx {
     })
 
     config += '\t}\n'
+
+    if (D.locations) {
+      Object.keys(D.locations).forEach(l => {
+        config += `\n\tlocation ${l} {\n`
+        D.locations[l].forEach(k => {
+          var sc = ';'
+          if (k[-1] === ';') {
+            sc = ''
+          }
+          config += `\t\t${k}${sc}\n`
+        })
+        config += '\t}\n'
+      })
+    }
 
     config += '}'
     fs.writeFileSync(`${this.NGINX_FOLDER}/sites-available/${domain}`, config)
