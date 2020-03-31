@@ -83,6 +83,8 @@ router.get('/nginx/test', (req, res) => {
 
   nginx.test().then(response => {
     res.end(response)
+  }).catch(error => {
+    res.end(error.message)
   })
 })
 
@@ -93,6 +95,8 @@ router.get('/nginx/reload', (req, res) => {
 
   nginx.reload().then(response => {
     res.end(response)
+  }).catch(error => {
+    res.end(error.message)
   })
 })
 
@@ -103,6 +107,8 @@ router.get('/nginx/stop', (req, res) => {
 
   nginx.stop().then(response => {
     res.end(response)
+  }).catch(error => {
+    res.end(error.message)
   })
 })
 
@@ -113,6 +119,8 @@ router.get('/nginx/start', (req, res) => {
 
   nginx.start().then(response => {
     res.end(response)
+  }).catch(error => {
+    res.end(error.message)
   })
 })
 
@@ -123,6 +131,8 @@ router.get('/nginx/running', (req, res) => {
 
   nginx.running().then(response => {
     res.end(response)
+  }).catch(error => {
+    res.end(error.message)
   })
 })
 

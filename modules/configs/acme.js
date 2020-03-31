@@ -3,6 +3,7 @@
 'use strict'
 
 const fs = require('fs')
+const wait = require('wait-for-stuff')
 
 module.exports = class Acme {
   constructor () {
@@ -40,18 +41,29 @@ module.exports = class Acme {
         config += `  - ${d}\n`
       })
       fs.writeFileSync(`${this.ACME_FOLDER}/${domain}`, config)
+      var response
 
       if (domainConfig.enabled === true) {
         const check = this.wget.data(false, `${domain}/.well-known/acme-challenge/test`)
         this.checks[domain] = check
         if (check === 'working!!!') {
-          this.responses[domain] = this.acme.want(domains.join(' '))
+          response = wait.for.promise(this.acme.want(domains.join(' ')))
+          if (response instanceof Error) {
+            this.responses[domain] = response.message
+          } else {
+            this.responses[domain] = 'OK'
+          } 
           return true
         }
       } else {
-        // disabled certificates will not be able to be renewed after ma 3 months
+        // disabled certificates will not be able to be renewed after max 3 months
         // so we just unwant them
-        this.responses[domain] = this.acme.unwant(domains.join(' '))
+        response = wait.for.promise(this.acme.unwant(domains.join(' ')))
+        if (response instanceof Error) {
+          this.responses[domain] = response.message
+        } else {
+          this.responses[domain] = 'OK'
+        }
       }
       return true
     }

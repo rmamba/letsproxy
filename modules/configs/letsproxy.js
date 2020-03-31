@@ -90,19 +90,16 @@ module.exports = class Letsproxy {
     const used = this.usedUpstreams()
     if (used.indexOf(name) !== -1) {
       // Upstream is used, needs to be removed first!
-      return
+      throw new Error(`Upstream '${name}' is in use! Detach it from a domain first.`)
     }
     delete this.backendsDict[name]
   }
 
   removeDomain (name) {
-    this.error = undefined
     if (!this.domainsDict[name]) {
-      this.error = new Error(`Upstream '${name}' not found.`)
-      return false
+      throw new Error(`Upstream '${name}' not found.`)
     }
     delete this.domainsDict[name]
-    return true
   }
 
   renameUpstream (oldName, newName) {
@@ -155,7 +152,11 @@ module.exports = class Letsproxy {
       var locations = {}
       for (let i = 0; i < body.locationKeys.length; i++) {
         if (body.locationKeys[i] !== '' && body.locationValues[i] !== '') {
-          locations[body.locationKeys[i]] = body.locationValues[i].replace(/\r/g, '').replace(/\n\n/g, '\n').split('\n')
+          if (body.locationKeys[i] !== '/') { 
+            locations[body.locationKeys[i]] = body.locationValues[i].replace(/\r/g, '').replace(/\n\n/g, '\n').split('\n')
+          } else {
+            throw new Error('Can not use \'/\' as location, already in use!')
+          }
         } else {
           // ToDO: Force user to enter data!
           // For now it is just going to be ignored!

@@ -161,7 +161,7 @@ module.exports = class Nginx {
           ret = false
         }
       } else {
-        this.responses.response = 'Invalid Nginx configuration.'
+        this.responses.error = 'Invalid Nginx configuration.'
       }
     }
     return ret
@@ -307,38 +307,30 @@ module.exports = class Nginx {
     } catch (e) {
       exists = false
     }
+
     var response = null
     if (D.enabled) {
       if (!exists) {
         fs.symlinkSync(`../sites-available/${domain}`, `${this.NGINX_FOLDER}/sites-enabled/${domain}`)
-        response = wait.for.promise(nginx.test())
-        if (response === 'OK') {
-          response = wait.for.promise(nginx.reload())
-          this.responses[domain] = response
-          if (response !== 'OK') {
-            console.log('Error: ' + response)
-            ret = false
-          }
-        } else {
-          this.responses[domain] = 'Invalid Nginx configuration.'
-        }
       }
     } else {
       if (exists) {
         fs.unlinkSync(`${this.NGINX_FOLDER}/sites-enabled/${domain}`)
-        response = wait.for.promise(nginx.test())
-        if (response === 'OK') {
-          response = wait.for.promise(nginx.reload())
-          this.responses[domain] = response
-          if (response !== 'OK') {
-            console.log('Error: ' + response)
-            ret = false
-          }
-        } else {
-          this.responses[domain] = 'Invalid Nginx configuration.'
-        }
       }
     }
+
+    response = wait.for.promise(nginx.test())
+    if (response === 'OK') {
+      response = wait.for.promise(nginx.reload())
+      this.responses[domain] = response
+      if (response !== 'OK') {
+        console.log('Error: ' + response)
+        ret = false
+      }
+    } else {
+      this.responses[domain] = 'Invalid Nginx configuration.'
+    }
+
     return ret
   }
 
