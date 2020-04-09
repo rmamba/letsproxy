@@ -18,6 +18,8 @@ router.get('/domain', (req, res) => {
     errorMessage: errorMessage,
     domain: {},
     upstreamServers: Object.keys(configLetsproxy.backendsDict),
+    serverRewrites: [],
+    serverLocations: [],
     VERSION: process.env.VERSION
   })
 })
