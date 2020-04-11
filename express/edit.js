@@ -34,7 +34,7 @@ router.get('/domain/:domain', (req, res) => {
     domainUpstream: configLetsproxy.domainsDict[req.params.domain].location.proxy_pass.backend,
     domainUpstreamHttps: configLetsproxy.domainsDict[req.params.domain].location.proxy_pass.https === true ? 'true' : 'false',
     domainAliases: aliases,
-    upstreamServers: Object.keys(configLetsproxy.backendsDict),
+    upstreamServers: Object.keys(configLetsproxy.backendsDict).sort(),
     domainTemplate: configLetsproxy.domainsDict[req.params.domain].template || '',
     serverRewrites: configLetsproxy.domainsDict[req.params.domain].rewrites || {},
     serverLocations: configLetsproxy.domainsDict[req.params.domain].locations || {},
