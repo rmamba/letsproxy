@@ -173,6 +173,16 @@ module.exports = class Letsproxy {
       return locations
     }
 
+    if (body.externalDomain === '') {
+      throw new Error('Domain name can not be empty.')
+    }
+
+    // https://stackoverflow.com/questions/16463666/javascript-regex-to-match-fully-qualified-domain-name-without-protocol-optiona/16463966
+    // ToDO: add automated tests!
+    if (!(/^(?!:\/\/)([a-zA-Z0-9]+\.)?[a-zA-Z0-9][a-zA-Z0-9-]+\.[a-zA-Z]{2,6}?$/i.test(body.externalDomain))) {
+      throw new Error('Invalid domain name.')
+    }
+
     if (this.domainsDict[body.externalDomain]) {
       domain = this.domainsDict[body.externalDomain]
       domain.location.proxy_pass.backend = body.domainUpstream

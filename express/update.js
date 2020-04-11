@@ -19,6 +19,9 @@ router.post('/domain', (req, res) => {
     data = configLetsproxy.parseDomain(req.body)
   } catch (error) {
     req.session.errorMessages.push(error.message)
+    if (req.body.oldExternalDomain === '') {
+      return res.redirect('/add/domain/')
+    }
     return res.redirect('/edit/domain/' + req.body.externalDomain)
   }
 
