@@ -82,6 +82,10 @@ module.exports = class Nginx {
     }
   }
 
+  /**
+   * Return domains in a form of an array.
+   * @returns {array} Domains
+   */
   domainsAsArray () {
     var domainsArray = []
     Object.keys(this.domainsDict).sort().forEach(domain => {
@@ -290,7 +294,7 @@ module.exports = class Nginx {
         config += `\n\tlocation ${l} {\n`
         D.locations[l].forEach(k => {
           var sc = ';'
-          if (k[-1] === ';') {
+          if (k[k.length - 1] === ';') {
             sc = ''
           }
           config += `\t\t${k}${sc}\n`
