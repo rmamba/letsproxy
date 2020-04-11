@@ -184,6 +184,9 @@ module.exports = class Letsproxy {
     }
 
     if (this.domainsDict[body.externalDomain]) {
+      if (body.oldExternalDomain === '') {
+        throw new Error('Domain name already exists.')
+      }
       domain = this.domainsDict[body.externalDomain]
       domain.location.proxy_pass.backend = body.domainUpstream
       domain.location.proxy_pass.https = body.domainUpstreamHttps === 'true'
