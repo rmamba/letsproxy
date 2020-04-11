@@ -183,6 +183,16 @@ module.exports = class Letsproxy {
       throw new Error('Invalid domain name.')
     }
 
+    if (body.domainAliases !== '') {
+      body.domainAliases = body.domainAliases.replace(/ /g, '')
+      var subDomains = body.domainAliases.split(',')
+      subDomains.forEach(domain => {
+        if (!(/^(?!:\/\/)([a-zA-Z0-9]+\.)?[a-zA-Z0-9][a-zA-Z0-9-]+\.[a-zA-Z]{2,6}?$/i.test(domain))) {
+          throw new Error(`${domain} is not a valid sub-domain name.`)
+        }
+      })
+    }
+
     if (this.domainsDict[body.externalDomain]) {
       if (body.oldExternalDomain === '') {
         throw new Error('Domain name already exists.')

@@ -21,7 +21,7 @@ html(lang="en")
             option(value="rancher" selected= domainTemplate == 'rancher') Rancher
             option(value="rcon" selected= domainTemplate == 'rcon') RCON
         label External domain:
-        input(type="hidden" name="oldExternalDomain" value=oldExternalDomain)
+        input(type="hidden" name="oldExternalDomain" value=externalDomain)
         input(type="text" name="externalDomain" placeholder="example.com" value=externalDomain style="width: 100%;")
         label Domain Aliases:
         input(type="text" name="domainAliases" placeholder="www.example.com,img1.example.com,img2.example.com" value=domainAliases style="width: 100%;")
