@@ -5,6 +5,7 @@
 const fs = require('fs')
 const Acme = require('./acme')
 const Nginx = require('./nginx')
+const helper = require('../helper')
 
 module.exports = class Letsproxy {
   constructor () {
@@ -179,7 +180,7 @@ module.exports = class Letsproxy {
 
     // https://stackoverflow.com/questions/16463666/javascript-regex-to-match-fully-qualified-domain-name-without-protocol-optiona/16463966
     // ToDO: add automated tests!
-    if (!(/^(?!:\/\/)([a-zA-Z0-9]+\.)?[a-zA-Z0-9][a-zA-Z0-9-]+\.[a-zA-Z]{2,6}?$/i.test(body.externalDomain))) {
+    if (!helper.domain.is.valid(body.externalDomain)) {
       throw new Error('Invalid domain name.')
     }
 
@@ -187,7 +188,7 @@ module.exports = class Letsproxy {
       body.domainAliases = body.domainAliases.replace(/ /g, '')
       var subDomains = body.domainAliases.split(',')
       subDomains.forEach(domain => {
-        if (!(/^(?!:\/\/)([a-zA-Z0-9]+\.)?[a-zA-Z0-9][a-zA-Z0-9-]+\.[a-zA-Z]{2,6}?$/i.test(domain))) {
+        if (!helper.domain.is.valid(domain)) {
           throw new Error(`${domain} is not a valid sub-domain name.`)
         }
       })

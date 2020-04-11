@@ -15,9 +15,14 @@ module.exports.noty.parse = function notyParse (messages, type) {
 }
 
 module.exports.domain = {
-  to: {}
+  to: {},
+  is: {}
 }
 
 module.exports.domain.to.backend = function domains2backend (domain) {
   return domain.replace(/\./g, '-')
+}
+
+module.exports.domain.is.valid = function domainsIsValid (domain) {
+  return /(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]/g.test(domain)
 }
