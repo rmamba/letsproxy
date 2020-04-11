@@ -60,6 +60,11 @@ router.post('/server', (req, res) => {
     return res.redirect('/add/server')
   }
 
+  if (req.body.upstreamName !== req.body.upstreamName.replace(/[^a-z0-9-]/gi, '')) {
+    req.session.errorMessages.push('Only letters, numbers and dash is allowed for upstream naming.')
+    return res.redirect('/add/server')
+  }
+
   var servers = []
   for (let i = 0; i < req.body.upstreamAddresses.length; i++) {
     servers.push({
@@ -76,6 +81,9 @@ router.post('/server', (req, res) => {
     configLetsproxy.updateUpstream(req.body.upstreamName, servers, req.body.stickySession === 'on')
   } catch (error) {
     req.session.errorMessages.push(error.message)
+    if (req.body.oldUpstreamName === '') {
+      return res.redirect('/add/server/')
+    }
     return res.redirect('/edit/server/' + req.body.upstreamName)
   }
   if (!configLetsproxy.writeUpstream()) {
