@@ -13,7 +13,7 @@ module.exports = class Acme {
     this.domains = {}
     this.checks = {}
     this.responses = {}
-    this.errors = {}
+    this.errors = undefined
 
     const Acme = require('../system/acmetool')
     const Wget = require('../wget')
@@ -26,6 +26,8 @@ module.exports = class Acme {
   }
 
   writeConfig (domain) {
+    var ret = true
+    this.errors = []
     this.responses[domain] = undefined
     this.checks[domain] = undefined
     if (this.domains[domain]) {
@@ -50,10 +52,12 @@ module.exports = class Acme {
           response = wait.for.promise(this.acme.want(domains.join(' ')))
           if (response instanceof Error) {
             this.responses[domain] = response.message
+            this.errors.push(response.message)
+            ret = false
           } else {
             this.responses[domain] = 'OK'
-          } 
-          return true
+          }
+          return ret
         }
       } else {
         // disabled certificates will not be able to be renewed after max 3 months
@@ -61,13 +65,16 @@ module.exports = class Acme {
         response = wait.for.promise(this.acme.unwant(domains.join(' ')))
         if (response instanceof Error) {
           this.responses[domain] = response.message
+          this.errors.push(response.message)
+          ret = false
         } else {
           this.responses[domain] = 'OK'
         }
       }
-      return true
+      return ret
     }
     this.responses[domain] = `Domain '${domain}' not found.`
+    this.errors.push(`Domain '${domain}' not found.`)
     return false
   }
 

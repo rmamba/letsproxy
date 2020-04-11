@@ -11,7 +11,7 @@ module.exports = class Letsproxy {
     const PREFIX = process.env.NODE_ENV === 'test' ? './test' : '.'
     this.BACKEND_CONFIG = `${PREFIX}/config/backends.json`
     this.FRONTEND_CONFIG = `${PREFIX}/config/frontends.json`
-    this.error = undefined
+    this.errors = undefined
     this.domainsDict = {}
     this.backendsDict = {}
     if (fs.existsSync(this.BACKEND_CONFIG)) {
@@ -27,11 +27,18 @@ module.exports = class Letsproxy {
   }
 
   writeConfigs () {
+    this.errors = []
     var ret = true
     const acme = new Acme()
-    ret = ret && acme.writeConfigs()
+    if (!acme.writeConfigs()) {
+      this.errors.push('Acmetoll error.')
+      ret = false
+    }
     const nginx = new Nginx()
-    ret = ret && nginx.writeConfigs()
+    if (!nginx.writeConfigs()) {
+      this.errors.push('Error writing Nginx configurations.')
+      ret = false
+    }
     return ret
   }
 
@@ -53,7 +60,7 @@ module.exports = class Letsproxy {
 
   writeUpstream () {
     fs.writeFileSync(this.BACKEND_CONFIG, JSON.stringify(this.backendsDict, null, 2))
-    this.writeUpstreams()
+    return this.writeUpstreams()
   }
 
   updateUpstream (name, servers, sticky) {
@@ -152,7 +159,7 @@ module.exports = class Letsproxy {
       var locations = {}
       for (let i = 0; i < body.locationKeys.length; i++) {
         if (body.locationKeys[i] !== '' && body.locationValues[i] !== '') {
-          if (body.locationKeys[i] !== '/') { 
+          if (body.locationKeys[i] !== '/') {
             locations[body.locationKeys[i]] = body.locationValues[i].replace(/\r/g, '').replace(/\n\n/g, '\n').split('\n')
           } else {
             throw new Error('Can not use \'/\' as location, already in use!')
@@ -234,7 +241,12 @@ module.exports = class Letsproxy {
   }
 
   writeDomains () {
+    this.errors = []
     fs.writeFileSync(this.FRONTEND_CONFIG, JSON.stringify(this.domainsDict, null, 2))
-    return this.writeConfigs()
+    if (!this.writeConfigs()) {
+      this.errors.push('Error saving domains configurations.')
+      return false
+    }
+    return true
   }
 }

@@ -6,17 +6,24 @@ const express = require('express')
 const router = express.Router()
 const ConfigProxy = require('../modules/configs/letsproxy')
 const ConfigNginx = require('../modules/configs/nginx')
+const helper = require('../modules/helper')
 
 router.get('/domains', (req, res) => {
   if (!req.session.user) {
     return res.redirect(401, '/login')
   }
-  var errorMessage = req.session.errorMessage
-  req.session.errorMessage = undefined
+  var errorMessages = req.session.errorMessages
+  var successMessages = req.session.successMessages
+  req.session.errorMessages = []
+  req.session.successMessages = []
+
+  var notyMessages = helper.noty.parse(errorMessages, 'error')
+  notyMessages += helper.noty.parse(successMessages, 'success')
+
   const configNginx = new ConfigNginx()
   res.render('domains', {
     user: req.session.user !== undefined ? req.session.user : false,
-    errorMessage: errorMessage,
+    notyMessages: notyMessages,
     domains: configNginx.domainsAsArray(),
     hasBackends: Object.keys(configNginx.backendsDict).length > 0,
     VERSION: process.env.VERSION
@@ -27,12 +34,18 @@ router.get('/servers', (req, res) => {
   if (!req.session.user) {
     return res.redirect(401, '/login')
   }
-  var errorMessage = req.session.errorMessage
-  req.session.errorMessage = undefined
+  var errorMessages = req.session.errorMessages
+  var successMessages = req.session.successMessages
+  req.session.errorMessages = []
+  req.session.successMessages = []
+
+  var notyMessages = helper.noty.parse(errorMessages, 'error')
+  notyMessages += helper.noty.parse(successMessages, 'success')
+
   const configNginx = new ConfigNginx()
   res.render('servers', {
     user: req.session.user !== undefined ? req.session.user : false,
-    errorMessage: errorMessage,
+    notyMessages: notyMessages,
     servers: configNginx.backendsDict,
     usedUpstreams: configNginx.usedUpstreamsAsArray(),
     VERSION: process.env.VERSION
@@ -43,11 +56,10 @@ router.get('/domain/enable/:domain', (req, res) => {
   if (!req.session.user) {
     return res.redirect(401, '/login')
   }
-  // var errorMessage = req.session.errorMessage
-  req.session.errorMessage = undefined
+  req.session.errorMessages = []
   const configLetsproxy = new ConfigProxy()
   if (!Object.prototype.hasOwnProperty.call(configLetsproxy.domainsDict, req.params.domain)) {
-    req.session.errorMessage = 'Domain not found.'
+    req.session.errorMessages.push('Domain not found.')
     return res.redirect('/domains')
   }
   configLetsproxy.domainsDict[req.params.domain].enabled = true
@@ -60,16 +72,19 @@ router.get('/domain/disable/:domain', (req, res) => {
   if (!req.session.user) {
     return res.redirect(401, '/login')
   }
-  // var errorMessage = req.session.errorMessage
-  req.session.errorMessage = undefined
+  req.session.errorMessages = []
   const configLetsproxy = new ConfigProxy()
   if (!Object.prototype.hasOwnProperty.call(configLetsproxy.domainsDict, req.params.domain)) {
-    req.session.errorMessage = 'Domain not found.'
+    req.session.errorMessages.push('Domain not found.')
     return res.redirect('/domains')
   }
   configLetsproxy.domainsDict[req.params.domain].enabled = false
-  configLetsproxy.writeDomains()
-  configLetsproxy.writeConfig(req.params.domain)
+  if (!configLetsproxy.writeDomains()) {
+    req.session.errorMessages.push(configLetsproxy.error)
+  }
+  if (!configLetsproxy.writeConfig(req.params.domain)) {
+    req.session.errorMessages.push(configLetsproxy.error)
+  }
   res.redirect('/domains')
 })
 
@@ -77,16 +92,19 @@ router.get('/domain/redirect/enable/:domain', (req, res) => {
   if (!req.session.user) {
     return res.redirect(401, '/login')
   }
-  // var errorMessage = req.session.errorMessage
-  req.session.errorMessage = undefined
+  req.session.errorMessages = undefined
   const configLetsproxy = new ConfigProxy()
   if (!Object.prototype.hasOwnProperty.call(configLetsproxy.domainsDict, req.params.domain)) {
-    req.session.errorMessage = 'Domain not found.'
+    req.session.errorMessages.push('Domain not found.')
     return res.redirect('/domains')
   }
   configLetsproxy.domainsDict[req.params.domain].httpRedirect = true
-  configLetsproxy.writeDomains()
-  configLetsproxy.writeConfig(req.params.domain)
+  if (!configLetsproxy.writeDomains()) {
+    req.session.errorMessages = req.session.errorMessages.concat(configLetsproxy.errors)
+  }
+  if (!configLetsproxy.writeConfig(req.params.domain)) {
+    req.session.errorMessages = req.session.errorMessages.concat(configLetsproxy.errors)
+  }
   res.redirect('/domains')
 })
 
@@ -94,11 +112,10 @@ router.get('/domain/redirect/disable/:domain', (req, res) => {
   if (!req.session.user) {
     return res.redirect(401, '/login')
   }
-  // var errorMessage = req.session.errorMessage
-  req.session.errorMessage = undefined
+  req.session.errorMessages = []
   const configLetsproxy = new ConfigProxy()
   if (!Object.prototype.hasOwnProperty.call(configLetsproxy.domainsDict, req.params.domain)) {
-    req.session.errorMessage = 'Domain not found.'
+    req.session.errorMessages.push('Domain not found.')
     return res.redirect('/domains')
   }
   configLetsproxy.domainsDict[req.params.domain].httpRedirect = false

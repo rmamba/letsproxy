@@ -11,7 +11,7 @@ router.get('/domain/:domain', (req, res) => {
   if (!req.session.user) {
     return res.redirect(401, '/login')
   }
-  req.session.errorMessage = undefined
+  req.session.errorMessages = []
   const configLetsproxy = new ConfigLetsproxy()
   const acme = new Acme()
 
@@ -28,17 +28,16 @@ router.get('/domain/:domain', (req, res) => {
 
     var P = acme.unwant(domains.join(' '))
     P.then(function () {
-      req.session.errorMessage = 'Domain removed'
-      req.session.messageType = 'success'
+      req.session.errorMessages.push('Domain removed')
     }).catch(function (error) {
       console.error(error)
-      req.session.errorMessage = `Error unwanting domains '${domains.join(' ')}'`
+      req.session.errorMessages.push(`Error unwanting domains '${domains.join(' ')}'`)
     }).finally(function () {
       return res.redirect('/domains')
     })
   } catch (error) {
     console.error(error)
-    req.session.errorMessage = error.message
+    req.session.errorMessages.push(error.message)
     return res.redirect('/domains')
   }
 })
@@ -47,7 +46,7 @@ router.get('/server/:server', (req, res) => {
   if (!req.session.user) {
     return res.redirect(401, '/login')
   }
-  req.session.errorMessage = undefined
+  req.session.errorMessages = []
   const configLetsproxy = new ConfigLetsproxy()
 
   try {
@@ -55,7 +54,7 @@ router.get('/server/:server', (req, res) => {
     configLetsproxy.writeUpstream()
   } catch (error) {
     console.error(error)
-    req.session.errorMessage = error.message
+    req.session.errorMessages.push(error.message)
   }
   return res.redirect('/servers')
 })

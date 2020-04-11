@@ -2,6 +2,18 @@
 // @ts-check
 'use strict'
 
+module.exports.noty = {}
+
+module.exports.noty.parse = function notyParse (messages, type) {
+  var notyMessages = ''
+  if (messages !== undefined) {
+    messages.forEach(message => {
+      notyMessages += `notyAlert('${message}', '${type}');`  
+    })
+  }
+  return notyMessages
+}
+
 module.exports.domain = {
   to: {}
 }

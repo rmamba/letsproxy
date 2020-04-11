@@ -5,26 +5,34 @@
 const md5 = require('md5')
 const express = require('express')
 const router = express.Router()
+const helper = require('../modules/helper')
 
 const PASSWD = require('../passwd')
 
 router.get('/login', (req, res) => {
-  var errorMessage = req.session.errorMessage
-  req.session.errorMessage = undefined
+  var errorMessages = req.session.errorMessages
+  var successMessages = req.session.successMessages
+  req.session.errorMessages = []
+  req.session.successMessages = []
+
+  var notyMessages = helper.noty.parse(errorMessages, 'error')
+  notyMessages += helper.noty.parse(successMessages, 'success')
+
   res.render('login', {
-    errorMessage: errorMessage,
+    notyMessages: notyMessages,
     VERSION: process.env.VERSION
   })
 })
 
 router.post('/login', (req, res) => {
-  req.session.errorMessage = undefined
+  req.session.errorMessages = []
+  req.session.successMessages = []
   if (!PASSWD[req.body.user]) {
-    req.session.errorMessage = 'Unknown user!'
+    req.session.errorMessages.push('Unknown user!')
     return res.redirect('/login')
   }
   if (PASSWD[req.body.user].password !== md5(req.body.password)) {
-    req.session.errorMessage = 'Invalid password!'
+    req.session.errorMessage.push('Invalid password!')
     return res.redirect('/login')
   }
   if (req.session.user === undefined) {

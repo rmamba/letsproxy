@@ -10,23 +10,32 @@ router.post('/domain', (req, res) => {
   if (!req.session.user) {
     return res.redirect(401, '/login')
   }
-  req.session.errorMessage = undefined
+  req.session.successMessages = []
+  req.session.errorMessages = []
   const configLetsproxy = new ConfigLetsproxy()
 
   var data
   try {
     data = configLetsproxy.parseDomain(req.body)
   } catch (error) {
-    req.session.errorMessage = error.message
+    req.session.errorMessages.push(error.message)
     return res.redirect('/edit/domain/' + req.body.externalDomain)
   }
 
   configLetsproxy.updateDomain(req.body.externalDomain, data)
-  configLetsproxy.writeDomains()
+  if (!configLetsproxy.writeDomains()) {
+    req.session.errorMessages = req.session.errorMessages.concat(configLetsproxy.errors)
+  }
   if (req.body.oldExternalDomain !== '' && req.body.oldExternalDomain !== req.body.externalDomain) {
     configLetsproxy.removeDomain(req.body.oldExternalDomain)
   }
-  configLetsproxy.writeConfigs()
+  if (!configLetsproxy.writeConfigs()) {
+    req.session.errorMessages = req.session.errorMessages.concat(configLetsproxy.errors)
+  }
+
+  if (req.session.errorMessages.length === 0) {
+    req.session.successMessages.push('Configuration updated.')
+  }
 
   return res.redirect('/domains')
 })
@@ -35,12 +44,13 @@ router.post('/server', (req, res) => {
   if (!req.session.user) {
     return res.redirect(401, '/login')
   }
-  req.session.errorMessage = undefined
+  req.session.successMessages = []
+  req.session.errorMessages = []
   const configLetsproxy = new ConfigLetsproxy()
 
   if (req.body.oldUpstreamName === '') {
     if (Object.prototype.hasOwnProperty.call(configLetsproxy.backendsDict, req.body.upstreamName)) {
-      req.session.errorMessage = 'Server with this name already exists.'
+      req.session.errorMessages.push('Server with this name already exists.')
       return res.redirect('/add/server')
     }
   }
@@ -60,11 +70,19 @@ router.post('/server', (req, res) => {
   try {
     configLetsproxy.updateUpstream(req.body.upstreamName, servers, req.body.stickySession === 'on')
   } catch (error) {
-    req.session.errorMessage = error.message
+    req.session.errorMessages.push(error.message)
     return res.redirect('/edit/server/' + req.body.upstreamName)
   }
-  configLetsproxy.writeUpstream()
-  configLetsproxy.writeDomains()
+  if (!configLetsproxy.writeUpstream()) {
+    req.session.errorMessages = req.session.errorMessages.concat(configLetsproxy.errors)
+  }
+  if (!configLetsproxy.writeDomains()) {
+    req.session.errorMessages = req.session.errorMessages.concat(configLetsproxy.errors)
+  }
+
+  if (req.session.errorMessages.length === 0) {
+    req.session.successMessages.push('Configuration updated.')
+  }
 
   // if (req.body.oldUpstreamName !== '' && req.body.oldUpstreamName !== req.body.upstreamName) {
   //     configLetsproxy.removeUpstream(req.body.oldUpstreamName)

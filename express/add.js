@@ -10,12 +10,15 @@ router.get('/domain', (req, res) => {
   if (!req.session.user) {
     return res.redirect(401, '/login')
   }
-  var errorMessage = req.session.errorMessage
-  req.session.errorMessage = undefined
+  var errorMessages = req.session.errorMessages
+  var successMessages = req.session.successMessages
+  req.session.errorMessages = []
+  req.session.successMessages = []
   const configLetsproxy = new ConfigLetsproxy()
   res.render('domain', {
     user: req.session.user !== undefined ? req.session.user : false,
-    errorMessage: errorMessage,
+    errorMessages: errorMessages,
+    successMessages: successMessages,
     domain: {},
     upstreamServers: Object.keys(configLetsproxy.backendsDict),
     serverRewrites: [],
@@ -28,11 +31,14 @@ router.get('/server', (req, res) => {
   if (!req.session.user) {
     return res.redirect(401, '/login')
   }
-  var errorMessage = req.session.errorMessage
-  req.session.errorMessage = undefined
+  var errorMessages = req.session.errorMessages
+  var successMessages = req.session.successMessages
+  req.session.errorMessages = []
+  req.session.successMessages = []
   res.render('server', {
     user: req.session.user !== undefined ? req.session.user : false,
-    errorMessage: errorMessage,
+    errorMessages: errorMessages,
+    successMessages: successMessages,
     upstreamName: null,
     upstreamServers: [{
       address: null,

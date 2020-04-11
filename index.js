@@ -39,7 +39,8 @@ app.use(express.static('static'))
 // app.set('json spaces', 2);
 
 app.get('/', (req, res) => {
-  req.session.errorMessage = undefined
+  req.session.errorMessages = []
+  req.session.successMessages = []
   res.render('index', {
     user: req.session.user !== undefined ? req.session.user : false,
     VERSION: process.env.VERSION

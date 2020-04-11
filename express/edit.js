@@ -5,25 +5,31 @@
 const express = require('express')
 const router = express.Router()
 const ConfigLetsproxy = require('../modules/configs/letsproxy')
+const helper = require('../modules/helper')
 
 router.get('/domain/:domain', (req, res) => {
   if (!req.session.user) {
     return res.redirect(401, '/login')
   }
-  var errorMessage = req.session.errorMessage
-  req.session.errorMessage = undefined
+  var errorMessages = req.session.errorMessages
+  var successMessages = req.session.successMessages
+  req.session.errorMessages = []
+  req.session.successMessages = []
   const configLetsproxy = new ConfigLetsproxy()
   if (!Object.prototype.hasOwnProperty.call(configLetsproxy.domainsDict, req.params.domain)) {
-    req.session.errorMessage = 'Unknown domain!!!'
+    req.session.errorMessages.push('Unknown domain!!!')
     return res.redirect('/domains')
   }
   var aliases = ''
   if (Object.prototype.hasOwnProperty.call(configLetsproxy.domainsDict[req.params.domain], 'aliases')) {
     aliases = configLetsproxy.domainsDict[req.params.domain].aliases.join(',')
   }
+
+  var notyMessages = helper.noty.parse(errorMessages, 'error')
+  notyMessages += helper.noty.parse(successMessages, 'sucess')
   res.render('domain', {
     user: req.session.user !== undefined ? req.session.user : false,
-    errorMessage: errorMessage,
+    notyMessages: notyMessages,
     externalDomain: req.params.domain,
     domainUpstream: configLetsproxy.domainsDict[req.params.domain].location.proxy_pass.backend,
     domainUpstreamHttps: configLetsproxy.domainsDict[req.params.domain].location.proxy_pass.https === true ? 'true' : 'false',
@@ -40,16 +46,19 @@ router.get('/server/:server', (req, res) => {
   if (!req.session.user) {
     return res.redirect(401, '/login')
   }
-  var errorMessage = req.session.errorMessage
-  req.session.errorMessage = undefined
+  var errorMessages = req.session.errorMessages
+  req.session.errorMessages = []
+  req.session.successMessages = []
   const configLetsproxy = new ConfigLetsproxy()
   if (!Object.prototype.hasOwnProperty.call(configLetsproxy.backendsDict, req.params.server)) {
-    req.session.errorMessage = 'Unknown server!!!'
+    req.session.errorMessages.push('Unknown server!!!')
     return res.redirect('/servers')
   }
+
+  var notyMessages = helper.noty.parse(errorMessages, 'error')
   res.render('server', {
     user: req.session.user !== undefined ? req.session.user : false,
-    errorMessage: errorMessage,
+    notyMessages: notyMessages,
     upstreamName: req.params.server,
     upstreamServers: configLetsproxy.backendsDict[req.params.server].servers,
     isSticky: configLetsproxy.backendsDict[req.params.server].sticky,

@@ -29,11 +29,13 @@ tr {
 .top-left {
     width: 100px;
     height: 100px;
+    clip-path: polygon(0 0, 0% 100%, 100% 0);
     -webkit-clip-path: polygon(0 0, 0% 100%, 100% 0);
 }
 .bottom-right {
     width: 100px;
     height: 100px;
+    clip-path: polygon(0 100%, 100% 100%, 100% 0);
     -webkit-clip-path: polygon(0 100%, 100% 100%, 100% 0);
 }
 
@@ -43,9 +45,9 @@ tr {
     padding: 0px;
 }
 
-.material-icons {
-    /* font-size: 16px; */
-}
+/* .material-icons {
+  font-size: 16px;
+} */
 
 .pointer {
     cursor: pointer;

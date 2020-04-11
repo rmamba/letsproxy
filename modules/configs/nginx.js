@@ -153,21 +153,23 @@ module.exports = class Nginx {
       exists = false
     }
 
-    var ret = true
     if (!exists) {
       fs.symlinkSync('../sites-available/upstreams', `${this.NGINX_FOLDER}/sites-enabled/upstreams`)
-      var response = wait.for.promise(nginx.test())
-      if (response === 'OK') {
-        response = wait.for.promise(nginx.reload())
-        this.responses.upstream = response
-        if (response !== 'OK') {
-          console.log('Error: ' + response)
-          ret = false
-        }
-      } else {
-        this.responses.error = 'Invalid Nginx configuration.'
-      }
     }
+
+    var ret = true
+    var response = wait.for.promise(nginx.test())
+    if (response === 'OK') {
+      response = wait.for.promise(nginx.reload())
+      this.responses.upstream = response
+      if (response !== 'OK') {
+        console.log('Error: ' + response)
+        ret = false
+      }
+    } else {
+      this.responses.error = 'Invalid Nginx configuration.'
+    }
+
     return ret
   }
 
@@ -312,7 +314,6 @@ module.exports = class Nginx {
       exists = false
     }
 
-    var response = null
     if (D.enabled) {
       if (!exists) {
         fs.symlinkSync(`../sites-available/${domain}`, `${this.NGINX_FOLDER}/sites-enabled/${domain}`)
@@ -321,18 +322,6 @@ module.exports = class Nginx {
       if (exists) {
         fs.unlinkSync(`${this.NGINX_FOLDER}/sites-enabled/${domain}`)
       }
-    }
-
-    response = wait.for.promise(nginx.test())
-    if (response === 'OK') {
-      response = wait.for.promise(nginx.reload())
-      this.responses[domain] = response
-      if (response !== 'OK') {
-        console.log('Error: ' + response)
-        ret = false
-      }
-    } else {
-      this.responses[domain] = 'Invalid Nginx configuration.'
     }
 
     return ret
@@ -349,6 +338,20 @@ module.exports = class Nginx {
     Object.keys(this.domainsDict).forEach(domain => {
       ret = ret && this.writeConfig(domain)
     })
+
+    var response = wait.for.promise(nginx.test())
+    if (response === 'OK') {
+      response = wait.for.promise(nginx.reload())
+      if (response !== 'OK') {
+        console.log('Error: ' + response)
+        ret = false
+      } else {
+        this.responses.success = 'Nginx restarted.'
+      }
+    } else {
+      this.responses.error = 'Invalid Nginx configuration.'
+    }
+
     return ret
   }
 }

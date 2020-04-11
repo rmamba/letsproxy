@@ -1,3 +1,2 @@
-- var msg = errorMessage
-- var type = messageType ? messageType : 'error'
-  script!= '$( document ).ready(function () { if ("' + msg + '" !== \'\' && "' + msg + '" !== \'undefined\') { notyAlert("' + msg + '", \'' + type + '\') } })'
+if notyMessages
+  script!= '$( document ).ready(function () {' + notyMessages + '});'
