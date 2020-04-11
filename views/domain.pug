@@ -66,6 +66,8 @@ html(lang="en")
               i.material-icons.pointer.delete.medium-icon(onclick="removeServerLocation('" + rndId + "');" style="float: right;") remove_circle_outline
               |
               textarea(type="textbox" name="locationValues[]" placeholder="return 301 https://letspro.xyz/$1;" style="width: 100%;")= values
-        input(type="submit" value="SAVE")
+        input(type="submit" class="bg-lightgreen" value="SAVE")
+        | &nbsp;
+        a(href="/domains" class="btn bg-coral") CANCEL
       include includes/noty.pug
-      include includes/footer.pug
+      

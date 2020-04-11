@@ -40,6 +40,8 @@ html(lang="en")
           input(type="checkbox" id="stickySession" name="stickySession" value="on" checked=isChecked)
           |
           label(for="stickySession" style="display: inline-block;") Sticky session
-        input(type="submit" value="SAVE")
+        input(type="submit" class="bg-lightgreen" value="SAVE")
+        | &nbsp;
+        a(href="/servers" class="btn bg-coral") CANCEL
       include includes/noty.pug
       include includes/footer.pug
