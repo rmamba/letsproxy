@@ -5,6 +5,7 @@
 const express = require('express')
 const router = express.Router()
 const ConfigLetsproxy = require('../modules/configs/letsproxy')
+const helper = require('../modules/helper')
 
 router.post('/domain', (req, res) => {
   if (!req.session.user) {
@@ -63,7 +64,7 @@ router.post('/server', (req, res) => {
     return res.redirect('/add/server')
   }
 
-  if (req.body.upstreamName !== req.body.upstreamName.replace(/[^a-z0-9-]/gi, '')) {
+  if (!helper.upstream.is.valid(req.body.upstreamName)) {
     req.session.errorMessages.push('Only letters, numbers and dash is allowed for upstream naming.')
     return res.redirect('/add/server')
   }

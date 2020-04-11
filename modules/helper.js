@@ -26,3 +26,11 @@ module.exports.domain.to.backend = function domains2backend (domain) {
 module.exports.domain.is.valid = function domainsIsValid (domain) {
   return /(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]/g.test(domain)
 }
+
+module.exports.upstream = {
+  is: {}
+}
+
+module.exports.upstream.is.valid = function upstreamIsValid (upstream) {
+  return upstream === upstream.replace(/[^a-z0-9-]/gi, '')
+}
