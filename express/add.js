@@ -5,6 +5,7 @@
 const express = require('express')
 const router = express.Router()
 const ConfigLetsproxy = require('../modules/configs/letsproxy')
+const helper = require('../modules/helper')
 
 router.get('/domain', (req, res) => {
   if (!req.session.user) {
@@ -14,11 +15,14 @@ router.get('/domain', (req, res) => {
   var successMessages = req.session.successMessages
   req.session.errorMessages = []
   req.session.successMessages = []
+
+  var notyMessages = helper.noty.parse(errorMessages, 'error')
+  notyMessages += helper.noty.parse(successMessages, 'success')
+
   const configLetsproxy = new ConfigLetsproxy()
   res.render('domain', {
     user: req.session.user !== undefined ? req.session.user : false,
-    errorMessages: errorMessages,
-    successMessages: successMessages,
+    notyMessages: notyMessages,
     domain: {},
     upstreamServers: Object.keys(configLetsproxy.backendsDict),
     serverRewrites: [],
@@ -35,10 +39,13 @@ router.get('/server', (req, res) => {
   var successMessages = req.session.successMessages
   req.session.errorMessages = []
   req.session.successMessages = []
+
+  var notyMessages = helper.noty.parse(errorMessages, 'error')
+  notyMessages += helper.noty.parse(successMessages, 'success')
+
   res.render('server', {
     user: req.session.user !== undefined ? req.session.user : false,
-    errorMessages: errorMessages,
-    successMessages: successMessages,
+    notyMessages: notyMessages,
     upstreamName: null,
     upstreamServers: [{
       address: null,

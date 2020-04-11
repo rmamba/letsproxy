@@ -55,6 +55,11 @@ router.post('/server', (req, res) => {
     }
   }
 
+  if (req.body.upstreamName === '') {
+    req.session.errorMessages.push('Can not use empty name for upstream.')
+    return res.redirect('/add/server')
+  }
+
   var servers = []
   for (let i = 0; i < req.body.upstreamAddresses.length; i++) {
     servers.push({
