@@ -9,7 +9,7 @@ const Acme = require('../modules/system/acmetool')
 
 router.get('/domain/:domain', (req, res) => {
   if (!req.session.user) {
-    return res.redirect(401, '/login')
+    return res.redirect('/login')
   }
   req.session.errorMessages = []
   const configLetsproxy = new ConfigLetsproxy()
@@ -44,7 +44,7 @@ router.get('/domain/:domain', (req, res) => {
 
 router.get('/server/:server', (req, res) => {
   if (!req.session.user) {
-    return res.redirect(401, '/login')
+    return res.redirect('/login')
   }
   req.session.errorMessages = []
   const configLetsproxy = new ConfigLetsproxy()

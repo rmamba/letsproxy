@@ -21,7 +21,7 @@ const mime = {
 
 router.get('/config/:domain', (req, res) => {
   if (!req.session.user) {
-    return res.redirect(401, '/login')
+    return res.redirect('/login')
   }
   var data = '{\n\t"error": "No config found!!!"\n}'
   if (fs.existsSync(`./nginx/sites-available/${req.params.domain}`)) {
@@ -33,7 +33,7 @@ router.get('/config/:domain', (req, res) => {
 
 router.get('/favicon/:protocol/:url', (req, res) => {
   if (!req.session.user) {
-    return res.redirect(401, '/login')
+    return res.redirect('/login')
   }
   var data
   var contentType = 'image/x-icon'
@@ -78,7 +78,7 @@ router.get('/favicon/:protocol/:url', (req, res) => {
 
 router.get('/nginx/test', (req, res) => {
   if (!req.session.user) {
-    return res.redirect(401, '/login')
+    return res.redirect('/login')
   }
 
   nginx.test().then(response => {
@@ -90,7 +90,7 @@ router.get('/nginx/test', (req, res) => {
 
 router.get('/nginx/reload', (req, res) => {
   if (!req.session.user) {
-    return res.redirect(401, '/login')
+    return res.redirect('/login')
   }
 
   nginx.reload().then(response => {
@@ -102,7 +102,7 @@ router.get('/nginx/reload', (req, res) => {
 
 router.get('/nginx/stop', (req, res) => {
   if (!req.session.user) {
-    return res.redirect(401, '/login')
+    return res.redirect('/login')
   }
 
   nginx.stop().then(response => {
@@ -114,7 +114,7 @@ router.get('/nginx/stop', (req, res) => {
 
 router.get('/nginx/start', (req, res) => {
   if (!req.session.user) {
-    return res.redirect(401, '/login')
+    return res.redirect('/login')
   }
 
   nginx.start().then(response => {
@@ -126,7 +126,7 @@ router.get('/nginx/start', (req, res) => {
 
 router.get('/nginx/running', (req, res) => {
   if (!req.session.user) {
-    return res.redirect(401, '/login')
+    return res.redirect('/login')
   }
 
   nginx.running().then(response => {

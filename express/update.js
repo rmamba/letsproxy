@@ -9,7 +9,7 @@ const helper = require('../modules/helper')
 
 router.post('/domain', (req, res) => {
   if (!req.session.user) {
-    return res.redirect(401, '/login')
+    return res.redirect('/login')
   }
   req.session.successMessages = []
   req.session.errorMessages = []
@@ -46,7 +46,7 @@ router.post('/domain', (req, res) => {
 
 router.post('/server', (req, res) => {
   if (!req.session.user) {
-    return res.redirect(401, '/login')
+    return res.redirect('/login')
   }
   req.session.successMessages = []
   req.session.errorMessages = []

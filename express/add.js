@@ -9,7 +9,7 @@ const helper = require('../modules/helper')
 
 router.get('/domain', (req, res) => {
   if (!req.session.user) {
-    return res.redirect(401, '/login')
+    return res.redirect('/login')
   }
   var errorMessages = req.session.errorMessages
   var successMessages = req.session.successMessages
@@ -33,7 +33,7 @@ router.get('/domain', (req, res) => {
 
 router.get('/server', (req, res) => {
   if (!req.session.user) {
-    return res.redirect(401, '/login')
+    return res.redirect('/login')
   }
   var errorMessages = req.session.errorMessages
   var successMessages = req.session.successMessages

@@ -1,0 +1,26 @@
+.loginBackground {
+  display: block;
+  /* text-indent: -9999px; */
+  /* width: 100px; */
+  /* height: 82px; */
+  background: url(/images/login.svg) no-repeat center center fixed;
+  /* background-size: 100px 82px; */
+}
+
+.login {
+  /* background-color: #fff; */
+  color: #454545;
+  margin: calc((100vh - 500px)/ 2) auto 0;
+  padding: 40px;
+  max-width: 440px;
+  position: relative;
+  /* box-shadow: 0 0 10px rgba(61,61,61,.25); */
+}
+
+.centerText {
+  text-align: center;
+}
+
+.columns {
+  margin-left: 0px;
+}

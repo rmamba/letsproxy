@@ -10,7 +10,7 @@ const helper = require('../modules/helper')
 
 router.get('/domains', (req, res) => {
   if (!req.session.user) {
-    return res.redirect(401, '/login')
+    return res.redirect('/login')
   }
   var errorMessages = req.session.errorMessages
   var successMessages = req.session.successMessages
@@ -32,7 +32,7 @@ router.get('/domains', (req, res) => {
 
 router.get('/servers', (req, res) => {
   if (!req.session.user) {
-    return res.redirect(401, '/login')
+    return res.redirect('/login')
   }
   var errorMessages = req.session.errorMessages
   var successMessages = req.session.successMessages
@@ -54,7 +54,7 @@ router.get('/servers', (req, res) => {
 
 router.get('/domain/enable/:domain', (req, res) => {
   if (!req.session.user) {
-    return res.redirect(401, '/login')
+    return res.redirect('/login')
   }
   req.session.errorMessages = []
   const configLetsproxy = new ConfigProxy()
@@ -70,7 +70,7 @@ router.get('/domain/enable/:domain', (req, res) => {
 
 router.get('/domain/disable/:domain', (req, res) => {
   if (!req.session.user) {
-    return res.redirect(401, '/login')
+    return res.redirect('/login')
   }
   req.session.errorMessages = []
   const configLetsproxy = new ConfigProxy()
@@ -90,7 +90,7 @@ router.get('/domain/disable/:domain', (req, res) => {
 
 router.get('/domain/redirect/enable/:domain', (req, res) => {
   if (!req.session.user) {
-    return res.redirect(401, '/login')
+    return res.redirect('/login')
   }
   req.session.errorMessages = undefined
   const configLetsproxy = new ConfigProxy()
@@ -110,7 +110,7 @@ router.get('/domain/redirect/enable/:domain', (req, res) => {
 
 router.get('/domain/redirect/disable/:domain', (req, res) => {
   if (!req.session.user) {
-    return res.redirect(401, '/login')
+    return res.redirect('/login')
   }
   req.session.errorMessages = []
   const configLetsproxy = new ConfigProxy()
