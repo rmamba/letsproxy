@@ -14,10 +14,11 @@ html(lang="en")
         form.form-signin(action="/login" method="post")
           .row.centerText
             .columns.twelwe
-              h2.form-signin-heading Please sign in
+              h2.form-signin-heading
+                img(src="/images/favicon.png")
             .columns.twelwe
               input.input-block-level.centerText(type='text', name="user", placeholder='User name...')
             .columns.twelwe
               input.input-block-level.centerText(type='password', name="password", placeholder='Password...')
-            button.btn.bg-lightgreen(type='submit') Sign in
+            button.btn.bg-lightgreen(type='submit') Login
     include includes/noty.pug
