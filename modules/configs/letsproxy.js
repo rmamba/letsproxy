@@ -189,7 +189,7 @@ module.exports = class Letsproxy {
       var subDomains = body.domainAliases.split(',')
       subDomains.forEach(domain => {
         if (!helper.domain.is.valid(domain)) {
-          throw new Error(`${domain} is not a valid sub-domain name.`)
+          throw new Error(`${domain} is not a valid domain name.`)
         }
       })
     }
