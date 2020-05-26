@@ -32,7 +32,7 @@ router.post('/login', (req, res) => {
     return res.redirect('/login')
   }
   if (PASSWD[req.body.user].password !== md5(req.body.password)) {
-    req.session.errorMessage.push('Invalid password!')
+    req.session.errorMessages.push('Invalid password!')
     return res.redirect('/login')
   }
   if (req.session.user === undefined) {
