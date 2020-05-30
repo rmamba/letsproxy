@@ -69,6 +69,25 @@ module.exports = class Nginx {
     return true
   }
 
+  setLocationsProperties (domain, properties) {
+    if (!this.domainsDict[domain]) {
+      console.error(`domainsDict does not contain '${domain}'.`)
+      return false
+    }
+    var D = this.domainsDict[domain]
+    if (!D.locations) {
+      D.locations = {}
+    }
+    Object.keys(properties).forEach(property => {
+      if (properties[property] === null) {
+        delete D.location[property]
+      } else {
+        D.locations[property] = properties[property]
+      }
+    })
+    return true
+  }
+
   assignTemplate (domain, name) {
     if (!fs.existsSync(`${this.NGINX_TEMPLATES}/${name}.json`)) {
       throw new Error('Unknown template.')
@@ -79,6 +98,9 @@ module.exports = class Nginx {
     }
     if (template.location) {
       this.setLocationProperties(domain, template.location)
+    }
+    if (template.locations) {
+      this.setLocationsProperties(domain, template.locations)
     }
   }
 
@@ -269,13 +291,15 @@ module.exports = class Nginx {
     })
 
     config += `\t\n\tlocation ${D.location.path} {\n`
+    let upstream
     Object.keys(D.location).forEach(p => {
       if (p === 'proxy_pass') {
         if (D.location.proxy_pass.backend) {
-          config += `\t\tproxy_pass http${D.location.proxy_pass.https ? 's' : ''}://${D.location.proxy_pass.backend};\n`
+          upstream = `http${D.location.proxy_pass.https ? 's' : ''}://${D.location.proxy_pass.backend}`
         } else {
-          config += `\t\tproxy_pass http${D.location.proxy_pass.https ? 's' : ''}://${D.location.proxy_pass.address}${D.location.proxy_pass.port ? ':' + D.location.proxy_pass.port : ''};\n`
+          upstream = `http${D.location.proxy_pass.https ? 's' : ''}://${D.location.proxy_pass.address}${D.location.proxy_pass.port ? ':' + D.location.proxy_pass.port : ''}`
         }
+        config += `\t\tproxy_pass ${upstream};\n`
       } else if (p === 'proxy_redirect' || p === 'proxy_buffering' || p === 'proxy_ssl_verify') {
         config += `\t\t${p} ${D.location[p] === true ? 'on' : 'off'};\n`
       } else if (p === 'proxy_set_header') {
@@ -299,6 +323,7 @@ module.exports = class Nginx {
           if (k[k.length - 1] === ';') {
             sc = ''
           }
+          k = k.replace('{{UPSTREAM}}', upstream)
           config += `\t\t${k}${sc}\n`
         })
         config += '\t}\n'
