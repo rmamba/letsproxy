@@ -1,0 +1,36 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    meta(http-equiv="X-UA-Compatible", content="ie=edge")
+    title letsProxy
+    include includes/styles.pug
+    include includes/code.pug
+  body
+    .container.bottom-space
+      .row
+        include includes/menu.pug
+      table.u-full-width
+        tbody
+          tr
+            td
+              h1 Settings
+      form(action="/settings" method="post")
+        table.u-full-width
+          tbody
+            tr
+              td Default domain:
+              td
+                select(name="defaultDomain" style="width: 100%;")
+                  option(value="" selected= domainTemplate == '') None
+                  each domain in domains
+                    if defaultDomain===domain.name
+                      option(value=domain.name selected) #{domain.name}
+                    else
+                      option(value=domain.name) #{domain.name}
+            tr
+              td(colspan=2)
+                button.btn.bg-lightgreen.u-full-width(type='submit') Save settings
+    include includes/noty.pug
+    include includes/footer.pug

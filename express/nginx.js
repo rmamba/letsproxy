@@ -6,6 +6,7 @@ const express = require('express')
 const router = express.Router()
 const ConfigProxy = require('../modules/configs/letsproxy')
 const ConfigNginx = require('../modules/configs/nginx')
+const Settings = require('../modules/configs/settings')
 const helper = require('../modules/helper')
 
 router.get('/domains', (req, res) => {
@@ -21,11 +22,13 @@ router.get('/domains', (req, res) => {
   notyMessages += helper.noty.parse(successMessages, 'success')
 
   const configNginx = new ConfigNginx()
+  const settings = new Settings()
   res.render('domains', {
     user: req.session.user !== undefined ? req.session.user : false,
     notyMessages: notyMessages,
     domains: configNginx.domainsAsArray(),
     hasBackends: Object.keys(configNginx.backendsDict).length > 0,
+    defaultDomain: settings.settings.defaultDomain ? settings.settings.defaultDomain : '',
     VERSION: process.env.VERSION
   })
 })

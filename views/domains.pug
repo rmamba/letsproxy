@@ -44,6 +44,8 @@ html(lang="en")
                     i.material-icons.pointer(id=domain.name name="domain" title="Active, no certificates" style="color: orange;") pause_circle_filled
                 else
                   i.material-icons.pointer(id=domain.name name="domain" title="Inactive" style="color: red;") cancel
+                if domain.name === defaultDomain
+                  i.material-icons.pointer(title="Default server" style="color: green;") web
               td
                 .float-left.space-right
                   a(href="/edit/domain/"+domain.name)

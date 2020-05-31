@@ -6,6 +6,7 @@ const fs = require('fs')
 const wait = require('wait-for-stuff')
 const CONFIG = require('../../config/config')
 const SystemNginx = require('../system/nginx')
+const Settings = require('../configs/settings')
 const nginx = new SystemNginx()
 
 module.exports = class Nginx {
@@ -202,6 +203,10 @@ module.exports = class Nginx {
    * @returns {boolean}
    */
   writeConfig (domain) {
+    if (domain === '') {
+      return
+    }
+    const S = new Settings()
     var D = this.domainsDict[domain]
     var isFirst
     var ret = true
@@ -218,12 +223,16 @@ module.exports = class Nginx {
     }
 
     var config = ''
+    var defaultServer = ''
+    if (domain === S.settings.defaultDomain) {
+      defaultServer = ' default_server'
+    }
     var domains = domain.toLowerCase()
     if (D.aliases) {
       domains += ` ${D.aliases.join(' ')}`
     }
     config += 'server {\n'
-    config += '\tlisten 80;\n'
+    config += `\tlisten 80${defaultServer};\n`
     config += `\tserver_name ${domains.toLowerCase()};\n`
 
     // #ACME
@@ -249,7 +258,7 @@ module.exports = class Nginx {
     }
 
     config += '\nserver {\n'
-    config += '\tlisten 443'
+    config += `\tlisten 443${defaultServer}`
 
     if (isCert === '') {
       config += ' ssl'
