@@ -2,6 +2,8 @@
 // @ts-check
 'use strict'
 
+const Settings = require('../../modules/configs/settings')
+
 const {
   exec
 } = require('child_process')
@@ -78,7 +80,13 @@ module.exports = class Acmetool {
     })
   }
 
-  run () {
+  run (forceRun = false) {
+    const settings = new Settings()
+    if (!settings.settings.autorunAcmetool && !forceRun) {
+      return new Promise(function (resolve, reject) {
+        resolve(true)
+      })
+    }
     const SUDO = this.SUDO
     const BATCH = this.BATCH
     const THIS = this

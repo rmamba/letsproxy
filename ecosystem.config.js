@@ -1,5 +1,5 @@
 module.exports = {
-  apps : [{
+  apps: [{
     name: 'letsProxy',
     script: 'index.js',
 
@@ -13,4 +13,4 @@ module.exports = {
       PORT: 3000
     }
   }]
-};
+}

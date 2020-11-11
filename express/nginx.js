@@ -83,10 +83,10 @@ router.get('/domain/disable/:domain', (req, res) => {
   }
   configLetsproxy.domainsDict[req.params.domain].enabled = false
   if (!configLetsproxy.writeDomains()) {
-    req.session.errorMessages.push(configLetsproxy.error)
+    req.session.errorMessages.push(configLetsproxy.errors)
   }
   if (!configLetsproxy.writeConfig(req.params.domain)) {
-    req.session.errorMessages.push(configLetsproxy.error)
+    req.session.errorMessages.push(configLetsproxy.errors)
   }
   res.redirect('/domains')
 })

@@ -32,7 +32,7 @@ module.exports = class Letsproxy {
     var ret = true
     const acme = new Acme()
     if (!acme.writeConfigs()) {
-      this.errors.push('Acmetoll error.')
+      this.errors.push('Acmetool error.')
       ret = false
     }
     const nginx = new Nginx()

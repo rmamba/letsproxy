@@ -30,6 +30,10 @@ html(lang="en")
                     else
                       option(value=domain.name) #{domain.name}
             tr
+              td Autorun Acmetool
+              td
+                input(name="autorunAcmetool" type="checkbox")
+            tr
               td(colspan=2)
                 button.btn.bg-lightgreen.u-full-width(type='submit') Save settings
     include includes/noty.pug

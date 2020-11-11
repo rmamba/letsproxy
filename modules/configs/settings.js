@@ -8,7 +8,9 @@ module.exports = class Settings {
   constructor () {
     const PREFIX = process.env.NODE_ENV === 'test' ? './test' : '.'
     this.SETTINGS_CONFIG = `${PREFIX}/config/settings.json`
-    this.settings = {}
+    this.settings = {
+      autorunAcmetools: false
+    }
     this.errors = undefined
 
     if (fs.existsSync(this.SETTINGS_CONFIG)) {
