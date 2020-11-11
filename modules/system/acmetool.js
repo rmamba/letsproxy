@@ -10,7 +10,7 @@ const {
 
 module.exports = class Acmetool {
   constructor () {
-    this.SUDO = 'sudo '
+    this.SUDO = process.env.SUDO_ACMETOOL_CMD || 'sudo '
     this.BATCH = ''
     this.DEBUG = process.env.DEBUG === 'true'
   }

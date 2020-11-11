@@ -27,11 +27,11 @@ module.exports = class Letsproxy {
     }
   }
 
-  writeConfigs () {
+  writeConfigs (acmeWant) {
     this.errors = []
     var ret = true
     const acme = new Acme()
-    if (!acme.writeConfigs()) {
+    if (!acme.writeConfigs(acmeWant)) {
       this.errors.push('Acmetool error.')
       ret = false
     }
@@ -50,10 +50,10 @@ module.exports = class Letsproxy {
     return ret
   }
 
-  writeConfig (domain) {
+  writeConfig (domain, acmeWant) {
     var ret = true
     const acme = new Acme()
-    ret = ret && acme.writeConfig(domain)
+    ret = ret && acme.writeConfig(domain, acmeWant)
     const nginx = new Nginx()
     ret = ret && nginx.writeConfig(domain)
     return ret
@@ -264,10 +264,10 @@ module.exports = class Letsproxy {
     this.domainsDict[name] = data
   }
 
-  writeDomains () {
+  writeDomains (acmeWant) {
     this.errors = []
     fs.writeFileSync(this.FRONTEND_CONFIG, JSON.stringify(this.domainsDict, null, 2))
-    if (!this.writeConfigs()) {
+    if (!this.writeConfigs(acmeWant)) {
       this.errors.push('Error saving domains configurations.')
       return false
     }

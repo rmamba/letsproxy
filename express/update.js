@@ -33,7 +33,7 @@ router.post('/domain', (req, res) => {
   if (req.body.oldExternalDomain !== '' && req.body.oldExternalDomain !== req.body.externalDomain) {
     configLetsproxy.removeDomain(req.body.oldExternalDomain)
   }
-  if (!configLetsproxy.writeConfigs()) {
+  if (!configLetsproxy.writeConfigs(true)) {
     req.session.errorMessages = req.session.errorMessages.concat(configLetsproxy.errors)
   }
 
@@ -93,7 +93,7 @@ router.post('/server', (req, res) => {
   if (!configLetsproxy.writeUpstream()) {
     req.session.errorMessages = req.session.errorMessages.concat(configLetsproxy.errors)
   }
-  if (!configLetsproxy.writeDomains()) {
+  if (!configLetsproxy.writeDomains(false)) {
     req.session.errorMessages = req.session.errorMessages.concat(configLetsproxy.errors)
   }
 

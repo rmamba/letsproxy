@@ -25,7 +25,7 @@ module.exports = class Acme {
     }
   }
 
-  writeConfig (domain) {
+  writeConfig (domain, acmeWant) {
     var ret = true
     this.errors = []
     this.responses[domain] = undefined
@@ -48,27 +48,29 @@ module.exports = class Acme {
       if (domainConfig.enabled === true) {
         const check = this.wget.data(false, `${domain}/.well-known/acme-challenge/test`)
         this.checks[domain] = check
+        this.responses[domain] = 'OK'
         if (check === 'working!!!') {
-          response = wait.for.promise(this.acme.want(domains.join(' ')))
-          if (response instanceof Error) {
-            this.responses[domain] = response.message
-            this.errors.push(response.message)
-            ret = false
-          } else {
-            this.responses[domain] = 'OK'
+          if (acmeWant) {
+            response = wait.for.promise(this.acme.want(domains.join(' ')))
+            if (response instanceof Error) {
+              this.responses[domain] = response.message
+              this.errors.push(response.message)
+              ret = false
+            }
           }
           return ret
         }
       } else {
         // disabled certificates will not be able to be renewed after max 3 months
         // so we just unwant them
-        response = wait.for.promise(this.acme.unwant(domains.join(' ')))
-        if (response instanceof Error) {
-          this.responses[domain] = response.message
-          this.errors.push(response.message)
-          ret = false
-        } else {
-          this.responses[domain] = 'OK'
+        this.responses[domain] = 'OK'
+        if (acmeWant) {
+          response = wait.for.promise(this.acme.unwant(domains.join(' ')))
+          if (response instanceof Error) {
+            this.responses[domain] = response.message
+            this.errors.push(response.message)
+            ret = false
+          }
         }
       }
       return ret
@@ -78,12 +80,12 @@ module.exports = class Acme {
     return false
   }
 
-  writeConfigs () {
+  writeConfigs (acmeWant) {
     this.responses = {}
     this.checks = {}
     var ret = true
     Object.keys(this.domains).forEach(domain => {
-      ret = ret && this.writeConfig(domain)
+      ret = ret && this.writeConfig(domain, acmeWant)
     })
     return ret
   }

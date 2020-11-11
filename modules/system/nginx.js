@@ -8,7 +8,7 @@ const {
 
 module.exports = class Nginx {
   constructor () {
-    this.SUDO = 'sudo '
+    this.SUDO = process.env.SUDO_NGINX_CMD || 'sudo '
     this.DEBUG = process.env.DEBUG === 'true'
   }
 
