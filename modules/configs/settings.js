@@ -9,7 +9,8 @@ module.exports = class Settings {
     const PREFIX = process.env.NODE_ENV === 'test' ? './test' : '.'
     this.SETTINGS_CONFIG = `${PREFIX}/config/settings.json`
     this.settings = {
-      autorunAcmetools: false
+      autorunAcmetools: false,
+      defaultUploadSize: '10M'
     }
     this.errors = undefined
 

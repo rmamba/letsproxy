@@ -164,6 +164,12 @@ button.btn {
 }
 
 .webBackground {
-    background: url(/images/pattern-9.svg) ;
+    background: url(/images/pattern-2.svg) ;
     background-size: 500px auto;
-  }
+}
+
+.material-icons-circle {
+    background-color: antiquewhite;
+    padding: 5px;
+    border-radius: 17px;
+}
