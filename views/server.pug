@@ -7,11 +7,11 @@ html(lang="en")
     title letsProxy
     include includes/styles.pug
     include includes/code.pug
-  body
+  body(class="webBackground")
     .container
       .row
         include includes/menu.pug
-      h1 New server 
+      h1 New server
       form(action="/update/server" method="post")
         label Upstream name:
         input(type="hidden" name="oldUpstreamName" value=upstreamName)
@@ -22,9 +22,9 @@ html(lang="en")
             - var port = 1000+Math.floor(Math.random() * 1000);
             div(id="port-"+port)
                 input(type="text" name="upstreamAddresses[]" placeholder="127.0.0.1" value=server.address)
-                | : 
+                | :
                 input(type="text" name="upstreamPorts[]" placeholder="3000" value=server.port style="width: 65px;")
-                | 
+                |
                 select(name="upstreamExtra[]" data-port=port)
                   option(value=0) Default
                   option(value=1) Weight

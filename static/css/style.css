@@ -162,3 +162,8 @@ button.btn {
   font-weight: 600;
   text-decoration: none;
 }
+
+.webBackground {
+    background: url(/images/pattern-9.svg) ;
+    background-size: 500px auto;
+  }

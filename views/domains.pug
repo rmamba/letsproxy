@@ -7,14 +7,14 @@ html(lang="en")
     title letsProxy
     include includes/styles.pug
     include includes/code.pug
-  body
+  body(class="webBackground")
     .container.bottom-space
       .row
         include includes/menu.pug
       table.u-full-width
         tbody
           td
-            h1 Domains 
+            h1 Domains
               if hasBackends
                 a(href="/add/domain")
                   i.material-icons.pointer.big-icon(title="Add domain" style="color: green;") add_circle_outline

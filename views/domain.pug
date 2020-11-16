@@ -7,11 +7,11 @@ html(lang="en")
     title letsProxy
     include includes/styles.pug
     include includes/code.pug
-  body
+  body(class="webBackground")
     .container
       .row
         include includes/menu.pug
-      h1 New domain 
+      h1 New domain
       form(action="/update/domain" method="post")
         label Template:
         .templates
@@ -50,9 +50,9 @@ html(lang="en")
             - var rndId = 1000+Math.floor(Math.random() * 1000);
             div(id="rewrite-"+rndId)
               input(type="text" name="rewriteKeys[]" placeholder="^/(?:jackets|sweats)/.*/(.*)$" value=key style="width: 75%;")
-              | : 
+              | :
               input(type="text" name="rewriteValues[]" placeholder="/products/$1" value=val style="width: auto;")
-              | 
+              |
               i.material-icons.pointer.delete.medium-icon(onclick="removeServerRewrite('" + rndId + "');") remove_circle_outline
         label Locations:
           |
@@ -71,4 +71,3 @@ html(lang="en")
         | &nbsp;
         a(href="/domains" class="btn bg-coral") CANCEL
       include includes/noty.pug
-      
