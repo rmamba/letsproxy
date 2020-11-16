@@ -210,6 +210,7 @@ module.exports = class Nginx {
     var D = this.domainsDict[domain]
     var isFirst
     var ret = true
+    var defaultUploadSize = '10M'
     this.responses[domain] = undefined
 
     D.ssl_dhparam = `${CONFIG.nginx}/dhparam.pem`
@@ -268,6 +269,7 @@ module.exports = class Nginx {
     config += `\tserver_name ${domains.toLowerCase()};\n`
     config += `\taccess_log /var/log/nginx/${domain.toLowerCase()}.access.log;\n`
     config += `\terror_log /var/log/nginx/${domain.toLowerCase()}.error.log;\n`
+    config += `\tclient_max_body_size ${defaultUploadSize};\n`
 
     if (D.ssl_dhparam) {
       config += `${isCert}\tssl_dhparam ${D.ssl_dhparam};\n`
