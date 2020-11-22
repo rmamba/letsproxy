@@ -264,6 +264,9 @@ module.exports = class Nginx {
     if (isCert === '') {
       config += ' ssl'
     }
+    if (S.settings.enableHTTP2) {
+      config += ' http2'
+    }
     config += ';\n'
 
     config += `\tserver_name ${domains.toLowerCase()};\n`
