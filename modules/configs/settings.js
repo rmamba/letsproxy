@@ -10,7 +10,7 @@ module.exports = class Settings {
     this.SETTINGS_CONFIG = `${PREFIX}/config/settings.json`
     this.settings = {
       autorunAcmetool: false,
-      enabeHTTP2: true,
+      enableHTTP2: true,
       defaultUploadSize: '10M'
     }
     this.errors = undefined

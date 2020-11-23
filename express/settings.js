@@ -30,7 +30,7 @@ router.get('/', (req, res) => {
     user: req.session.user !== undefined ? req.session.user : false,
     defaultDomain: settings.settings.defaultDomain ? settings.settings.defaultDomain : '',
     autorunAcmetool: settings.settings.autorunAcmetool ? settings.settings.autorunAcmetool : '',
-    enabeHTTP2: settings.settings.enabeHTTP2 ? settings.settings.enabeHTTP2 : '',
+    enableHTTP2: settings.settings.enableHTTP2 ? settings.settings.enableHTTP2 : '',
     defaultUploadSize: settings.settings.defaultUploadSize ? settings.settings.defaultUploadSize : '',
     domains: configNginx.domainsAsArray(),
     VERSION: process.env.VERSION
@@ -59,14 +59,14 @@ router.post('/', (req, res) => {
   }
 
   req.body.autorunAcmetool = req.body.autorunAcmetool === 'on'
-  req.body.enabeHTTP2 = req.body.enabeHTTP2 === 'on'
+  req.body.enableHTTP2 = req.body.enableHTTP2 === 'on'
 
   if (req.body.autorunAcmetool !== settings.settings.autorunAcmetool) {
     settings.settings.autorunAcmetool = req.body.autorunAcmetool
     save = true
   }
-  if (req.body.enabeHTTP2 !== settings.settings.enabeHTTP2) {
-    settings.settings.enabeHTTP2 = req.body.enabeHTTP2
+  if (req.body.enableHTTP2 !== settings.settings.enableHTTP2) {
+    settings.settings.enableHTTP2 = req.body.enableHTTP2
     save = true
   }
   if (req.body.defaultUploadSize !== settings.settings.defaultUploadSize) {
