@@ -207,11 +207,16 @@ module.exports = class Nginx {
       return
     }
     const S = new Settings()
+    this.responses[domain] = undefined
     var D = this.domainsDict[domain]
+    if (D === undefined) {
+      console.log(`Error: '${domain}' domain not found`)
+      this.responses[domain] = 'Domain not found'
+      return
+    }
     var isFirst
     var ret = true
     var uploadSize = S.settings.defaultUploadSize
-    this.responses[domain] = undefined
 
     D.ssl_dhparam = `${CONFIG.nginx}/dhparam.pem`
     D.ssl_prefer_server_ciphers = 'on'

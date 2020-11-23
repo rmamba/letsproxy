@@ -30,9 +30,17 @@ html(lang="en")
                     else
                       option(value=domain.name) #{domain.name}
             tr
+              td Max upload filesize:
+              td
+                input(name="defaultUploadSize" tyle="text" style="width: 100%;" value=defaultUploadSize)
+            tr
               td Autorun Acmetool
               td
-                input(name="autorunAcmetool" type="checkbox")
+                input(name="autorunAcmetool" type="checkbox" checked= autorunAcmetool===true)
+            tr
+              td HTTP2 enabled by default
+              td
+                input(name="enabeHTTP2" type="checkbox" checked= enabeHTTP2===true)
             tr
               td(colspan=2)
                 button.btn.bg-lightgreen.u-full-width(type='submit') Save settings

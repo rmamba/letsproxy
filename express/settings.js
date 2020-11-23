@@ -29,6 +29,9 @@ router.get('/', (req, res) => {
     notyMessages: notyMessages,
     user: req.session.user !== undefined ? req.session.user : false,
     defaultDomain: settings.settings.defaultDomain ? settings.settings.defaultDomain : '',
+    autorunAcmetool: settings.settings.autorunAcmetool ? settings.settings.autorunAcmetool : '',
+    enabeHTTP2: settings.settings.enabeHTTP2 ? settings.settings.enabeHTTP2 : '',
+    defaultUploadSize: settings.settings.defaultUploadSize ? settings.settings.defaultUploadSize : '',
     domains: configNginx.domainsAsArray(),
     VERSION: process.env.VERSION
   })
@@ -53,6 +56,22 @@ router.post('/', (req, res) => {
       delete settings.settings.defaultDomain
       save = true
     }
+  }
+
+  req.body.autorunAcmetool = req.body.autorunAcmetool === 'on'
+  req.body.enabeHTTP2 = req.body.enabeHTTP2 === 'on'
+
+  if (req.body.autorunAcmetool !== settings.settings.autorunAcmetool) {
+    settings.settings.autorunAcmetool = req.body.autorunAcmetool
+    save = true
+  }
+  if (req.body.enabeHTTP2 !== settings.settings.enabeHTTP2) {
+    settings.settings.enabeHTTP2 = req.body.enabeHTTP2
+    save = true
+  }
+  if (req.body.defaultUploadSize !== settings.settings.defaultUploadSize) {
+    settings.settings.defaultUploadSize = req.body.defaultUploadSize
+    save = true
   }
 
   if (save) {
