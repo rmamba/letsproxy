@@ -219,8 +219,23 @@ module.exports = class Nginx {
     var uploadSize = S.settings.defaultUploadSize
 
     D.ssl_dhparam = `${CONFIG.nginx}/dhparam.pem`
-    D.ssl_prefer_server_ciphers = 'on'
-    D.ssl_ciphers = '\'ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:AES:CAMELLIA:DES-CBC3-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA\''
+    D.ssl_prefer_server_ciphers = 'off'
+    D.ssl_ciphers = 'ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384'
+    D.ssl_protocols = 'TLSv1.2 TLSv1.3'
+    D.ssl_protocols = 'TLSv1.2 TLSv1.3'
+    D.add_headers = [
+      'Strict-Transport-Security',
+      '"max-age=63072000"',
+      'always'
+    ]
+    // ToDO: research...
+    // # OCSP stapling
+    // ssl_stapling on;
+    // ssl_stapling_verify on;
+    // # verify chain of trust of OCSP response using Root CA and Intermediate certs
+    // ssl_trusted_certificate /etc/nginx/ssl/fullchain.pem;
+    // # replace with the IP address of your resolver
+    // resolver 1.1.1.1;
 
     if (Object.prototype.hasOwnProperty.call(D, 'template')) {
       if (D.template !== '') {
@@ -263,16 +278,17 @@ module.exports = class Nginx {
       isCert = ''
     }
 
-    config += '\nserver {\n'
-    config += `\tlisten 443${defaultServer}`
-
-    if (isCert === '') {
-      config += ' ssl'
-    }
+    var HTTP2 = ''
+    var SSL = ''
     if (S.settings.enableHTTP2) {
-      config += ' http2'
+      HTTP2 = ' http2'
     }
-    config += ';\n'
+    if (isCert === '') {
+      SSL = ' ssl'
+    }
+
+    config += '\nserver {\n'
+    config += `\tlisten 443${SSL}${HTTP2}${defaultServer};\n`
 
     config += `\tserver_name ${domains.toLowerCase()};\n`
     config += `\taccess_log /var/log/nginx/${domain.toLowerCase()}.access.log;\n`
@@ -287,6 +303,12 @@ module.exports = class Nginx {
     }
     if (D.ssl_ciphers) {
       config += `${isCert}\tssl_ciphers ${D.ssl_ciphers};\n`
+    }
+    if (D.ssl_protocols) {
+      config += `${isCert}\tssl_protocols ${D.ssl_protocols};\n`
+    }
+    if (D.add_headers) {
+      config += `${isCert}\tadd_header ${D.add_headers.join(' ')};\n`
     }
     config += `${isCert}\tssl_certificate ${CONFIG.acme.certificates}/${domain.toLowerCase()}/fullchain;\n`
     config += `${isCert}\tssl_certificate_key ${CONFIG.acme.certificates}/${domain.toLowerCase()}/privkey;\n`
