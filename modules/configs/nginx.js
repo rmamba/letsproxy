@@ -25,7 +25,7 @@ module.exports = class Nginx {
       'aliases', 'enabled', 'path', 'template',
       'location', 'locations', 'httpRedirect',
       'ssl_dhparam', 'ssl_prefer_server_ciphers', 'ssl_ciphers',
-      'rewrites'
+      'rewrites', 'add_headers', 'ssl_protocols'
     ]
     if (fs.existsSync(this.FRONTEND_CONFIG)) {
       this.domainsDict = JSON.parse(fs.readFileSync(this.FRONTEND_CONFIG).toString())
