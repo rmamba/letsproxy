@@ -1,0 +1,16 @@
+{
+  "location": {
+    "proxy_next_upstream": "error timeout invalid_header http_500 http_502 http_503 http_504",
+		"proxy_redirect": "off",
+		"proxy_buffering": "off",
+		"proxy_ssl_verify": "off",
+    "proxy_set_header": {
+      "X-Forwarded-Proto": "$scheme",
+      "Host": "$http_host",
+      "X-Real-IP": "$remote_addr",
+      "X-NginX-Proxy": "true",
+      "X-Forwarded-For": "$proxy_add_x_forwarded_for",
+		  "X-Forwarded-Ssl": "on"
+    }
+  }
+}
