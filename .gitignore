@@ -71,8 +71,6 @@ acme/*
 passwd.js
 
 # ToDO
-.github
-*.md
 *.sh
 .dockerignore
 dist/*

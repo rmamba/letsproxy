@@ -1,9 +1,10 @@
 {
   "name": "letsproxy",
-  "version": "0.2.12",
+  "version": "0.2.13",
   "description": "Web front-end for letsencrypt certificates and Nginx proxy server",
   "main": "index.js",
   "dependencies": {
+    "bull": "^3.20.0",
     "child_process": "^1.0.2",
     "cookie-session": "^2.0.0-rc.1",
     "express": "^4.17.1",
@@ -24,7 +25,7 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.2",
     "jsonschema": "^1.4.0",
-    "mocha": "^5.1.1",
+    "mocha": "^8.2.1",
     "nyc": "^11.8.0",
     "rewiremock": "^3.14.3",
     "should": "^13.2.1",
