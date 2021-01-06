@@ -232,8 +232,10 @@ module.exports = class Letsproxy {
           proxy_ssl_verify: false,
           proxy_set_header: {
             Host: '$host',
+            Referer: '$http_referer',
             'X-Real-IP': '$remote_addr',
             'X-Forwarded-For': '$proxy_add_x_forwarded_for',
+            'X-Forwarded-Referrer': '$http_referer',
             'X-Forwarded-Ssl': 'on'
           }
         },
