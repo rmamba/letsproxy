@@ -38,7 +38,7 @@ lts/erbium -> v12.19.0 (-> N/A)
 
 Now we are ready to clone the repository:
 ```
-git clone git@bitbucket.org:mambix/letsproxy.git
+git clone https://github.com/rmamba/letsproxy.git
 ```
 
 Move to letsproxy folder and install node modules:
@@ -92,7 +92,7 @@ By default acmetool is not run auomatically when you change setings.
 This is due to long running processes not being handled correctly at this point.
 But you should add a cron job to be run every hour (or once per day if you can wait for updates).
 ```
-sudo crontab -l
+sudo crontab -e
 #Add this line at the bottom
 0 * * * * /usr/bin/acmetool --batch > /home/ubuntu/acme.log 2>&1
 ```
