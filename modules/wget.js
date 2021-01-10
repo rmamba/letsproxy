@@ -29,11 +29,7 @@ module.exports = class Wget {
       })
     })
 
-    var response = wait.for.promise(P)
-    if (response instanceof Error) {
-      throw response
-    }
-    return response
+    return wait.for.promise(P)
   }
 
   binary (isHttps, www) {
