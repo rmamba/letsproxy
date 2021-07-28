@@ -1,0 +1,83 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
+
+$bg-color: #f1f3fd;
+$main-color: #3c50e0;
+$heading-color: #3c3c3c;
+$primary-text-color: #3b3b3b;
+$primary-alt-text-color: #6d6d6d;
+$secondary-text-color: #3c50e0;
+$placeholder: #c4c4c4;
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background-color: $bg-color;
+  color: $primary-text-color;
+
+  &::-webkit-scrollbar {
+    width: 1em;
+  }
+
+  &::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: lightgrey;
+    border-radius: 15px;
+    transition: all 150ms ease-in-out;
+
+    &:hover {
+      background-color: darkgrey;
+    }
+  }
+}
+
+.page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: $bg-color;
+  height: 100vh;
+  padding: 0;
+}
+
+.btn-primary {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  border-style: none;
+  background-color: $main-color;
+  color: white;
+  border-radius: 10px;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+.text-input {
+  font-family: "Poppins", sans-serif;
+  border-style: none;
+  color: $primary-alt-text-color;
+  background-color: $bg-color;
+  padding-left: 0.5rem;
+  margin-left: 0.5rem;
+  width: 100%;
+}
+
+.text-input:focus {
+  outline: none;
+}
+
+.forgot{
+  display: flex;
+  justify-content:flex-end;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 1em;
+  text-decoration: none;
+  color: $main-color;
+  padding-bottom: 0.8750em;
+  padding-top: 0.5rem;
+}
