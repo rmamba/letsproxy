@@ -1,9 +1,10 @@
 {
   "name": "letsproxy",
-  "version": "0.2.15",
+  "version": "0.2.16",
   "description": "Web front-end for letsencrypt certificates and Nginx proxy server",
   "main": "index.js",
   "dependencies": {
+    "@supercharge/strings": "^1.19.0",
     "bull": "^3.20.0",
     "child_process": "^1.0.2",
     "cookie-session": "^2.0.0-rc.1",
