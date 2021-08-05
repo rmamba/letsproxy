@@ -7,9 +7,13 @@ console.log(`Letsproxy v${VERSION.version}`)
 process.env.VERSION = VERSION.version
 
 const express = require('express')
+const cors = require('cors')
 const session = require('cookie-session')
 const app = express()
 
+app.use(cors({
+  origin: 'http://localhost'
+}))
 app.use(express.json())
 app.use(express.urlencoded({
   extended: true
