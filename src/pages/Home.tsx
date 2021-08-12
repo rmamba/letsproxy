@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Home = () => {
   const [auth, setAuth] = useState(true);
@@ -11,6 +13,9 @@ const Home = () => {
     if (localStorage.getItem("token") === null) {
       setAuth(false);
     }
+    toast("You have sucessfully logged out", {
+      position: "top-right",
+    });
   }
 
   return auth ? (

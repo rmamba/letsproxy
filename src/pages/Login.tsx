@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import { ReactComponent as User } from "../assets/icons/user.svg";
 import { ReactComponent as Lock } from "../assets/icons/lock.svg";
@@ -22,27 +23,45 @@ const Login = (props: any) => {
 
     setLoginLoading(true);
 
-    axios
-      .post(API_URL, {
-        user: user,
-        password: password,
-      })
-      .then((res) => {
-        localStorage.setItem("token", JSON.stringify(res.data.token));
-        if (res.data.token != null) {
-          setAuth(true);
-          localStorage.setItem("user", user);
-          // return <Redirect to="/" />;
-        }
-        console.log(user);
-      })
-      .catch((err) => {
-        console.log(err);
-        toast.error(err.message, {
-          position: "top-right",
-        });
-        setLoginLoading(false);
+    if (user.length <= 0) {
+      toast.warn("Username is required", {
+        position: "top-right",
       });
+    } else if (password.length <= 0) {
+      toast.warn("Password is required", {
+        position: "top-right",
+      });
+    } else if (password.length < 5) {
+      toast.warn("Password must at least 6 characters", {
+        position: "top-right",
+      });
+    } else if (user.length > 0 && password.length > 5) {
+      axios
+        .post(API_URL, {
+          user: user,
+          password: password,
+        })
+        .then((res) => {
+          localStorage.setItem("token", JSON.stringify(res.data.token));
+          if (res.data.token != null) {
+            setAuth(true);
+            localStorage.setItem("user", user);
+          }
+          console.log(user);
+          toast.success("You have sucessfully logged in", {
+            position: "top-right",
+          });
+        })
+        .catch((err) => {
+          // toast.error(err.message, {
+          //   position: "top-right",
+          // });
+          toast.error("Invalid username or password", {
+            position: "top-right",
+          });
+          setLoginLoading(false);
+        });
+    }
   }
 
   function handleRemember() {
