@@ -81,5 +81,10 @@ $placeholder: #c4c4c4;
         height: 600px;
         background-color: $placeholder;
         border-radius: 25px;
+        overflow: hidden;
+    }
+
+    .login-pat{
+        height: 600px;
     }
 }

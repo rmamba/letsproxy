@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 
 import { ReactComponent as User } from "../assets/icons/user.svg";
 import { ReactComponent as Lock } from "../assets/icons/lock.svg";
+import Pattern from "../assets/images/pattern.png";
 import { Redirect } from "react-router-dom";
 
 const API_URL =
@@ -14,6 +15,7 @@ const Login = (props: any) => {
   const [password, setPassword] = useState("");
   const [loginLoading, setLoginLoading] = useState(false);
   const [auth, setAuth] = useState(false);
+  const [remember, setRemember] = useState(false);
 
   function handleLogin(e: any) {
     e.preventDefault();
@@ -29,7 +31,7 @@ const Login = (props: any) => {
         localStorage.setItem("token", JSON.stringify(res.data.token));
         if (res.data.token != null) {
           setAuth(true);
-          localStorage.setItem("user", JSON.stringify(user));
+          localStorage.setItem("user", user);
           // return <Redirect to="/" />;
         }
         console.log(user);
@@ -41,6 +43,10 @@ const Login = (props: any) => {
         });
         setLoginLoading(false);
       });
+  }
+
+  function handleRemember() {
+    setRemember(!remember);
   }
 
   return auth ? (
@@ -64,12 +70,7 @@ const Login = (props: any) => {
                   <label htmlFor="remember" className="form-text">
                     Remember
                   </label>
-                  <input
-                    type="checkbox"
-                    id="remember"
-                    name="remember"
-                    value="remember"
-                  ></input>
+                  <input type="checkbox" onChange={handleRemember}></input>
                 </div>
               </div>
 
@@ -119,7 +120,9 @@ const Login = (props: any) => {
             }`}
           ></div>
         </div>
-        <div className="login-pic"></div>
+        <div className="login-pic">
+          <img src={Pattern} className="login-pat" alt="" />
+        </div>
       </div>
     </div>
   );
