@@ -1,10 +1,21 @@
+import React from "react";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import ProtectedRoute from "./components/ProtectedRoute";
+// import AuthService from "./services/auth.service";
 
-function App() {
+import "./styles/global.scss";
+import "./styles/login.scss";
+
+import Login from "./pages/Login";
+import Home from "./pages/Home";
+
+const App: React.FC = (): JSX.Element => {
   return (
-    <div>
-      Start
-    </div>
+    <Router>
+      <Route exact path="/login" component={Login} />
+      <ProtectedRoute exact path="/" component={Home} />
+    </Router>
   );
-}
+};
 
 export default App;
