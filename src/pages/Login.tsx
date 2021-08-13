@@ -47,7 +47,6 @@ const Login = (props: any) => {
             setAuth(true);
             localStorage.setItem("user", user);
           }
-          console.log(user);
           toast.success("You have sucessfully logged in", {
             position: "top-right",
           });
@@ -85,12 +84,12 @@ const Login = (props: any) => {
                 <label htmlFor="username" className="form-title">
                   Username
                 </label>
-                <div>
+                {/* <div>
                   <label htmlFor="remember" className="form-text">
                     Remember
                   </label>
                   <input type="checkbox" onChange={handleRemember}></input>
-                </div>
+                </div> */}
               </div>
 
               <div className="login-input">
@@ -123,11 +122,11 @@ const Login = (props: any) => {
               </div>
             </div>
 
-            <div className="login-field">
+            {/* <div className="login-field">
               <a href="/" className="forgot">
                 Forgot Password?
               </a>
-            </div>
+            </div> */}
 
             <button className="btn-primary btn-login" onClick={handleLogin}>
               Sign In
