@@ -38,7 +38,7 @@ module.exports = class Users {
 
   checkPassword (user, password) {
     if (this.users[user]) {
-      if (this.users[user].password === crypto.createHash('sha256').update(password).digest('hex')) {
+      if (this.users[user].password.toLowerCase() === crypto.createHash('sha256').update(password).digest('hex')) {
         return true
       }
     }

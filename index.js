@@ -10,9 +10,10 @@ const express = require('express')
 const cors = require('cors')
 const session = require('cookie-session')
 const app = express()
+const PORT = process.env.PORT || 3005
 
 app.use(cors({
-  origin: 'http://localhost'
+  origin: 'http://localhost:3000'
 }))
 app.use(express.json())
 app.use(express.urlencoded({
@@ -75,5 +76,4 @@ app.use('/ajax', ajaxV1)
 app.use('/settings', settingsV1)
 app.use('/api/user', apiUserV1)
 
-const PORT = process.env.PORT || 3000
 module.exports = app.listen(PORT, () => console.log(`Listening on port ${PORT}...`))
