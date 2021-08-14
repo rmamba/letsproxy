@@ -1,4 +1,4 @@
-import React from "react";
+import type React from "react";
 import { Route, Redirect, RouteProps } from "react-router-dom";
 
 interface ProtectedRouteProps extends RouteProps {}

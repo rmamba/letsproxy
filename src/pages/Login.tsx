@@ -7,16 +7,15 @@ import { ReactComponent as User } from "../assets/icons/user.svg";
 import { ReactComponent as Lock } from "../assets/icons/lock.svg";
 import Pattern from "../assets/images/pattern.png";
 import { Redirect } from "react-router-dom";
+import { API_URL } from '../config/settings';
 
-const API_URL =
-  process.env.LEPSPTOXY_API || "http://localhost:3000/api/user/login";
+const USER_API_URL = API_URL + '/api/user/login';
 
 const Login = (props: any) => {
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const [loginLoading, setLoginLoading] = useState(false);
   const [auth, setAuth] = useState(false);
-  const [remember, setRemember] = useState(false);
 
   function handleLogin(e: any) {
     e.preventDefault();
@@ -37,7 +36,7 @@ const Login = (props: any) => {
       });
     } else if (user.length > 0 && password.length > 5) {
       axios
-        .post(API_URL, {
+        .post(USER_API_URL, {
           user: user,
           password: password,
         })
@@ -63,10 +62,6 @@ const Login = (props: any) => {
     }
   }
 
-  function handleRemember() {
-    setRemember(!remember);
-  }
-
   return auth ? (
     <Redirect to="/"></Redirect>
   ) : (
@@ -84,12 +79,6 @@ const Login = (props: any) => {
                 <label htmlFor="username" className="form-title">
                   Username
                 </label>
-                {/* <div>
-                  <label htmlFor="remember" className="form-text">
-                    Remember
-                  </label>
-                  <input type="checkbox" onChange={handleRemember}></input>
-                </div> */}
               </div>
 
               <div className="login-input">
@@ -121,12 +110,6 @@ const Login = (props: any) => {
                 />
               </div>
             </div>
-
-            {/* <div className="login-field">
-              <a href="/" className="forgot">
-                Forgot Password?
-              </a>
-            </div> */}
 
             <button className="btn-primary btn-login" onClick={handleLogin}>
               Sign In

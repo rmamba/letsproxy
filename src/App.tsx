@@ -1,4 +1,4 @@
-import React from "react";
+import type React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
 // import AuthService from "./services/auth.service";
