@@ -6,9 +6,9 @@ const express = require('express')
 const router = express.Router()
 
 const Users = require('../../modules/configs/users')
-const users = new Users()
 
 router.post('/login', (req, res) => {
+  const users = new Users()
   if (!users.exists(req.body.user)) {
     return res.status(400).json({
       message: 'Unknown user'
@@ -33,6 +33,7 @@ router.post('/login', (req, res) => {
 })
 
 router.post('/logout', (req, res) => {
+  const users = new Users()
   if (!users.exists(req.body.user)) {
     return res.status(400).json({
       message: 'Unknown user'

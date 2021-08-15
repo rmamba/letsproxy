@@ -47,14 +47,13 @@ module.exports = class Users {
 
   getOrCreateToken (user, ttl = 3600) {
     if (this.users[user]) {
-      if (!this.users[user].token) {
+      if (!this.users[user].token || (this.utcTimeInSeconds() > this.users[user].tokenExpiration)) {
         this.users[user].token = superchargeStrings.random(64)
         this.users[user].tokenExpiration = this.utcTimeInSeconds(ttl)
-        this.saveConfig()
-      }
-      if (this.users[user].tokenExpiration > this.utcTimeInSeconds()) {
+      } else {
         this.extendToken(user, ttl)
       }
+      this.saveConfig()
       return this.users[user].token
     }
     return false
