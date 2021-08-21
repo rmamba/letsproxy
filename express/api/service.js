@@ -12,12 +12,12 @@ router.post('/services', (req, res) => {
   const configNginx = new ConfigNginx()
   const users = new Users()
 
-  if (!req.headers.authorize) {
+  if (!req.headers.authorization) {
     return res.status(401).json({
       message: 'Missing token'
     })
   } else {
-    var authorizeParts = req.headers.authorize
+    var authorizeParts = req.headers.authorization
     if (typeof authorizeParts === 'string') {
       authorizeParts = authorizeParts.split(' ')
     }
