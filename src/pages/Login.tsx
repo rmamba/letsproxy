@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { ReactComponent as User } from "../assets/icons/user.svg";
 import { ReactComponent as Lock } from "../assets/icons/lock.svg";
 import Pattern from "../assets/images/pattern.png";
-import { Redirect } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { API_URL } from '../config/settings';
 
 const USER_API_URL = API_URL + '/api/user/login';
@@ -63,7 +63,7 @@ const Login = (props: any) => {
   }
 
   return auth ? (
-    <Redirect to="/"></Redirect>
+    <Navigate to="/"></Navigate>
   ) : (
     <div className="page-container">
       <div className="login-container">

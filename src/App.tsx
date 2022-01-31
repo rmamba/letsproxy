@@ -14,8 +14,8 @@ import Home from "./pages/Home";
 const App: React.FC = (): JSX.Element => {
   return (
     <Router>
-      <Route exact path="/login" component={Login} />
-      <ProtectedRoute exact path="/" component={Home} />
+      <Route path="/login" element={Login} />
+      <ProtectedRoute path="/" element={Home} />
       <ToastContainer />
     </Router>
   );
