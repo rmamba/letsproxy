@@ -1,1 +1,1 @@
-export const API_URL = process.env.LEPSPTOXY_API || 'http://localhost:3005';
+export const API_URL = process.env.LETSPROXY_API || 'http://localhost:3005';

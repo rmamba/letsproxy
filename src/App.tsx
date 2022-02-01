@@ -1,8 +1,6 @@
 import type React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-// import ProtectedRoute from "./components/ProtectedRoute";
-import RequireAuth from "./components/RequireAuth";
-// import AuthService from "./services/auth.service";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 import "./styles/global.scss";
 import "./styles/login.scss";
@@ -18,7 +16,7 @@ const App: React.FC = (): JSX.Element => {
       <Router>
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route path="/" element={<RequireAuth><Home /></RequireAuth>} />
+          <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
         </Routes>
       </Router>
       <ToastContainer />

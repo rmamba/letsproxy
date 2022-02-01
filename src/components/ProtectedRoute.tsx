@@ -1,16 +1,13 @@
 import type React from "react";
-import { Route, Navigate, RouteProps } from "react-router-dom";
+import { Navigate } from "react-router";
 
-interface ProtectedRouteProps extends RouteProps {}
+const ProtectedRoute: (props: any) => JSX.Element = props => {
+  const { children } = props;
+  const authed = localStorage.getItem("token") !== null;
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ ...rest }) => {
-  const token = localStorage.getItem("token");
-
-  return (
-    <Route {...rest}>
-      {/* {token === null ? <Navigate to="/login" /> : null} */}
-    </Route>
-  )
-};
+  return authed
+    ? children
+    : <Navigate to="/login" replace />;
+}
 
 export default ProtectedRoute;
