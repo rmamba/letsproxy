@@ -6,8 +6,11 @@ interface ProtectedRouteProps extends RouteProps {}
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ ...rest }) => {
   const token = localStorage.getItem("token");
 
-  if (token === null) return <Navigate to="/login" />;
-  return <Route {...rest} />;
+  return (
+    <Route {...rest}>
+      {/* {token === null ? <Navigate to="/login" /> : null} */}
+    </Route>
+  )
 };
 
 export default ProtectedRoute;

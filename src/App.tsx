@@ -1,6 +1,7 @@
 import type React from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
-import ProtectedRoute from "./components/ProtectedRoute";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+// import ProtectedRoute from "./components/ProtectedRoute";
+import RequireAuth from "./components/RequireAuth";
 // import AuthService from "./services/auth.service";
 
 import "./styles/global.scss";
@@ -13,11 +14,15 @@ import Home from "./pages/Home";
 
 const App: React.FC = (): JSX.Element => {
   return (
-    <Router>
-      <Route path="/login" element={Login} />
-      <ProtectedRoute path="/" element={Home} />
+    <>
+      <Router>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<RequireAuth><Home /></RequireAuth>} />
+        </Routes>
+      </Router>
       <ToastContainer />
-    </Router>
+    </>
   );
 };
 
