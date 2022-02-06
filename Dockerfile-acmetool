@@ -1,0 +1,26 @@
+FROM debian:10-slim AS acme
+
+RUN apt-get update && apt-get install -y build-essential libcap-dev bash git curl openssl golang
+RUN cd /tmp && \
+    git config --global http.followRedirects true && \
+    git clone https://github.com/hlandau/acmetool.git && \
+    cd acmetool && \
+    make && make install
+
+# production container
+FROM debian:10-slim
+COPY --from=acme /usr/local/bin/acmetool /usr/bin/acmetool
+
+RUN chmod +x /usr/bin/acmetool && \
+    mkdir -p /var/lib/acme/conf && \
+    mkdir -p /var/lib/acme/desired
+
+RUN echo "request:" > /var/lib/acme/conf/target && \
+    echo "  provider: https://acme-v02.api.letsencrypt.org/directory" >> /var/lib/acme/conf/target && \
+    echo "  key:" >> /var/lib/acme/conf/target && \
+    echo "    type: rsa" >> /var/lib/acme/conf/target && \
+    echo "  challenge:" >> /var/lib/acme/conf/target && \
+    echo "    webroot-paths:" >> /var/lib/acme/conf/target && \
+    echo "    - /var/www/.well-known/acme-challenge" >> /var/lib/acme/conf/target
+
+RUN acmetool --batch

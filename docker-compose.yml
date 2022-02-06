@@ -1,0 +1,50 @@
+version: "3.9"
+
+volumes:
+  config:
+  certificates:
+  desired:
+  rates:
+  available:
+  enabled:
+
+services:
+  acmetool:
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile-acmetool
+    image: "rmamba/acmetool:develop"
+    volumes:
+      - certificates:/var/lib/acme/live
+      - desired:/var/lib/acme/desired:ro
+  nginx:
+    image: "rmamba/letsproxy:nginx-develop"
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - "acmetool"
+    volumes:
+      - certificates:/var/lib/acme/live:ro
+      - rates:/etc/nginx/rates:ro
+      - available:/etc/nginx/sites-available:ro
+      - enabled:/etc/nginx/sites-enabled:ro
+  api:
+    image: "rmamba/letsproxy:api-develop"
+    ports:
+      - "3005:3005"
+    depends_on:
+      - "nginx"
+    volumes:
+      - desired:/var/lib/acme/desired
+      - config:/usr/src/app/config
+      - available:/usr/src/app/nginx/sites-available
+      - enabled:/usr/src/app/nginx/sites-enabled
+  frontend:
+    image: "rmamba/letsproxy:frontend"
+    ports:
+      - "3001:80"
+    depends_on:
+      - "api"
+    environment:
+      - LETSPROXY_API=http://api:3005
