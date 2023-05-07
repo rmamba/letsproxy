@@ -21,7 +21,13 @@ module.exports = class Acmetool {
     }
   }
 
-  want (domains) {
+  want (domains, forceRun = false) {
+    const settings = new Settings()
+    if (!settings.settings.autorunAcmetool && !forceRun) {
+      return new Promise(function (resolve, reject) {
+        resolve(true)
+      })
+    }
     const DOMAINS = domains
     const SUDO = this.SUDO
     const THIS = this
@@ -41,7 +47,13 @@ module.exports = class Acmetool {
     })
   }
 
-  unwant (domains) {
+  unwant (domains, forceRun = false) {
+    const settings = new Settings()
+    if (!settings.settings.autorunAcmetool && !forceRun) {
+      return new Promise(function (resolve, reject) {
+        resolve(true)
+      })
+    }
     const DOMAINS = domains
     const SUDO = this.SUDO
     const THIS = this
@@ -61,7 +73,13 @@ module.exports = class Acmetool {
     })
   }
 
-  status () {
+  status (forceRun = false) {
+    const settings = new Settings()
+    if (!settings.settings.autorunAcmetool && !forceRun) {
+      return new Promise(function (resolve, reject) {
+        resolve(true)
+      })
+    }
     const SUDO = this.SUDO
     const THIS = this
     return new Promise(function (resolve, reject) {
