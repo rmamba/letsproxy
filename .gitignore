@@ -82,5 +82,6 @@ rootfs/etc/nginx
 
 test/acme/desired/*.com
 test/nginx/*
+test/taurus/*
 /2019-*
 /2020-*
