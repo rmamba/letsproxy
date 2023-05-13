@@ -11,10 +11,10 @@ pipeline {
 
     stages {
         stage('Docker:latest') {
-            script {
-                currentBuild.displayName = "${params.gitLabel}"
-            }
             steps {
+                script {
+                    currentBuild.displayName = "${params.gitLabel}"
+                }
                 sh "docker build --build-arg debug_mode=--no-dev -t rmamba/letsproxy:api ."
                 sh "docker push rmamba/letsproxy:api"
             }
