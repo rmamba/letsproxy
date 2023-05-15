@@ -270,10 +270,10 @@
     "@babel/helper-validator-identifier" "^7.14.9"
     to-fast-properties "^2.0.0"
 
-"@supercharge/strings@^1.19.0":
-  version "1.19.0"
-  resolved "https://registry.yarnpkg.com/@supercharge/strings/-/strings-1.19.0.tgz#7f91e14f682737f671f5dc4b737b519ca2af1e0f"
-  integrity sha512-vugYPfTvVuASwKKHcBkq7XXRumYrE/3qQDTrCDpSDiWq3uEL9YntYMqf50+8vsP9yEx1qd5iydXTUCw/Ft9hLA==
+"@supercharge/strings@^1.29.1":
+  version "1.29.1"
+  resolved "https://registry.yarnpkg.com/@supercharge/strings/-/strings-1.29.1.tgz#56321ffd52eeb605026d270d5f4075307277ec87"
+  integrity sha512-jKosdS9r2icnwGAiv0Oqn9XJUo9qq7JuLLKGTCpivvOpfb/dSQhIbV3mw6W3vm5sZmignutcRskaavcMsnOIUA==
   dependencies:
     uuid "~8.3.2"
 
