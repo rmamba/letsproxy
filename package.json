@@ -5,7 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "@supercharge/strings": "^1.19.0",
-    "bull": "^3.20.0",
+    "bull": "^3.29.3",
     "child_process": "^1.0.2",
     "cookie-session": "^2.0.0-rc.1",
     "cors": "^2.8.5",
