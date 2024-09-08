@@ -7,7 +7,7 @@
     "@supercharge/strings": "^1.19.0",
     "bull": "^3.29.3",
     "child_process": "^1.0.2",
-    "cookie-session": "^2.0.0",
+    "cookie-session": "^2.1.0",
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "md5": "^2.3.0",
