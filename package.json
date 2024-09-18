@@ -9,7 +9,7 @@
     "child_process": "^1.0.2",
     "cookie-session": "^2.1.0",
     "cors": "^2.8.5",
-    "express": "^4.19.2",
+    "express": "^4.20.0",
     "md5": "^2.3.0",
     "node-dig-dns": "^0.3.3",
     "pug": ">=3.0.3",
